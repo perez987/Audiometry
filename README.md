@@ -4,7 +4,6 @@
 
 <img src="Images/Main-window-ES.png" width="450px">
 
-
 - Xcode 15.2 project
 
 - Implements:
@@ -13,6 +12,6 @@
   - hearing loss assessment calculations
   - including SAL and ELI indices with results display
   - save patients data in core data
-  - add language system with English and Spanish
-  - add buttons to move back and forth between saved patients
-  - add search button.
+  - language system with English and Spanish
+  - buttons to move back and forth between saved patients
+  - search button.
