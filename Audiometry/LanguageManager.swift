@@ -4,12 +4,18 @@
 //
 //  Created by GitHub Copilot on 2025/01/10.
 //
+//  FIXED: Dynamic language switching at runtime
+//  - Loads appropriate language bundle (en.lproj/es.lproj) based on user selection
+//  - Updates all UI elements when language changes through @Published property
+//  - Resolves ViewBridge error by avoiding rapid UI updates and improving Menu implementation
+//
 
 import Foundation
 import SwiftUI
 
 class LanguageManager: ObservableObject {
     @Published var currentLanguage: Language = .english
+    private var currentBundle: Bundle = Bundle.main
     
     enum Language: String, CaseIterable {
         case english = "en"
@@ -31,25 +37,46 @@ class LanguageManager: ObservableObject {
            let language = Language(rawValue: savedLanguage) {
             currentLanguage = language
         }
+        updateBundle()
     }
     
     func setLanguage(_ language: Language) {
+        // Avoid unnecessary changes
+        guard currentLanguage != language else { return }
+        
         currentLanguage = language
         UserDefaults.standard.set(language.rawValue, forKey: "selectedLanguage")
+        updateBundle()
+    }
+    
+    private func updateBundle() {
+        guard let path = Bundle.main.path(forResource: currentLanguage.rawValue, ofType: "lproj") else {
+            // Fallback to main bundle if language bundle not found
+            currentBundle = Bundle.main
+            return
+        }
+        
+        guard let bundle = Bundle(path: path) else {
+            // Fallback to main bundle if bundle creation fails
+            currentBundle = Bundle.main
+            return
+        }
+        
+        currentBundle = bundle
     }
     
     func localizedString(for key: String) -> String {
-        return NSLocalizedString(key, bundle: Bundle.main, comment: "")
+        return NSLocalizedString(key, bundle: currentBundle, comment: "")
     }
 }
 
 // Extension for convenient localization
 extension String {
     var localized: String {
-        return NSLocalizedString(self, bundle: Bundle.main, comment: "")
+        return LanguageManager.shared.localizedString(for: self)
     }
     
     func localized(with arguments: CVarArg...) -> String {
-        return String(format: NSLocalizedString(self, bundle: Bundle.main, comment: ""), arguments: arguments)
+        return String(format: LanguageManager.shared.localizedString(for: self), arguments: arguments)
     }
 }

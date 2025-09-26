@@ -4,6 +4,11 @@
 //
 //  Created by GitHub Copilot on 2025/01/10.
 //
+//  FIXED: Language switching Menu to avoid ViewBridge errors
+//  - Removed BorderlessButtonMenuStyle() that could cause ViewBridge issues
+//  - Added checkmark indicator for currently selected language
+//  - Menu now properly observes LanguageManager for UI updates
+//
 
 import SwiftUI
 import CoreData
@@ -39,8 +44,16 @@ struct PatientNavigationView: View {
             // Language Selector
             Menu {
                 ForEach(LanguageManager.Language.allCases, id: \.self) { language in
-                    Button(language.displayName) {
+                    Button(action: {
                         languageManager.setLanguage(language)
+                    }) {
+                        HStack {
+                            Text(language.displayName)
+                            if languageManager.currentLanguage == language {
+                                Spacer()
+                                Image(systemName: "checkmark")
+                            }
+                        }
                     }
                 }
             } label: {
@@ -49,7 +62,6 @@ struct PatientNavigationView: View {
                     Text("language".localized)
                 }
             }
-            .menuStyle(BorderlessButtonMenuStyle())
             
             Spacer()
             
