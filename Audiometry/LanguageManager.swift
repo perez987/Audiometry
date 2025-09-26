@@ -10,6 +10,7 @@ import SwiftUI
 
 class LanguageManager: ObservableObject {
     @Published var currentLanguage: Language = .english
+    private var currentBundle: Bundle = Bundle.main
     
     enum Language: String, CaseIterable {
         case english = "en"
@@ -31,25 +32,36 @@ class LanguageManager: ObservableObject {
            let language = Language(rawValue: savedLanguage) {
             currentLanguage = language
         }
+        updateBundle()
     }
     
     func setLanguage(_ language: Language) {
         currentLanguage = language
         UserDefaults.standard.set(language.rawValue, forKey: "selectedLanguage")
+        updateBundle()
+    }
+    
+    private func updateBundle() {
+        guard let path = Bundle.main.path(forResource: currentLanguage.rawValue, ofType: "lproj"),
+              let bundle = Bundle(path: path) else {
+            currentBundle = Bundle.main
+            return
+        }
+        currentBundle = bundle
     }
     
     func localizedString(for key: String) -> String {
-        return NSLocalizedString(key, bundle: Bundle.main, comment: "")
+        return NSLocalizedString(key, bundle: currentBundle, comment: "")
     }
 }
 
 // Extension for convenient localization
 extension String {
     var localized: String {
-        return NSLocalizedString(self, bundle: Bundle.main, comment: "")
+        return LanguageManager.shared.localizedString(for: self)
     }
     
     func localized(with arguments: CVarArg...) -> String {
-        return String(format: NSLocalizedString(self, bundle: Bundle.main, comment: ""), arguments: arguments)
+        return String(format: LanguageManager.shared.localizedString(for: self), arguments: arguments)
     }
 }
