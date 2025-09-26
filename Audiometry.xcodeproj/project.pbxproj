@@ -12,6 +12,7 @@
 		D9779AB32E86A860000F22FB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D9779AB22E86A860000F22FB /* Assets.xcassets */; };
 		D9779AB62E86A860000F22FB /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D9779AB52E86A860000F22FB /* Preview Assets.xcassets */; };
 		D9779ABE2E86A896000F22FB /* AudiometryCalculations.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9779ABD2E86A896000F22FB /* AudiometryCalculations.swift */; };
+		D9ABBBF82E86ADDB00703980 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9ABBBF72E86ADDB00703980 /* AppDelegate.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,6 +23,7 @@
 		D9779AB52E86A860000F22FB /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		D9779AB72E86A860000F22FB /* Audiometry.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Audiometry.entitlements; sourceTree = "<group>"; };
 		D9779ABD2E86A896000F22FB /* AudiometryCalculations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudiometryCalculations.swift; sourceTree = "<group>"; };
+		D9ABBBF72E86ADDB00703980 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,6 +56,7 @@
 		D9779AAD2E86A85F000F22FB /* Audiometry */ = {
 			isa = PBXGroup;
 			children = (
+				D9ABBBF72E86ADDB00703980 /* AppDelegate.swift */,
 				D9779AB22E86A860000F22FB /* Assets.xcassets */,
 				D9779AB72E86A860000F22FB /* Audiometry.entitlements */,
 				D9779AAE2E86A85F000F22FB /* AudiometryApp.swift */,
@@ -142,6 +145,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D9ABBBF82E86ADDB00703980 /* AppDelegate.swift in Sources */,
 				D9779AB12E86A85F000F22FB /* ContentView.swift in Sources */,
 				D9779AAF2E86A85F000F22FB /* AudiometryApp.swift in Sources */,
 				D9779ABE2E86A896000F22FB /* AudiometryCalculations.swift in Sources */,
