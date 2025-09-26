@@ -28,20 +28,20 @@
 "bilateral" = "Bilateral";
 
 /* SAL Index */
-"sal_index" = "SAL Index (Speech Audiometry Level):";
-"sal_description" = "SAL Index: Average of 500, 1000, 2000 Hz (speech frequencies)";
+"sal_index" = "SAL Index (Speech Average Loss):";
+"sal_description" = "SAL Index: Average of 500, 1000, 2000 Hz (speech frequencies).";
 
 /* ELI Index */
-"eli_index" = "ELI Index (Ear Loss Index):";
-"eli_description" = "ELI Index: Average of all tested frequencies weighted for hearing loss impact";
+"eli_index" = "ELI Index (Early Loss Index):";
+"eli_description" = "ELI Index: Average of all tested frequencies weighted for hearing loss impact.";
 
 /* Parameters Summary */
 "parameters_summary" = "Parameters Summary";
 "patient_label" = "Patient:";
 "age_label" = "Age:";
 "occupation_label" = "Occupation:";
-"test_frequencies" = "Test Frequencies: 500, 1000, 2000, 4000, 8000 Hz";
-"results_measured" = "Results are measured in dB HL (Hearing Level)";
+"test_frequencies" = "Frequencies: 500, 1000, 2000, 4000, 8000 Hz.";
+"results_measured" = "Results are measured in dB HL (Hearing Level).";
 
 /* Hearing Loss Classifications */
 "normal" = "Normal";

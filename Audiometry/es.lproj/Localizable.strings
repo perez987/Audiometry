@@ -9,10 +9,10 @@
 "patient_information" = "Información del Paciente";
 "name" = "Nombre:";
 "age" = "Edad:";
-"job" = "Trabajo:";
-"enter_patient_name" = "Ingrese nombre del paciente";
-"enter_age" = "Ingrese edad";
-"enter_job_occupation" = "Ingrese trabajo/ocupación";
+"job" = "Ocupación:";
+"enter_patient_name" = "Introduzca el Nombre";
+"enter_age" = "Introduzca la edad";
+"enter_job_occupation" = "Introduzca trabajo/ocupación";
 "not_specified" = "No especificado";
 
 /* Audiometric Testing */
@@ -28,20 +28,20 @@
 "bilateral" = "Bilateral";
 
 /* SAL Index */
-"sal_index" = "Índice SAL (Nivel de Audiometría del Habla):";
-"sal_description" = "Índice SAL: Promedio de 500, 1000, 2000 Hz (frecuencias del habla)";
+"sal_index" = "Índice SAL (Speech Average Loss):";
+"sal_description" = "Índice SAL: Promedio de 500, 1000, 2000 Hz (frecuencias del habla).";
 
 /* ELI Index */
-"eli_index" = "Índice ELI (Índice de Pérdida del Oído):";
-"eli_description" = "Índice ELI: Promedio de todas las frecuencias probadas ponderado por impacto en pérdida auditiva";
+"eli_index" = "Índice ELI (Early Loss Index):";
+"eli_description" = "Índice ELI: Promedio de todas las frecuencias probadas ponderado por impacto en pérdida auditiva.";
 
 /* Parameters Summary */
 "parameters_summary" = "Resumen de Parámetros";
 "patient_label" = "Paciente:";
 "age_label" = "Edad:";
 "occupation_label" = "Ocupación:";
-"test_frequencies" = "Frecuencias de Prueba: 500, 1000, 2000, 4000, 8000 Hz";
-"results_measured" = "Los resultados se miden en dB HL (Nivel de Audición)";
+"test_frequencies" = "Frecuencias: 500, 1000, 2000, 4000, 8000 Hz.";
+"results_measured" = "Los resultados se miden en dB HL (Nivel de Audición).";
 
 /* Hearing Loss Classifications */
 "normal" = "Normal";
@@ -59,7 +59,7 @@
 "search_patient" = "Buscar";
 "search_placeholder" = "Buscar por nombre del paciente";
 "no_patients_found" = "No se encontraron pacientes";
-"patient_saved" = "Paciente guardado exitosamente";
+"patient_saved" = "Paciente guardado con éxito";
 "patient_loaded" = "Paciente cargado";
 
 /* Buttons */
