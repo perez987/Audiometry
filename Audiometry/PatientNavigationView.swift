@@ -40,54 +40,52 @@ struct PatientNavigationView: View {
     }
     
     var body: some View {
-        HStack(spacing: 12) {
-            // Language Selector
-            Menu {
-                ForEach(LanguageManager.Language.allCases, id: \.self) { language in
-                    Button(action: {
-                        languageManager.setLanguage(language)
-                    }) {
-                        HStack {
-                            Text(language.displayName)
-                            if languageManager.currentLanguage == language {
+        VStack(spacing: 8) {
+            // Top row: Language selector, search box, and Find button
+            HStack(spacing: 12) {
+                // Language Selector
+                Menu {
+                    ForEach(LanguageManager.Language.allCases, id: \.self) { language in
+                        Button(action: {
+                            languageManager.setLanguage(language)
+                        }) {
+                            HStack {
+                                Text(language.displayName)
+                                if languageManager.currentLanguage == language {
 //                                Spacer()
-                                Image(systemName: "checkmark")
+                                    Image(systemName: "checkmark")
+                                }
                             }
                         }
                     }
-                }
-            } label: {
-                HStack {
-                    Image(systemName: "globe")
+                } label: {
+                    HStack {
+                        Image(systemName: "globe")
 //                    Text("language".localized)
+                    }
                 }
-            }
-            .help("select_language".localized) //Tooltip
+                .help("select_language".localized) //Tooltip
 
-            
-            Spacer()
-            
-            // Search
-            HStack {
-                TextField("search_placeholder".localized, text: $searchText)
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                    .frame(width: 216)
-                    .onSubmit {
+                Spacer()
+                
+                // Search
+                HStack {
+                    TextField("search_placeholder".localized, text: $searchText)
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                        .frame(width: 216)
+                        .onSubmit {
+                            performSearch()
+                        }
+                    
+                    Button("search_patient".localized) {
                         performSearch()
                     }
-                
-                Button("search_patient".localized) {
-                    performSearch()
+                    .frame(width: 72)
+                    .disabled(searchText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
                 }
-                .frame(width: 72)
-                .disabled(searchText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
             }
-            Divider()
-                .frame(height: 20)
             
-//            Spacer()
-            
-            // Patient Navigation
+            // Bottom row: Patient management buttons (New, Save, Prev, Next)
             HStack(spacing: 8) {
                 Button("new_patient".localized) {
                     onNewPatient()
@@ -124,6 +122,8 @@ struct PatientNavigationView: View {
                 }
                 .frame(width: 54)
                 .disabled(!hasNext)
+                
+                Spacer()
             }
         }
         .padding(.horizontal)
