@@ -36,17 +36,27 @@ class LanguageManager: ObservableObject {
     }
     
     func setLanguage(_ language: Language) {
+        // Avoid unnecessary changes
+        guard currentLanguage != language else { return }
+        
         currentLanguage = language
         UserDefaults.standard.set(language.rawValue, forKey: "selectedLanguage")
         updateBundle()
     }
     
     private func updateBundle() {
-        guard let path = Bundle.main.path(forResource: currentLanguage.rawValue, ofType: "lproj"),
-              let bundle = Bundle(path: path) else {
+        guard let path = Bundle.main.path(forResource: currentLanguage.rawValue, ofType: "lproj") else {
+            // Fallback to main bundle if language bundle not found
             currentBundle = Bundle.main
             return
         }
+        
+        guard let bundle = Bundle(path: path) else {
+            // Fallback to main bundle if bundle creation fails
+            currentBundle = Bundle.main
+            return
+        }
+        
         currentBundle = bundle
     }
     

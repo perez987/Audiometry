@@ -39,8 +39,16 @@ struct PatientNavigationView: View {
             // Language Selector
             Menu {
                 ForEach(LanguageManager.Language.allCases, id: \.self) { language in
-                    Button(language.displayName) {
+                    Button(action: {
                         languageManager.setLanguage(language)
+                    }) {
+                        HStack {
+                            Text(language.displayName)
+                            if languageManager.currentLanguage == language {
+                                Spacer()
+                                Image(systemName: "checkmark")
+                            }
+                        }
                     }
                 }
             } label: {
@@ -49,7 +57,6 @@ struct PatientNavigationView: View {
                     Text("language".localized)
                 }
             }
-            .menuStyle(BorderlessButtonMenuStyle())
             
             Spacer()
             
