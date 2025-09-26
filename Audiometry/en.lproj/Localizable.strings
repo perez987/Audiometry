@@ -16,7 +16,7 @@
 "not_specified" = "Not specified";
 
 /* Audiometric Testing */
-"audiometric_testing_results" = "Audiometric Testing Results (dB HL)";
+"audiometric_testing_results" = "Audiometric Test Result (dB HL)";
 "frequency_hz" = "Frequency (Hz)";
 "right_ear" = "Right Ear";
 "left_ear" = "Left Ear";
@@ -57,9 +57,9 @@
 "previous_patient" = "Previous";
 "next_patient" = "Next";
 "search_patient" = "Search";
-"search_placeholder" = "Search by patient name";
-"no_patients_found" = "No patients found";
-"patient_saved" = "Patient saved successfully";
+"search_placeholder" = "Search by name";
+"no_patients_found" = "No name found";
+"patient_saved" = "Patient saved";
 "patient_loaded" = "Patient loaded";
 
 /* Buttons */

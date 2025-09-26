@@ -7,19 +7,19 @@
 
 /* Patient Information */
 "patient_information" = "Información del Paciente";
-"name" = "Nombre:";
-"age" = "Edad:";
-"job" = "Ocupación:";
+"name" = "Nombre";
+"age" = "Edad";
+"job" = "Trabajo";
 "enter_patient_name" = "Introduzca el Nombre";
 "enter_age" = "Introduzca la edad";
 "enter_job_occupation" = "Introduzca trabajo/ocupación";
 "not_specified" = "No especificado";
 
 /* Audiometric Testing */
-"audiometric_testing_results" = "Resultados de Pruebas Audiométricas (dB HL)";
+"audiometric_testing_results" = "Resultado de la Prueba Audiométrica (dB HL)";
 "frequency_hz" = "Frecuencia (Hz)";
-"right_ear" = "Oído Derecho";
-"left_ear" = "Oído Izquierdo";
+"right_ear" = "OD";
+"left_ear" = "OI";
 "db_placeholder" = "dB";
 
 /* Assessment Results */
@@ -57,9 +57,9 @@
 "previous_patient" = "Anterior";
 "next_patient" = "Siguiente";
 "search_patient" = "Buscar";
-"search_placeholder" = "Buscar por nombre del paciente";
-"no_patients_found" = "No se encontraron pacientes";
-"patient_saved" = "Paciente guardado con éxito";
+"search_placeholder" = "Buscar por nombre";
+"no_patients_found" = "Nombre no encontrado";
+"patient_saved" = "Paciente guardado";
 "patient_loaded" = "Paciente cargado";
 
 /* Buttons */

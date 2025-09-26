@@ -2,7 +2,7 @@
 
 ## App for macOS 13+
 
-<img src="Images/Main-window.png" width="450px">
+<img src="Images/Main-window-ES.png" width="450px">
 
 
 - Xcode 15.2 project
