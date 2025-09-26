@@ -4,6 +4,11 @@
 //
 //  Created by GitHub Copilot on 2025/01/10.
 //
+//  FIXED: Language switching Menu to avoid ViewBridge errors
+//  - Removed BorderlessButtonMenuStyle() that could cause ViewBridge issues
+//  - Added checkmark indicator for currently selected language
+//  - Menu now properly observes LanguageManager for UI updates
+//
 
 import SwiftUI
 import CoreData

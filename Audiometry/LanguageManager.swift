@@ -4,6 +4,11 @@
 //
 //  Created by GitHub Copilot on 2025/01/10.
 //
+//  FIXED: Dynamic language switching at runtime
+//  - Loads appropriate language bundle (en.lproj/es.lproj) based on user selection
+//  - Updates all UI elements when language changes through @Published property
+//  - Resolves ViewBridge error by avoiding rapid UI updates and improving Menu implementation
+//
 
 import Foundation
 import SwiftUI
