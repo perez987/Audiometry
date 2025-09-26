@@ -1,0 +1,70 @@
+/* Spanish Localization for Audiometry App */
+
+/* Main UI */
+"app_title" = "Audiometría";
+"patient_report" = "Informe del Paciente";
+"language" = "Idioma";
+
+/* Patient Information */
+"patient_information" = "Información del Paciente";
+"name" = "Nombre:";
+"age" = "Edad:";
+"job" = "Trabajo:";
+"enter_patient_name" = "Ingrese nombre del paciente";
+"enter_age" = "Ingrese edad";
+"enter_job_occupation" = "Ingrese trabajo/ocupación";
+"not_specified" = "No especificado";
+
+/* Audiometric Testing */
+"audiometric_testing_results" = "Resultados de Pruebas Audiométricas (dB HL)";
+"frequency_hz" = "Frecuencia (Hz)";
+"right_ear" = "Oído Derecho";
+"left_ear" = "Oído Izquierdo";
+"db_placeholder" = "dB";
+
+/* Assessment Results */
+"assessment_results" = "Resultados de Evaluación";
+"hearing_loss_assessment" = "Evaluación de Pérdida Auditiva:";
+"bilateral" = "Bilateral";
+
+/* SAL Index */
+"sal_index" = "Índice SAL (Nivel de Audiometría del Habla):";
+"sal_description" = "Índice SAL: Promedio de 500, 1000, 2000 Hz (frecuencias del habla)";
+
+/* ELI Index */
+"eli_index" = "Índice ELI (Índice de Pérdida del Oído):";
+"eli_description" = "Índice ELI: Promedio de todas las frecuencias probadas ponderado por impacto en pérdida auditiva";
+
+/* Parameters Summary */
+"parameters_summary" = "Resumen de Parámetros";
+"patient_label" = "Paciente:";
+"age_label" = "Edad:";
+"occupation_label" = "Ocupación:";
+"test_frequencies" = "Frecuencias de Prueba: 500, 1000, 2000, 4000, 8000 Hz";
+"results_measured" = "Los resultados se miden en dB HL (Nivel de Audición)";
+
+/* Hearing Loss Classifications */
+"normal" = "Normal";
+"mild" = "Leve";
+"moderate" = "Moderada";
+"moderate_severe" = "Moderada-Severa";
+"severe" = "Severa";
+"profound" = "Profunda";
+
+/* Patient Navigation */
+"save_patient" = "Guardar Paciente";
+"new_patient" = "Nuevo Paciente";
+"previous_patient" = "Anterior";
+"next_patient" = "Siguiente";
+"search_patient" = "Buscar";
+"search_placeholder" = "Buscar por nombre del paciente";
+"no_patients_found" = "No se encontraron pacientes";
+"patient_saved" = "Paciente guardado exitosamente";
+"patient_loaded" = "Paciente cargado";
+
+/* Buttons */
+"save" = "Guardar";
+"load" = "Cargar";
+"clear" = "Limpiar";
+"cancel" = "Cancelar";
+"ok" = "Aceptar";

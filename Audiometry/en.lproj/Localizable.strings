@@ -1,0 +1,70 @@
+/* English Localization for Audiometry App */
+
+/* Main UI */
+"app_title" = "Audiometry";
+"patient_report" = "Patient Report";
+"language" = "Language";
+
+/* Patient Information */
+"patient_information" = "Patient Information";
+"name" = "Name:";
+"age" = "Age:";
+"job" = "Job:";
+"enter_patient_name" = "Enter patient name";
+"enter_age" = "Enter age";
+"enter_job_occupation" = "Enter job/occupation";
+"not_specified" = "Not specified";
+
+/* Audiometric Testing */
+"audiometric_testing_results" = "Audiometric Testing Results (dB HL)";
+"frequency_hz" = "Frequency (Hz)";
+"right_ear" = "Right Ear";
+"left_ear" = "Left Ear";
+"db_placeholder" = "dB";
+
+/* Assessment Results */
+"assessment_results" = "Assessment Results";
+"hearing_loss_assessment" = "Hearing Loss Assessment:";
+"bilateral" = "Bilateral";
+
+/* SAL Index */
+"sal_index" = "SAL Index (Speech Audiometry Level):";
+"sal_description" = "SAL Index: Average of 500, 1000, 2000 Hz (speech frequencies)";
+
+/* ELI Index */
+"eli_index" = "ELI Index (Ear Loss Index):";
+"eli_description" = "ELI Index: Average of all tested frequencies weighted for hearing loss impact";
+
+/* Parameters Summary */
+"parameters_summary" = "Parameters Summary";
+"patient_label" = "Patient:";
+"age_label" = "Age:";
+"occupation_label" = "Occupation:";
+"test_frequencies" = "Test Frequencies: 500, 1000, 2000, 4000, 8000 Hz";
+"results_measured" = "Results are measured in dB HL (Hearing Level)";
+
+/* Hearing Loss Classifications */
+"normal" = "Normal";
+"mild" = "Mild";
+"moderate" = "Moderate";
+"moderate_severe" = "Moderate-Severe";
+"severe" = "Severe";
+"profound" = "Profound";
+
+/* Patient Navigation */
+"save_patient" = "Save Patient";
+"new_patient" = "New Patient";
+"previous_patient" = "Previous";
+"next_patient" = "Next";
+"search_patient" = "Search";
+"search_placeholder" = "Search by patient name";
+"no_patients_found" = "No patients found";
+"patient_saved" = "Patient saved successfully";
+"patient_loaded" = "Patient loaded";
+
+/* Buttons */
+"save" = "Save";
+"load" = "Load";
+"clear" = "Clear";
+"cancel" = "Cancel";
+"ok" = "OK";
