@@ -61,7 +61,7 @@ struct PatientNavigationView: View {
                 } label: {
                     HStack {
                         Image(systemName: "globe")
-//                    Text("language".localized)
+                        Text("language".localized)
                     }
                 }
                 .help("select_language".localized) //Tooltip
@@ -72,7 +72,7 @@ struct PatientNavigationView: View {
                 HStack {
                     TextField("search_placeholder".localized, text: $searchText)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
-                        .frame(width: 216)
+                        .frame(width: 300)
                         .onSubmit {
                             performSearch()
                         }
@@ -87,6 +87,7 @@ struct PatientNavigationView: View {
             
             // Bottom row: Patient management buttons (New, Save, Prev, Next)
             HStack(spacing: 8) {
+                Spacer()
                 Button("new_patient".localized) {
                     onNewPatient()
                 }

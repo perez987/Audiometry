@@ -195,8 +195,8 @@ var body: some View {
             .padding()
         }
     }
-//    .frame(minWidth: 758, idealWidth: 758, maxWidth: 758, minHeight: 524, idealHeight: 860, maxHeight: 860)
-    .frame(minWidth: 758, idealWidth: 758, maxWidth: 758, minHeight: 524, idealHeight: 860, maxHeight: 860)
+//            .frame(minHeight: 524, idealHeight: 860, maxHeight: 960)
+    .frame(minWidth: 580, idealWidth: 580, maxWidth: 580, minHeight: 610, idealHeight: 610, maxHeight: 1186)
     
     .onAppear {
         loadAllPatients()
