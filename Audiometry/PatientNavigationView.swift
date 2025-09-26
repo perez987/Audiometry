@@ -50,7 +50,7 @@ struct PatientNavigationView: View {
                         HStack {
                             Text(language.displayName)
                             if languageManager.currentLanguage == language {
-                                Spacer()
+//                                Spacer()
                                 Image(systemName: "checkmark")
                             }
                         }
@@ -59,9 +59,11 @@ struct PatientNavigationView: View {
             } label: {
                 HStack {
                     Image(systemName: "globe")
-                    Text("language".localized)
+//                    Text("language".localized)
                 }
             }
+            .help("select_language".localized) //Tooltip
+
             
             Spacer()
             
@@ -69,7 +71,7 @@ struct PatientNavigationView: View {
             HStack {
                 TextField("search_placeholder".localized, text: $searchText)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
-                    .frame(width: 200)
+                    .frame(width: 216)
                     .onSubmit {
                         performSearch()
                     }
@@ -77,20 +79,25 @@ struct PatientNavigationView: View {
                 Button("search_patient".localized) {
                     performSearch()
                 }
+                .frame(width: 72)
                 .disabled(searchText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
             }
+            Divider()
+                .frame(height: 20)
             
-            Spacer()
+//            Spacer()
             
             // Patient Navigation
             HStack(spacing: 8) {
                 Button("new_patient".localized) {
                     onNewPatient()
                 }
+                .frame(width: 64)
                 
                 Button("save_patient".localized) {
                     onSavePatient()
                 }
+                .frame(width: 72)
                 .disabled(currentPatient == nil)
                 
                 Divider()
@@ -102,11 +109,12 @@ struct PatientNavigationView: View {
                         onPatientSelected(previousPatient)
                     }
                 }
+                .frame(width: 54)
                 .disabled(!hasPrevious)
                 
                 Text("\(currentIndex + 1) / \(allPatients.count)")
                     .foregroundColor(.secondary)
-                    .frame(minWidth: 60)
+                    .frame(minWidth: 40, idealWidth: 40, maxWidth: 40)
                 
                 Button("next_patient".localized) {
                     if hasNext {
@@ -114,6 +122,7 @@ struct PatientNavigationView: View {
                         onPatientSelected(nextPatient)
                     }
                 }
+                .frame(width: 54)
                 .disabled(!hasNext)
             }
         }

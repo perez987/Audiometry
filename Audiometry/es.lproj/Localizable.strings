@@ -7,12 +7,12 @@
 
 /* Patient Information */
 "patient_information" = "Información del Paciente";
-"name" = "Nombre";
-"age" = "Edad";
-"job" = "Trabajo";
+"name" = "Nombre:";
+"age" = "Edad:";
+"job" = "Trabajo:";
 "enter_patient_name" = "Introduzca el Nombre";
 "enter_age" = "Introduzca la edad";
-"enter_job_occupation" = "Introduzca trabajo/ocupación";
+"enter_job_occupation" = "Introduzca el trabajo u ocupación";
 "not_specified" = "No especificado";
 
 /* Audiometric Testing */
@@ -52,10 +52,10 @@
 "profound" = "Profunda";
 
 /* Patient Navigation */
-"save_patient" = "Guardar Paciente";
-"new_patient" = "Nuevo Paciente";
-"previous_patient" = "Anterior";
-"next_patient" = "Siguiente";
+"save_patient" = "Guardar";
+"new_patient" = "Nuevo";
+"previous_patient" = "<<";
+"next_patient" = ">>";
 "search_patient" = "Buscar";
 "search_placeholder" = "Buscar por nombre";
 "no_patients_found" = "Nombre no encontrado";
@@ -68,3 +68,6 @@
 "clear" = "Limpiar";
 "cancel" = "Cancelar";
 "ok" = "Aceptar";
+
+/* Help */
+"select_language" = "Elige el idioma de la aplicación";

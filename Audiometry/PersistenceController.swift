@@ -35,7 +35,8 @@ struct PersistenceController {
             try viewContext.save()
         } catch {
             let nsError = error as NSError
-            fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
+            print("Unresolved error: \(nsError), \(nsError.localizedDescription)")
+//            fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
         }
         return result
     }()
@@ -51,10 +52,8 @@ struct PersistenceController {
         
         container.loadPersistentStores { _, error in
             if let error = error as NSError? {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate.
-                // You should not use this function in a shipping application.
-                fatalError("Unresolved error \(error), \(error.userInfo)")
+                print("Unresolved error: \(error), \(error.localizedDescription)")
+//                fatalError("Unresolved error \(error), \(error.userInfo)")
             }
         }
         container.viewContext.automaticallyMergesChangesFromParent = true
@@ -71,7 +70,8 @@ extension PersistenceController {
                 try context.save()
             } catch {
                 let nsError = error as NSError
-                fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
+                print("Unresolved error: \(error), \(error.localizedDescription)")
+//                fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
             }
         }
     }
@@ -89,7 +89,7 @@ extension PersistenceController {
         do {
             return try container.viewContext.fetch(request)
         } catch {
-            print("Error fetching patients: \(error)")
+            print("Error fetching patients: \(error.localizedDescription)")
             return []
         }
     }
@@ -102,7 +102,7 @@ extension PersistenceController {
         do {
             return try container.viewContext.fetch(request)
         } catch {
-            print("Error searching patients: \(error)")
+            print("Error searching patients: \(error.localizedDescription)")
             return []
         }
     }

@@ -65,9 +65,10 @@ var body: some View {
                     VStack(alignment: .leading, spacing: 12) {
                         HStack {
                             Text("name".localized)
-                                .frame(width: 60, alignment: .leading)
+                                .frame(width: 72, alignment: .leading)
                             TextField("enter_patient_name".localized, text: $patientName)
                                 .textFieldStyle(RoundedBorderTextFieldStyle())
+                                .frame(width: 380)
                                 .onChange(of: patientName) { _ in
                                     updateCurrentPatient()
                                 }
@@ -75,10 +76,10 @@ var body: some View {
 
                         HStack {
                             Text("age".localized)
-                                .frame(width: 60, alignment: .leading)
+                                .frame(width: 72, alignment: .leading)
                             TextField("enter_age".localized, text: $patientAge)
                                 .textFieldStyle(RoundedBorderTextFieldStyle())
-                                .frame(width: 100)
+                                .frame(width: 140)
                                 .onChange(of: patientAge) { _ in
                                     updateCurrentPatient()
                                 }
@@ -87,9 +88,10 @@ var body: some View {
 
                         HStack {
                             Text("job".localized)
-                                .frame(width: 60, alignment: .leading)
+                                .frame(width: 72, alignment: .leading)
                             TextField("enter_job_occupation".localized, text: $patientJob)
                                 .textFieldStyle(RoundedBorderTextFieldStyle())
+                                .frame(width: 380)
                                 .onChange(of: patientJob) { _ in
                                     updateCurrentPatient()
                                 }
@@ -193,7 +195,9 @@ var body: some View {
             .padding()
         }
     }
-    .frame(minWidth: 524, idealWidth: 524, maxWidth: 524, minHeight: 524, idealHeight: 860, maxHeight: 860)
+//    .frame(minWidth: 758, idealWidth: 758, maxWidth: 758, minHeight: 524, idealHeight: 860, maxHeight: 860)
+    .frame(minWidth: 750, minHeight: 524, idealHeight: 860, maxHeight: 860)
+    
     .onAppear {
         loadAllPatients()
         if allPatients.isEmpty {

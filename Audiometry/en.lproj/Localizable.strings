@@ -52,11 +52,11 @@
 "profound" = "Profound";
 
 /* Patient Navigation */
-"save_patient" = "Save Patient";
-"new_patient" = "New Patient";
-"previous_patient" = "Previous";
-"next_patient" = "Next";
-"search_patient" = "Search";
+"save_patient" = "Save";
+"new_patient" = "New";
+"previous_patient" = "<<";
+"next_patient" = ">>";
+"search_patient" = "Find";
 "search_placeholder" = "Search by name";
 "no_patients_found" = "No name found";
 "patient_saved" = "Patient saved";
@@ -68,3 +68,6 @@
 "clear" = "Clear";
 "cancel" = "Cancel";
 "ok" = "OK";
+
+/* Help */
+"select_language" = "Select the app language";
