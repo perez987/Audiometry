@@ -46,7 +46,7 @@ struct PatientNavigationView: View {
             } label: {
                 HStack {
                     Image(systemName: "globe")
-//                    Text("language".localized)
+                    Text("language".localized)
                 }
             }
             .menuStyle(BorderlessButtonMenuStyle())
