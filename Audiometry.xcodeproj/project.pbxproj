@@ -7,6 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D951DC082E86BE6000D254D8 /* LanguageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D951DC072E86BE6000D254D8 /* LanguageManager.swift */; };
+		D951DC0A2E86BE6600D254D8 /* Patient.swift in Sources */ = {isa = PBXBuildFile; fileRef = D951DC092E86BE6600D254D8 /* Patient.swift */; };
+		D951DC0C2E86BE6B00D254D8 /* PatientNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D951DC0B2E86BE6B00D254D8 /* PatientNavigationView.swift */; };
+		D951DC0E2E86BE7000D254D8 /* PersistenceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D951DC0D2E86BE7000D254D8 /* PersistenceController.swift */; };
+		D951DC112E86BE7800D254D8 /* DataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = D951DC0F2E86BE7800D254D8 /* DataModel.xcdatamodeld */; };
+		D951DC132E86BE7F00D254D8 /* en.lproj in Resources */ = {isa = PBXBuildFile; fileRef = D951DC122E86BE7F00D254D8 /* en.lproj */; };
+		D951DC152E86BE8400D254D8 /* es.lproj in Resources */ = {isa = PBXBuildFile; fileRef = D951DC142E86BE8400D254D8 /* es.lproj */; };
 		D9779AAF2E86A85F000F22FB /* AudiometryApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9779AAE2E86A85F000F22FB /* AudiometryApp.swift */; };
 		D9779AB12E86A85F000F22FB /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9779AB02E86A85F000F22FB /* ContentView.swift */; };
 		D9779AB32E86A860000F22FB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D9779AB22E86A860000F22FB /* Assets.xcassets */; };
@@ -16,6 +23,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		D951DC072E86BE6000D254D8 /* LanguageManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LanguageManager.swift; sourceTree = "<group>"; };
+		D951DC092E86BE6600D254D8 /* Patient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Patient.swift; sourceTree = "<group>"; };
+		D951DC0B2E86BE6B00D254D8 /* PatientNavigationView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PatientNavigationView.swift; sourceTree = "<group>"; };
+		D951DC0D2E86BE7000D254D8 /* PersistenceController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PersistenceController.swift; sourceTree = "<group>"; };
+		D951DC102E86BE7800D254D8 /* DataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DataModel.xcdatamodel; sourceTree = "<group>"; };
+		D951DC122E86BE7F00D254D8 /* en.lproj */ = {isa = PBXFileReference; lastKnownFileType = folder; path = en.lproj; sourceTree = "<group>"; };
+		D951DC142E86BE8400D254D8 /* es.lproj */ = {isa = PBXFileReference; lastKnownFileType = folder; path = es.lproj; sourceTree = "<group>"; };
 		D9779AAB2E86A85F000F22FB /* Audiometry.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Audiometry.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D9779AAE2E86A85F000F22FB /* AudiometryApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudiometryApp.swift; sourceTree = "<group>"; };
 		D9779AB02E86A85F000F22FB /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -62,6 +76,13 @@
 				D9779AAE2E86A85F000F22FB /* AudiometryApp.swift */,
 				D9779ABD2E86A896000F22FB /* AudiometryCalculations.swift */,
 				D9779AB02E86A85F000F22FB /* ContentView.swift */,
+				D951DC0F2E86BE7800D254D8 /* DataModel.xcdatamodeld */,
+				D951DC122E86BE7F00D254D8 /* en.lproj */,
+				D951DC142E86BE8400D254D8 /* es.lproj */,
+				D951DC072E86BE6000D254D8 /* LanguageManager.swift */,
+				D951DC092E86BE6600D254D8 /* Patient.swift */,
+				D951DC0B2E86BE6B00D254D8 /* PatientNavigationView.swift */,
+				D951DC0D2E86BE7000D254D8 /* PersistenceController.swift */,
 				D9779AB42E86A860000F22FB /* Preview Content */,
 			);
 			path = Audiometry;
@@ -134,6 +155,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				D9779AB62E86A860000F22FB /* Preview Assets.xcassets in Resources */,
+				D951DC152E86BE8400D254D8 /* es.lproj in Resources */,
+				D951DC132E86BE7F00D254D8 /* en.lproj in Resources */,
 				D9779AB32E86A860000F22FB /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -149,6 +172,11 @@
 				D9779AB12E86A85F000F22FB /* ContentView.swift in Sources */,
 				D9779AAF2E86A85F000F22FB /* AudiometryApp.swift in Sources */,
 				D9779ABE2E86A896000F22FB /* AudiometryCalculations.swift in Sources */,
+				D951DC082E86BE6000D254D8 /* LanguageManager.swift in Sources */,
+				D951DC0C2E86BE6B00D254D8 /* PatientNavigationView.swift in Sources */,
+				D951DC112E86BE7800D254D8 /* DataModel.xcdatamodeld in Sources */,
+				D951DC0A2E86BE6600D254D8 /* Patient.swift in Sources */,
+				D951DC0E2E86BE7000D254D8 /* PersistenceController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -349,6 +377,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		D951DC0F2E86BE7800D254D8 /* DataModel.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				D951DC102E86BE7800D254D8 /* DataModel.xcdatamodel */,
+			);
+			currentVersion = D951DC102E86BE7800D254D8 /* DataModel.xcdatamodel */;
+			path = DataModel.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = D9779AA32E86A85E000F22FB /* Project object */;
 }

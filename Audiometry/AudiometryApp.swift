@@ -22,4 +22,3 @@ struct AudiometryApp: App {
         .windowResizability(.contentSize)
     }
 }
-
