@@ -11,6 +11,7 @@
   - audiometric test input
   - hearing loss assessment calculations
   - including SAL and ELI indices with results display.
+ 
 - To do:
  - save patients data in core data
  - add language system with English and Spanish
