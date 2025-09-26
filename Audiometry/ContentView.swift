@@ -196,7 +196,7 @@ var body: some View {
         }
     }
 //    .frame(minWidth: 758, idealWidth: 758, maxWidth: 758, minHeight: 524, idealHeight: 860, maxHeight: 860)
-    .frame(minWidth: 750, minHeight: 524, idealHeight: 860, maxHeight: 860)
+    .frame(minWidth: 758, idealWidth: 758, maxWidth: 758, minHeight: 524, idealHeight: 860, maxHeight: 860)
     
     .onAppear {
         loadAllPatients()
