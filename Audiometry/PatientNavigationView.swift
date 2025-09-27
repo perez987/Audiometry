@@ -47,7 +47,10 @@ struct PatientNavigationView: View {
                 Menu {
                     ForEach(LanguageManager.Language.allCases, id: \.self) { language in
                         Button(action: {
-                            languageManager.setLanguage(language)
+                            // Add small delay to avoid ViewBridge errors from rapid UI updates
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                                languageManager.setLanguage(language)
+                            }
                         }) {
                             HStack {
                                 Text(language.displayName)
