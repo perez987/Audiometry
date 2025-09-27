@@ -41,7 +41,7 @@ struct PatientNavigationView: View {
     
     var body: some View {
         VStack(spacing: 8) {
-            // Top row: Language selector, search box, and Find button
+            // Top row: Language selector, search box and Find button
             HStack(spacing: 12) {
                 // Language Selector
                 Menu {
@@ -80,7 +80,7 @@ struct PatientNavigationView: View {
                     Button("search_patient".localized) {
                         performSearch()
                     }
-                    .frame(width: 72)
+                    .frame(width: 80)
                     .disabled(searchText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
                 }
             }
@@ -91,12 +91,12 @@ struct PatientNavigationView: View {
                 Button("new_patient".localized) {
                     onNewPatient()
                 }
-                .frame(width: 64)
+//                .frame(width: 80)
                 
                 Button("save_patient".localized) {
                     onSavePatient()
                 }
-                .frame(width: 72)
+//                .frame(width: 80)
                 .disabled(currentPatient == nil)
                 
                 Divider()
@@ -108,12 +108,12 @@ struct PatientNavigationView: View {
                         onPatientSelected(previousPatient)
                     }
                 }
-                .frame(width: 54)
+//                .frame(width: 80)
                 .disabled(!hasPrevious)
                 
                 Text("\(currentIndex + 1) / \(allPatients.count)")
                     .foregroundColor(.secondary)
-                    .frame(minWidth: 40, idealWidth: 40, maxWidth: 40)
+//                    .frame(minWidth: 50, idealWidth: 50, maxWidth: 50)
                 
                 Button("next_patient".localized) {
                     if hasNext {
@@ -121,7 +121,7 @@ struct PatientNavigationView: View {
                         onPatientSelected(nextPatient)
                     }
                 }
-                .frame(width: 54)
+//                .frame(width: 80)
                 .disabled(!hasNext)
                 
                 Spacer()
