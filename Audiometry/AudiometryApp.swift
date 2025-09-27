@@ -19,28 +19,15 @@ struct AudiometryApp: App {
         WindowGroup {
             ContentView()
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
-            
-                .onAppear {
-                    // Set initial window title
-                    DispatchQueue.main.async {
-                        if let window = NSApplication.shared.windows.first {
-                            window.title = languageManager.localizedString(for: "app_title")
-                        }
-                    }
-                }
         }
-        
         .windowStyle(DefaultWindowStyle())
         .windowResizability(.contentSize)
         // Use computed property that responds to language changes
         .onChange(of: languageManager.currentLanguage) { _ in
-            // Force window title update when language changes
+            // Delegate window title update to AppDelegate to avoid ordering issues
             DispatchQueue.main.async {
-                if let window = NSApplication.shared.windows.first {
-                    window.title = languageManager.localizedString(for: "app_title")
-                }
+                appDelegate.updateWindowTitle()
             }
         }
-
     }
 }
