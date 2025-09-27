@@ -287,8 +287,13 @@ var body: some View {
         
         // Auto-save with debouncing to avoid excessive saves during rapid typing
         autoSaveWorkItem?.cancel()
-        autoSaveWorkItem = DispatchWorkItem { [weak self] in
-            self?.saveCurrentPatient()
+        let context = viewContext  // Capture the context instead of self
+        autoSaveWorkItem = DispatchWorkItem {
+            do {
+                try context.save()
+            } catch {
+                print("Error auto-saving patient: \(error)")
+            }
         }
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0, execute: autoSaveWorkItem!)
     }
