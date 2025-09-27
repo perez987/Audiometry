@@ -69,7 +69,7 @@ extension PersistenceController {
             do {
                 try context.save()
             } catch {
-                let nsError = error as NSError
+//                let nsError = error as NSError
                 print("Unresolved error: \(error), \(error.localizedDescription)")
 //                fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
             }
