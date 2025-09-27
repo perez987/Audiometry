@@ -6,7 +6,7 @@
 
 ## App for macOS 13+
 
-<img src="Images/Main-window-light.png" width="600px">
+<img src="Images/Main-window.png" width="640px">
 
 - Xcode 15.2 project
 - App runs on macOS13+.
