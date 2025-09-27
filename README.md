@@ -1,5 +1,9 @@
 # Audiometry
 
+![Platform](https://img.shields.io/badge/macOS-13+-orange.svg)
+![Xcode](https://img.shields.io/badge/Xcode-macOS13+-lavender.svg)
+![Downloads](https://img.shields.io/github/downloads/perez987/Audiometry/total?label=Downloads&color=9494ff)
+
 ## App for macOS 13+
 
 <img src="Images/Main-window-light.png" width="600px">
