@@ -84,7 +84,7 @@ extension PersistenceController {
     
     func fetchPatients() -> [Patient] {
         let request: NSFetchRequest<Patient> = Patient.fetchRequest()
-        request.sortDescriptors = [NSSortDescriptor(keyPath: \Patient.dateModified, ascending: false)]
+        request.sortDescriptors = [NSSortDescriptor(keyPath: \Patient.name, ascending: true)]
         
         do {
             return try container.viewContext.fetch(request)
