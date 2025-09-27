@@ -7,6 +7,7 @@
 
 import SwiftUI
 import CoreData
+import Combine
 
 struct ContentView: View {
     @Environment(\.managedObjectContext) private var viewContext
@@ -35,6 +36,9 @@ struct ContentView: View {
     @State private var leftEar2000: String = ""
     @State private var leftEar4000: String = ""
     @State private var leftEar8000: String = ""
+    
+    // Auto-save debouncing
+    @State private var autoSaveWorkItem: DispatchWorkItem?
 
 var body: some View {
     VStack(spacing: 0) {
@@ -244,6 +248,9 @@ var body: some View {
     }
     
     private func loadPatient(_ patient: Patient) {
+        // Cancel any pending auto-save for the previous patient
+        autoSaveWorkItem?.cancel()
+        
         currentPatient = patient
         patientName = patient.name
         patientAge = patient.age
@@ -277,6 +284,18 @@ var body: some View {
         patient.leftEar4000 = leftEar4000
         patient.leftEar8000 = leftEar8000
         patient.updateModifiedDate()
+        
+        // Auto-save with debouncing to avoid excessive saves during rapid typing
+        autoSaveWorkItem?.cancel()
+        let context = viewContext  // Capture the context instead of self
+        autoSaveWorkItem = DispatchWorkItem {
+            do {
+                try context.save()
+            } catch {
+                print("Error auto-saving patient: \(error)")
+            }
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0, execute: autoSaveWorkItem!)
     }
     
     private func saveCurrentPatient() {

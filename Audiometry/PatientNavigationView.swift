@@ -162,38 +162,46 @@ struct PatientSearchResultsView: View {
     let onDismiss: () -> Void
     
     var body: some View {
-        NavigationView {
+//        NavigationView {
             VStack {
                 if searchResults.isEmpty {
-                    Text("no_patients_found".localized)
-                        .foregroundColor(.secondary)
-                        .padding()
+                    VStack(spacing: 16) {
+                        Image(systemName: "person.fill.questionmark")
+                            .font(.largeTitle)
+                            .foregroundColor(.secondary)
+                        Text("no_patients_found".localized)
+                            .font(.title2)
+                            .foregroundColor(.secondary)
+                    }
+                    .padding(40)
                 } else {
                     List(searchResults) { patient in
                         Button(action: {
                             onPatientSelected(patient)
                         }) {
-                            VStack(alignment: .leading, spacing: 4) {
+                            VStack(alignment: .leading, spacing: 8) {
                                 Text(patient.name.isEmpty ? "not_specified".localized : patient.name)
-                                    .font(.headline)
+                                    .font(.title2)
+                                    .fontWeight(.medium)
                                     .foregroundColor(.primary)
                                 
                                 HStack {
                                     Text("age_label".localized)
-                                        .font(.caption)
+                                        .font(.body)
                                         .foregroundColor(.secondary)
                                     Text(patient.age.isEmpty ? "not_specified".localized : patient.age)
-                                        .font(.caption)
+                                        .font(.body)
                                         .foregroundColor(.secondary)
                                     
                                     Spacer()
                                     
                                     Text(DateFormatter.shortDateTime.string(from: patient.dateModified))
-                                        .font(.caption)
+                                        .font(.body)
                                         .foregroundColor(.secondary)
                                 }
                             }
-                            .padding(.vertical, 2)
+                            .padding(.vertical, 8)
+                            .padding(.horizontal, 4)
                         }
                         .buttonStyle(PlainButtonStyle())
                     }
@@ -209,8 +217,8 @@ struct PatientSearchResultsView: View {
                     }
                 }
             }
-        }
-        .frame(minWidth: 500, minHeight: 400)
+//        }
+        .frame(minWidth: 300, minHeight: 300)
     }
 }
 
