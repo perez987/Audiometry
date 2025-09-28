@@ -151,47 +151,13 @@ struct PatientNavigationView: View {
         let trimmedSearch = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmedSearch.isEmpty else { return }
         
-        // Force save any pending changes before searching to ensure data consistency
+        // Force save any pending changes before searching
         onForceSave()
         
-        // Add a small delay to ensure the save operation completes before searching
-        // This prevents race conditions between auto-save and search operations
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-            self.executeSearch(trimmedSearch)
-        }
-    }
-    
-    private func executeSearch(_ searchTerm: String) {
-        // Use the local viewContext to ensure consistency with current data
-        let context = viewContext
-        
-        // Process any remaining pending changes
-        context.processPendingChanges()
-        
-        let request: NSFetchRequest<Patient> = Patient.fetchRequest()
-        request.predicate = NSPredicate(format: "name CONTAINS[cd] %@", searchTerm)
-        request.sortDescriptors = [NSSortDescriptor(keyPath: \Patient.name, ascending: true)]
-        // Ensure we get fresh data from the persistent store
-        request.returnsObjectsAsFaults = false
-        
-        do {
-            let results = try context.fetch(request)
-            DispatchQueue.main.async {
-                self.searchResults = results
-                // Add small delay before showing sheet to prevent ViewBridge errors
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
-                    self.showingSearchResults = true
-                }
-            }
-        } catch {
-            print("Error searching patients: \(error.localizedDescription)")
-            DispatchQueue.main.async {
-                self.searchResults = []
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
-                    self.showingSearchResults = true
-                }
-            }
-        }
+        // Use the same approach as loadAllPatients to ensure consistency
+        // This searches using the shared persistence controller to match the data source
+        searchResults = PersistenceController.shared.searchPatients(by: trimmedSearch)
+        showingSearchResults = true
     }
 }
 
@@ -202,73 +168,64 @@ struct PatientSearchResultsView: View {
     let onDismiss: () -> Void
     
     var body: some View {
-        VStack(spacing: 16) {
-            // Header
-            HStack {
-                Text("search_patient".localized + ": \(searchText)")
-                    .font(.title2)
-                    .fontWeight(.medium)
-                Spacer()
-                Button("cancel".localized) {
-                    onDismiss()
-                }
-            }
-            .padding()
-            
-            if searchResults.isEmpty {
-                // Empty state
-                VStack(spacing: 16) {
-                    Image(systemName: "person.fill.questionmark")
-                        .font(.largeTitle)
-                        .foregroundColor(.secondary)
-                    Text("no_patients_found".localized)
-                        .font(.title2)
-                        .foregroundColor(.secondary)
-                }
-                .padding(40)
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-            } else {
-                // Results list
-                ScrollView {
-                    LazyVStack(spacing: 8) {
-                        ForEach(searchResults) { patient in
-                            Button(action: {
-                                onPatientSelected(patient)
-                            }) {
-                                VStack(alignment: .leading, spacing: 8) {
-                                    Text(patient.name.isEmpty ? "not_specified".localized : patient.name)
-                                        .font(.title3)
-                                        .fontWeight(.medium)
-                                        .foregroundColor(.primary)
-                                        .frame(maxWidth: .infinity, alignment: .leading)
-                                    
-                                    HStack {
-                                        Text("age_label".localized)
-                                            .font(.body)
-                                            .foregroundColor(.secondary)
-                                        Text(patient.age.isEmpty ? "not_specified".localized : patient.age)
-                                            .font(.body)
-                                            .foregroundColor(.secondary)
-                                        
-                                        Spacer()
-                                        
-                                        Text(DateFormatter.shortDateTime.string(from: patient.dateModified))
-                                            .font(.body)
-                                            .foregroundColor(.secondary)
-                                    }
-                                }
-                                .padding()
-                                .background(Color(NSColor.controlBackgroundColor))
-                                .cornerRadius(8)
-                            }
-                            .buttonStyle(PlainButtonStyle())
-                        }
+//        NavigationView {
+            VStack {
+                if searchResults.isEmpty {
+                    VStack(spacing: 16) {
+                        Image(systemName: "person.fill.questionmark")
+                            .font(.largeTitle)
+                            .foregroundColor(.secondary)
+                        Text("no_patients_found".localized)
+                            .font(.title2)
+                            .foregroundColor(.secondary)
                     }
-                    .padding()
+                    .padding(40)
+                    .frame(minWidth: 300,idealWidth: 300, maxWidth: 300, minHeight: 300, idealHeight: 300, maxHeight: 300)
+                } else {
+                    List(searchResults) { patient in
+                        Button(action: {
+                            onPatientSelected(patient)
+                        }) {
+                            VStack(alignment: .leading, spacing: 8) {
+                                Text(patient.name.isEmpty ? "not_specified".localized : patient.name)
+                                    .font(.title2)
+                                    .fontWeight(.medium)
+                                    .foregroundColor(.primary)
+                                
+                                HStack {
+                                    Text("age_label".localized)
+                                        .font(.body)
+                                        .foregroundColor(.secondary)
+                                    Text(patient.age.isEmpty ? "not_specified".localized : patient.age)
+                                        .font(.body)
+                                        .foregroundColor(.secondary)
+                                    
+                                    Spacer()
+                                    
+                                    Text(DateFormatter.shortDateTime.string(from: patient.dateModified))
+                                        .font(.body)
+                                        .foregroundColor(.secondary)
+                                }
+                            }
+                            .padding(.vertical, 8)
+                            .padding(.horizontal, 4)
+                        }
+                        .buttonStyle(PlainButtonStyle())
+                    }
+                }
+                
+                Spacer()
+            }
+            .navigationTitle("search_patient".localized + ": \(searchText)")
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("cancel".localized) {
+                        onDismiss()
+                    }
                 }
             }
-        }
-        .frame(minWidth: 400, idealWidth: 500, maxWidth: 600, minHeight: 300, idealHeight: 400, maxHeight: 500)
+//        }
+        .frame(minWidth: 300,idealWidth: 300, maxWidth: 300, minHeight: 300, idealHeight: 300, maxHeight: 300)
     }
 }
 

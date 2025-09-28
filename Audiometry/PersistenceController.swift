@@ -107,6 +107,18 @@ extension PersistenceController {
         // Process any pending changes to ensure we have the most up-to-date data
         context.processPendingChanges()
         
+        // If there are unsaved changes, save them to ensure search includes all data
+        if context.hasChanges {
+            do {
+                try context.save()
+            } catch {
+                print("Error saving changes before search: \(error.localizedDescription)")
+            }
+        }
+        
+        // Refresh the context to ensure we get the most up-to-date data
+        context.refreshAllObjects()
+        
         let request: NSFetchRequest<Patient> = Patient.fetchRequest()
         request.predicate = NSPredicate(format: "name CONTAINS[cd] %@", name)
         request.sortDescriptors = [NSSortDescriptor(keyPath: \Patient.name, ascending: true)]

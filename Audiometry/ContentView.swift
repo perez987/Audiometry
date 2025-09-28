@@ -238,8 +238,6 @@ var body: some View {
     // MARK: - Patient Management Functions
     
     private func loadAllPatients() {
-        // Ensure any pending changes are processed before loading
-        viewContext.processPendingChanges()
         allPatients = PersistenceController.shared.fetchPatients()
     }
     
