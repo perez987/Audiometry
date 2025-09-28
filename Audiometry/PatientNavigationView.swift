@@ -154,37 +154,9 @@ struct PatientNavigationView: View {
         // Force save any pending changes before searching
         onForceSave()
         
-        // Use the local viewContext to ensure consistency with current data
-        let context = viewContext
-        
-        // Process any pending changes to ensure we have the most up-to-date data
-        context.processPendingChanges()
-        
-        // If there are unsaved changes, save them to ensure search includes all data
-        if context.hasChanges {
-            do {
-                try context.save()
-            } catch {
-                print("Error saving changes before search: \(error.localizedDescription)")
-            }
-        }
-        
-        // Refresh the context to ensure we get the most up-to-date data
-        context.refreshAllObjects()
-        
-        let request: NSFetchRequest<Patient> = Patient.fetchRequest()
-        request.predicate = NSPredicate(format: "name CONTAINS[cd] %@", trimmedSearch)
-        request.sortDescriptors = [NSSortDescriptor(keyPath: \Patient.name, ascending: true)]
-        // Ensure we get fresh data from the persistent store
-        request.returnsObjectsAsFaults = false
-        
-        do {
-            searchResults = try context.fetch(request)
-        } catch {
-            print("Error searching patients: \(error.localizedDescription)")
-            searchResults = []
-        }
-        
+        // Use the same approach as loadAllPatients to ensure consistency
+        // This searches using the shared persistence controller to match the data source
+        searchResults = PersistenceController.shared.searchPatients(by: trimmedSearch)
         showingSearchResults = true
     }
 }
