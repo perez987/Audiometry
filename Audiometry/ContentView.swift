@@ -238,6 +238,8 @@ var body: some View {
     // MARK: - Patient Management Functions
     
     private func loadAllPatients() {
+        // Ensure any pending changes are processed before loading
+        viewContext.processPendingChanges()
         allPatients = PersistenceController.shared.fetchPatients()
     }
     
@@ -314,6 +316,7 @@ var body: some View {
         if viewContext.hasChanges {
             do {
                 try viewContext.save()
+                print("Force-saved pending changes successfully")
             } catch {
                 print("Error force-saving pending changes: \(error)")
             }

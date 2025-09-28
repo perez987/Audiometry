@@ -151,41 +151,47 @@ struct PatientNavigationView: View {
         let trimmedSearch = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmedSearch.isEmpty else { return }
         
-        // Force save any pending changes before searching
+        // Force save any pending changes before searching to ensure data consistency
         onForceSave()
         
+        // Add a small delay to ensure the save operation completes before searching
+        // This prevents race conditions between auto-save and search operations
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            self.executeSearch(trimmedSearch)
+        }
+    }
+    
+    private func executeSearch(_ searchTerm: String) {
         // Use the local viewContext to ensure consistency with current data
         let context = viewContext
         
-        // Process any pending changes to ensure we have the most up-to-date data
+        // Process any remaining pending changes
         context.processPendingChanges()
         
-        // If there are unsaved changes, save them to ensure search includes all data
-        if context.hasChanges {
-            do {
-                try context.save()
-            } catch {
-                print("Error saving changes before search: \(error.localizedDescription)")
-            }
-        }
-        
-        // Refresh the context to ensure we get the most up-to-date data
-        context.refreshAllObjects()
-        
         let request: NSFetchRequest<Patient> = Patient.fetchRequest()
-        request.predicate = NSPredicate(format: "name CONTAINS[cd] %@", trimmedSearch)
+        request.predicate = NSPredicate(format: "name CONTAINS[cd] %@", searchTerm)
         request.sortDescriptors = [NSSortDescriptor(keyPath: \Patient.name, ascending: true)]
         // Ensure we get fresh data from the persistent store
         request.returnsObjectsAsFaults = false
         
         do {
-            searchResults = try context.fetch(request)
+            let results = try context.fetch(request)
+            DispatchQueue.main.async {
+                self.searchResults = results
+                // Add small delay before showing sheet to prevent ViewBridge errors
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
+                    self.showingSearchResults = true
+                }
+            }
         } catch {
             print("Error searching patients: \(error.localizedDescription)")
-            searchResults = []
+            DispatchQueue.main.async {
+                self.searchResults = []
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
+                    self.showingSearchResults = true
+                }
+            }
         }
-        
-        showingSearchResults = true
     }
 }
 
@@ -196,64 +202,73 @@ struct PatientSearchResultsView: View {
     let onDismiss: () -> Void
     
     var body: some View {
-//        NavigationView {
-            VStack {
-                if searchResults.isEmpty {
-                    VStack(spacing: 16) {
-                        Image(systemName: "person.fill.questionmark")
-                            .font(.largeTitle)
-                            .foregroundColor(.secondary)
-                        Text("no_patients_found".localized)
-                            .font(.title2)
-                            .foregroundColor(.secondary)
-                    }
-                    .padding(40)
-                    .frame(minWidth: 300,idealWidth: 300, maxWidth: 300, minHeight: 300, idealHeight: 300, maxHeight: 300)
-                } else {
-                    List(searchResults) { patient in
-                        Button(action: {
-                            onPatientSelected(patient)
-                        }) {
-                            VStack(alignment: .leading, spacing: 8) {
-                                Text(patient.name.isEmpty ? "not_specified".localized : patient.name)
-                                    .font(.title2)
-                                    .fontWeight(.medium)
-                                    .foregroundColor(.primary)
-                                
-                                HStack {
-                                    Text("age_label".localized)
-                                        .font(.body)
-                                        .foregroundColor(.secondary)
-                                    Text(patient.age.isEmpty ? "not_specified".localized : patient.age)
-                                        .font(.body)
-                                        .foregroundColor(.secondary)
-                                    
-                                    Spacer()
-                                    
-                                    Text(DateFormatter.shortDateTime.string(from: patient.dateModified))
-                                        .font(.body)
-                                        .foregroundColor(.secondary)
-                                }
-                            }
-                            .padding(.vertical, 8)
-                            .padding(.horizontal, 4)
-                        }
-                        .buttonStyle(PlainButtonStyle())
-                    }
-                }
-                
+        VStack(spacing: 16) {
+            // Header
+            HStack {
+                Text("search_patient".localized + ": \(searchText)")
+                    .font(.title2)
+                    .fontWeight(.medium)
                 Spacer()
-            }
-            .navigationTitle("search_patient".localized + ": \(searchText)")
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("cancel".localized) {
-                        onDismiss()
-                    }
+                Button("cancel".localized) {
+                    onDismiss()
                 }
             }
-//        }
-        .frame(minWidth: 300,idealWidth: 300, maxWidth: 300, minHeight: 300, idealHeight: 300, maxHeight: 300)
+            .padding()
+            
+            if searchResults.isEmpty {
+                // Empty state
+                VStack(spacing: 16) {
+                    Image(systemName: "person.fill.questionmark")
+                        .font(.largeTitle)
+                        .foregroundColor(.secondary)
+                    Text("no_patients_found".localized)
+                        .font(.title2)
+                        .foregroundColor(.secondary)
+                }
+                .padding(40)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+            } else {
+                // Results list
+                ScrollView {
+                    LazyVStack(spacing: 8) {
+                        ForEach(searchResults) { patient in
+                            Button(action: {
+                                onPatientSelected(patient)
+                            }) {
+                                VStack(alignment: .leading, spacing: 8) {
+                                    Text(patient.name.isEmpty ? "not_specified".localized : patient.name)
+                                        .font(.title3)
+                                        .fontWeight(.medium)
+                                        .foregroundColor(.primary)
+                                        .frame(maxWidth: .infinity, alignment: .leading)
+                                    
+                                    HStack {
+                                        Text("age_label".localized)
+                                            .font(.body)
+                                            .foregroundColor(.secondary)
+                                        Text(patient.age.isEmpty ? "not_specified".localized : patient.age)
+                                            .font(.body)
+                                            .foregroundColor(.secondary)
+                                        
+                                        Spacer()
+                                        
+                                        Text(DateFormatter.shortDateTime.string(from: patient.dateModified))
+                                            .font(.body)
+                                            .foregroundColor(.secondary)
+                                    }
+                                }
+                                .padding()
+                                .background(Color(NSColor.controlBackgroundColor))
+                                .cornerRadius(8)
+                            }
+                            .buttonStyle(PlainButtonStyle())
+                        }
+                    }
+                    .padding()
+                }
+            }
+        }
+        .frame(minWidth: 400, idealWidth: 500, maxWidth: 600, minHeight: 300, idealHeight: 400, maxHeight: 500)
     }
 }
 
