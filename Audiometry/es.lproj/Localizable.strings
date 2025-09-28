@@ -58,7 +58,7 @@
 "next_patient" = ">>";
 "search_patient" = "Buscar";
 "search_placeholder" = "Buscar por nombre";
-"no_patients_found" = "Nombre no encontrado";
+"no_patients_found" = "No se encuentran pacientes con ese nombre";
 "patient_saved" = "Paciente guardado";
 "patient_loaded" = "Paciente cargado";
 
