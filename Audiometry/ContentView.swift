@@ -48,7 +48,8 @@ var body: some View {
             allPatients: allPatients,
             onPatientSelected: loadPatient,
             onNewPatient: createNewPatient,
-            onSavePatient: saveCurrentPatient
+            onSavePatient: saveCurrentPatient,
+            onForceSave: forceSavePendingChanges
         )
         .padding(.vertical, 8)
         .background(Color(NSColor.controlBackgroundColor))
@@ -304,6 +305,18 @@ var body: some View {
             loadAllPatients() // Refresh the list
         } catch {
             print("Error saving patient: \(error)")
+        }
+    }
+    
+    private func forceSavePendingChanges() {
+        // Cancel any pending auto-save and execute it immediately
+        autoSaveWorkItem?.cancel()
+        if viewContext.hasChanges {
+            do {
+                try viewContext.save()
+            } catch {
+                print("Error force-saving pending changes: \(error)")
+            }
         }
     }
     

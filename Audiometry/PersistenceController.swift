@@ -83,13 +83,18 @@ extension PersistenceController {
     }
     
     func fetchPatients() -> [Patient] {
+        let context = container.viewContext
+        
+        // Process any pending changes to ensure we have the most up-to-date data
+        context.processPendingChanges()
+        
         let request: NSFetchRequest<Patient> = Patient.fetchRequest()
         // Sort by dateModified
 //        request.sortDescriptors = [NSSortDescriptor(keyPath: \Patient.dateModified, ascending: false)]
         // Sort by patient name
         request.sortDescriptors = [NSSortDescriptor(keyPath: \Patient.name, ascending: true)]
         do {
-            return try container.viewContext.fetch(request)
+            return try context.fetch(request)
         } catch {
             print("Error fetching patients: \(error.localizedDescription)")
             return []
@@ -97,12 +102,31 @@ extension PersistenceController {
     }
     
     func searchPatients(by name: String) -> [Patient] {
+        let context = container.viewContext
+        
+        // Process any pending changes to ensure we have the most up-to-date data
+        context.processPendingChanges()
+        
+        // If there are unsaved changes, save them to ensure search includes all data
+        if context.hasChanges {
+            do {
+                try context.save()
+            } catch {
+                print("Error saving changes before search: \(error.localizedDescription)")
+            }
+        }
+        
+        // Refresh the context to ensure we get the most up-to-date data
+        context.refreshAllObjects()
+        
         let request: NSFetchRequest<Patient> = Patient.fetchRequest()
         request.predicate = NSPredicate(format: "name CONTAINS[cd] %@", name)
         request.sortDescriptors = [NSSortDescriptor(keyPath: \Patient.name, ascending: true)]
+        // Ensure we get fresh data from the persistent store
+        request.returnsObjectsAsFaults = false
         
         do {
-            return try container.viewContext.fetch(request)
+            return try context.fetch(request)
         } catch {
             print("Error searching patients: \(error.localizedDescription)")
             return []
