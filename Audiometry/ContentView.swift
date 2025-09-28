@@ -315,6 +315,8 @@ var body: some View {
             do {
                 try viewContext.save()
                 print("Force-saved pending changes successfully")
+                // Refresh the patient list to ensure consistency
+                loadAllPatients()
             } catch {
                 print("Error force-saving pending changes: \(error)")
             }

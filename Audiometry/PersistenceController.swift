@@ -88,6 +88,15 @@ extension PersistenceController {
         // Process any pending changes to ensure we have the most up-to-date data
         context.processPendingChanges()
         
+        // If there are unsaved changes, save them to ensure consistency with search
+        if context.hasChanges {
+            do {
+                try context.save()
+            } catch {
+                print("Error saving changes before fetch: \(error.localizedDescription)")
+            }
+        }
+        
         let request: NSFetchRequest<Patient> = Patient.fetchRequest()
         // Sort by dateModified
 //        request.sortDescriptors = [NSSortDescriptor(keyPath: \Patient.dateModified, ascending: false)]
