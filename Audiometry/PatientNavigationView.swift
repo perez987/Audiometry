@@ -174,6 +174,7 @@ struct PatientSearchResultsView: View {
                             .foregroundColor(.secondary)
                     }
                     .padding(40)
+                    .frame(minWidth: 300,idealWidth: 300, maxWidth: 300, minHeight: 300, idealHeight: 300, maxHeight: 300)
                 } else {
                     List(searchResults) { patient in
                         Button(action: {
@@ -218,7 +219,7 @@ struct PatientSearchResultsView: View {
                 }
             }
 //        }
-        .frame(minWidth: 300, minHeight: 300)
+        .frame(minWidth: 300,idealWidth: 300, maxWidth: 300, minHeight: 300, idealHeight: 300, maxHeight: 300)
     }
 }
 
