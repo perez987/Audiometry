@@ -116,9 +116,14 @@ extension PersistenceController {
             }
         }
         
+        // Refresh the context to ensure we get the most up-to-date data
+        context.refreshAllObjects()
+        
         let request: NSFetchRequest<Patient> = Patient.fetchRequest()
         request.predicate = NSPredicate(format: "name CONTAINS[cd] %@", name)
         request.sortDescriptors = [NSSortDescriptor(keyPath: \Patient.name, ascending: true)]
+        // Ensure we get fresh data from the persistent store
+        request.returnsObjectsAsFaults = false
         
         do {
             return try context.fetch(request)
