@@ -25,6 +25,7 @@ struct PatientNavigationView: View {
     let onPatientSelected: (Patient) -> Void
     let onNewPatient: () -> Void
     let onSavePatient: () -> Void
+    let onForceSave: () -> Void
     
     var currentIndex: Int {
         guard let current = currentPatient else { return -1 }
@@ -149,6 +150,9 @@ struct PatientNavigationView: View {
     private func performSearch() {
         let trimmedSearch = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmedSearch.isEmpty else { return }
+        
+        // Force save any pending changes before searching
+        onForceSave()
         
         // Use the local viewContext to ensure consistency with current data
         let context = viewContext
