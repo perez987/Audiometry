@@ -151,14 +151,7 @@ struct PatientNavigationView: View {
         let trimmedSearch = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmedSearch.isEmpty else { return }
         
-        // Critical fix: Ensure any pending auto-save operations are completed immediately
-        // The original workaround worked because onPatientSelected cancels auto-save timers
-        if let current = currentPatient {
-            // Trigger patient selection to cancel any pending auto-save and force immediate save
-            onPatientSelected(current)
-        }
-        
-        // Force save any remaining pending changes
+        // Force save any pending changes before searching
         onForceSave()
         
         // Search using the shared persistence controller
