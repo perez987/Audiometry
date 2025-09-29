@@ -154,10 +154,20 @@ struct PatientNavigationView: View {
         // Force save any pending changes before searching
         onForceSave()
         
-        // Ensure all patient objects are properly faulted in from Core Data
-        // This is what the original workaround was accomplishing by calling onPatientSelected
-        for patient in allPatients {
-            _ = patient.name // Access name property to fault in the object
+        // The original workaround worked by triggering onPatientSelected calls
+        // This minimal version ensures the current patient is properly loaded without changing UI state
+        if let current = currentPatient, !allPatients.isEmpty {
+            // Store current state to restore later
+            let originalPatient = current
+            
+            // Trigger a patient selection to ensure context is in the right state
+            // This is what made the original workaround work
+            onPatientSelected(current)
+            
+            // If we're not already on the current patient, make sure we're back to it
+            if currentPatient != originalPatient {
+                onPatientSelected(originalPatient)
+            }
         }
         
         // Search using the shared persistence controller
