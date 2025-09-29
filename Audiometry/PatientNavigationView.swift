@@ -151,6 +151,15 @@ struct PatientNavigationView: View {
         let trimmedSearch = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmedSearch.isEmpty else { return }
         
+        // Ensure Core Data objects are properly faulted in before searching
+        // This is what the original workaround accomplished by calling onPatientSelected
+        for patient in allPatients {
+            _ = patient.name // Access a property to fault in the object from persistent store
+        }
+        
+        // Force save any pending changes before searching
+        onForceSave()
+        
         // MARK: workaround to resolve the issue with the search function:
         // - Search returns "No patients found" on the first attempt
         // - Navigating patient list using Next/Back buttons

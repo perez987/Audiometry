@@ -321,6 +321,8 @@ var body: some View {
                 print("Error force-saving pending changes: \(error)")
             }
         }
+        // Always refresh the patient list to ensure search consistency
+        loadAllPatients()
     }
     
     private func clearForm() {
