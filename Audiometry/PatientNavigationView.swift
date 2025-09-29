@@ -186,11 +186,27 @@ struct PatientNavigationView: View {
         // Force save any pending changes before searching
         onForceSave()
         
+        // The original workaround worked by triggering onPatientSelected calls
+        // This minimal version ensures the current patient is properly loaded without changing UI state
+        if let current = currentPatient, !allPatients.isEmpty {
+            // Store current state to restore later
+            let originalPatient = current
+            
+            // Trigger a patient selection to ensure context is in the right state
+            // This is what made the original workaround work
+            onPatientSelected(current)
+            
+            // If we're not already on the current patient, make sure we're back to it
+            if currentPatient != originalPatient {
+                onPatientSelected(originalPatient)
+            }
+        }
+        
         // Search using the shared persistence controller
         searchResults = PersistenceController.shared.searchPatients(by: trimmedSearch)
         showingSearchResults = true
+        }
     }
-}
 
 struct PatientSearchResultsView: View {
     let searchResults: [Patient]
@@ -211,7 +227,7 @@ struct PatientSearchResultsView: View {
                             .foregroundColor(.secondary)
                     }
                     .padding(40)
-                    .frame(minWidth: 300,idealWidth: 300, maxWidth: 300, minHeight: 300, idealHeight: 300, maxHeight: 300)
+//                    .frame(minWidth: 300,idealWidth: 300, maxWidth: 300, minHeight: 300, idealHeight: 300, maxHeight: 300)
                 } else {
                     List(searchResults) { patient in
                         Button(action: {
@@ -256,7 +272,7 @@ struct PatientSearchResultsView: View {
                 }
             }
 //        }
-        .frame(minWidth: 340,idealWidth: 340, maxWidth: 340, minHeight: 300, idealHeight: 300, maxHeight: 300)
+        .frame(minWidth: 400,idealWidth: 400, maxWidth: 400, minHeight: 300, idealHeight: 300, maxHeight: 300)
     }
 }
 
