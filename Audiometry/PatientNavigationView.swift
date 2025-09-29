@@ -151,24 +151,15 @@ struct PatientNavigationView: View {
         let trimmedSearch = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmedSearch.isEmpty else { return }
         
-        // Force save any pending changes before searching
-        onForceSave()
-        
-        // The original workaround worked by triggering onPatientSelected calls
-        // This minimal version ensures the current patient is properly loaded without changing UI state
-        if let current = currentPatient, !allPatients.isEmpty {
-            // Store current state to restore later
-            let originalPatient = current
-            
-            // Trigger a patient selection to ensure context is in the right state
-            // This is what made the original workaround work
+        // Critical fix: Ensure any pending auto-save operations are completed immediately
+        // The original workaround worked because onPatientSelected cancels auto-save timers
+        if let current = currentPatient {
+            // Trigger patient selection to cancel any pending auto-save and force immediate save
             onPatientSelected(current)
-            
-            // If we're not already on the current patient, make sure we're back to it
-            if currentPatient != originalPatient {
-                onPatientSelected(originalPatient)
-            }
         }
+        
+        // Force save any remaining pending changes
+        onForceSave()
         
         // Search using the shared persistence controller
         searchResults = PersistenceController.shared.searchPatients(by: trimmedSearch)
