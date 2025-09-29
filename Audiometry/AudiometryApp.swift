@@ -32,20 +32,16 @@ struct AudiometryApp: App {
                 .onChange(of: languageManager.currentLanguage) { _ in
                     // Force window title update when language changes
                     // Delegate window title update to AppDelegate to avoid ordering issues
-                     DispatchQueue.main.async {
-                         appDelegate.updateWindowTitle()
-                        }
+                    DispatchQueue.main.async {
+                        appDelegate.updateWindowTitle()
                     }
+                }
             
         }
         
         .windowStyle(DefaultWindowStyle())
         .windowResizability(.contentSize)
         
-        // Use computed property that responds to language changes
-
-        
-        }
-
     }
-
+    
+}

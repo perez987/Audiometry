@@ -155,6 +155,7 @@ struct PatientNavigationView: View {
         // - Search returns "No patients found" on the first attempt
         // - Navigating patient list using Next/Back buttons
         // is required for the search to work.
+        // It's a work in progress
         
         if allPatients.isEmpty {
                  let thisPatient = allPatients[currentIndex]
