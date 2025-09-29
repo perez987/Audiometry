@@ -7,8 +7,10 @@
 
 import AppKit
 import Foundation
+import SwiftUI
 
 class AppDelegate: NSObject, NSApplicationDelegate {
+
     func applicationDidFinishLaunching(_: Notification) {
         // Ensure the application is active before manipulating windows
         NSApp.activate(ignoringOtherApps: true)

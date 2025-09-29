@@ -17,7 +17,7 @@ struct PersistenceController {
         
         // Add sample data for previews
         let samplePatient = Patient.create(in: viewContext)
-        samplePatient.name = "John Doe"
+        samplePatient.name = "John Sketches"
         samplePatient.age = "45"
         samplePatient.job = "Engineer"
         samplePatient.rightEar500 = "25"
