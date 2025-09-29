@@ -17,7 +17,7 @@ struct PersistenceController {
         
         // Add sample data for previews
         let samplePatient = Patient.create(in: viewContext)
-        samplePatient.name = "John Doe"
+        samplePatient.name = "John Sketches"
         samplePatient.age = "45"
         samplePatient.job = "Engineer"
         samplePatient.rightEar500 = "25"
@@ -87,6 +87,15 @@ extension PersistenceController {
         
         // Process any pending changes to ensure we have the most up-to-date data
         context.processPendingChanges()
+        
+        // If there are unsaved changes, save them to ensure consistency with search
+        if context.hasChanges {
+            do {
+                try context.save()
+            } catch {
+                print("Error saving changes before fetch: \(error.localizedDescription)")
+            }
+        }
         
         let request: NSFetchRequest<Patient> = Patient.fetchRequest()
         // Sort by dateModified
