@@ -151,13 +151,18 @@ struct PatientNavigationView: View {
         let trimmedSearch = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmedSearch.isEmpty else { return }
         
+        // Ensure Core Data objects are properly faulted in before searching
+        // This is what the original workaround accomplished by calling onPatientSelected
+        for patient in allPatients {
+            _ = patient.name // Access a property to fault in the object from persistent store
+        }
+        
         // Force save any pending changes before searching
         onForceSave()
         
         // Search using the shared persistence controller
         searchResults = PersistenceController.shared.searchPatients(by: trimmedSearch)
         showingSearchResults = true
-    }
     }
 }
 
