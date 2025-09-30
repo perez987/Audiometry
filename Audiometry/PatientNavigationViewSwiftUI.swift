@@ -72,13 +72,13 @@ struct PatientNavigationViewSwiftUI: View {
                 
                 // Language Menu
                 Menu {
-                    ForEach(["en", "es"], id: \.self) { langCode in
+                    ForEach(LanguageManager.Language.allCases, id: \.self) { language in
                         Button(action: {
-                            languageManager.setLanguage(langCode)
+                            languageManager.setLanguage(language)
                         }) {
                             HStack {
-                                Text(langCode == "en" ? "English" : "Español")
-                                if languageManager.currentLanguage == langCode {
+                                Text(language.displayName)
+                                if languageManager.currentLanguage == language {
                                     Image(systemName: "checkmark")
                                 }
                             }
@@ -87,7 +87,7 @@ struct PatientNavigationViewSwiftUI: View {
                 } label: {
                     HStack {
                         Image(systemName: "globe")
-                        Text(languageManager.currentLanguage == "en" ? "English" : "Español")
+                        Text(languageManager.currentLanguage.displayName)
                     }
                 }
                 
