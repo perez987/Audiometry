@@ -41,9 +41,11 @@ The implementation of SwiftUI Storage alongside CoreData Storage allows users to
 Patient data are saved in different files depending on the storage mode:
 
 **CoreData Storage**
+
 `/Users/<user_name>/Library/Containers/perez987.Audiometry/Data/Library/Application Support/Audiometry/DataModel.sqlite`
 
 **SwiftUI Storage**
+
 `/Users/<user_name>/Library/Containers/perez987.Audiometry/Data/Library/Application Support/Audiometry/patients.json`
 
 You can bring your saved data back by copying those files (SQLite database and JSON file) to a different machine and running the Audiometry app on it.
