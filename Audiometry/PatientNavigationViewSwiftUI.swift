@@ -199,7 +199,7 @@ struct PatientSearchResultsViewSwiftUI: View {
                 }
             }
         }
-        .frame(minWidth: 400, minHeight: 300)
+        .frame(minWidth: 320, idealWidth: 320, maxWidth: 320, minHeight: 300, idealHeight: 300, maxHeight: 300)
         .toolbar {
             ToolbarItem(placement: .principal) {
                 Text("search_results_for".localized + " \"\(searchText)\"")
