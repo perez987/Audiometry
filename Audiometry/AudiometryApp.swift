@@ -25,7 +25,8 @@ struct AudiometryApp: App {
             VStack(spacing: 0) {
                 // Storage Mode Selector
                 HStack {
-                    Text("Storage Mode:")
+					Text("storage_mode:".localized)
+						.foregroundColor(.secondary)
                         .font(.headline)
                     Picker("", selection: $storageModeRaw) {
                         ForEach(StorageMode.allCases, id: \.rawValue) { mode in
@@ -36,10 +37,12 @@ struct AudiometryApp: App {
                     .frame(width: 300)
                     
                     Spacer()
-                    
-                    Text("Current: \(storageMode.displayName)")
+
+					let Text1 = "current: ".localized
+					let Text2 = storageMode.displayName
+					Text(Text1 + Text2)
                         .foregroundColor(.secondary)
-                        .font(.caption)
+						.font(.subheadline)
                 }
                 .padding()
                 .background(Color(NSColor.windowBackgroundColor))

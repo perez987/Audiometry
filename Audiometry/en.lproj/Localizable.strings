@@ -4,6 +4,8 @@
 "app_title" = "Audiometry";
 "patient_report" = "Patient Report";
 "language" = "Language";
+"storage_mode:" = "Storage Mode:";
+"current: " = "Current: ";
 
 /* Patient Information */
 "patient_information" = "Patient Information";
@@ -14,6 +16,7 @@
 "enter_age" = "Enter age";
 "enter_job_occupation" = "Enter job/occupation";
 "not_specified" = "Not specified";
+"age_label" = "Age";
 
 /* Audiometric Testing */
 "audiometric_testing_results" = "Audiometric Test Result (dB HL)";
@@ -61,6 +64,8 @@
 "no_patients_found" = "No patient found";
 "patient_saved" = "Patient saved";
 "patient_loaded" = "Patient loaded";
+"search_results_for" = "Search results for";
+"search_by_name" = "Search by name";
 
 /* Buttons */
 "save" = "Save";
@@ -68,6 +73,7 @@
 "clear" = "Clear";
 "cancel" = "Cancel";
 "ok" = "OK";
+"close" = "Close";
 
 /* Help */
 "select_language" = "Select the app language";
