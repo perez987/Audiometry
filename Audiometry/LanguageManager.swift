@@ -2,7 +2,8 @@
 //  LanguageManager.swift
 //  Audiometry
 //
-//  Created by GitHub Copilot on 2025/01/10.
+//  Created by GitHub Copilot on 20/09/2025.
+//  Modified by perez987 on 20/09/2025.
 //
 //  FIXED: Dynamic language switching at runtime
 //  - Loads appropriate language bundle (en.lproj/es.lproj) based on user selection

@@ -2,7 +2,8 @@
 //
 //  AppDelegate.swift
 //
-//  Created by Emilio P Egido on 2025-08-23
+//  Created by GitHub Copilot on 20/09/2025.
+//  Modified by perez987 on 20/09/2025.
 //
 
 import AppKit

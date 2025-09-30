@@ -2,7 +2,8 @@
 //  PatientNavigationView.swift
 //  Audiometry
 //
-//  Created by GitHub Copilot on 2025/01/10.
+//  Created by GitHub Copilot on 20/09/2025.
+//  Modified by perez987 on 20/09/2025.
 //
 //  FIXED: Language switching Menu to avoid ViewBridge errors
 //  - Removed BorderlessButtonMenuStyle() that could cause ViewBridge issues
@@ -151,16 +152,10 @@ struct PatientNavigationView: View {
         let trimmedSearch = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmedSearch.isEmpty else { return }
         
-        // Ensure Core Data objects are properly faulted in before searching
-        // This is what the original workaround accomplished by calling onPatientSelected
-//        for patient in allPatients {
-//            _ = patient.name // Access a property to fault in the object from persistent store
-//        }
-        
         // Force save any pending changes before searching
         onForceSave()
         
-        // MARK: workaround to resolve the issue with the search function:
+        // MARK: - workaround to resolve the issue with the search function
         // - Search returns "No patients found" on the first attempt
         // - Navigating patient list using Next/Back buttons
         // is required for the search to work.
@@ -192,22 +187,6 @@ struct PatientNavigationView: View {
         }
         
         // MARK: -
-        
-        // The original workaround worked by triggering onPatientSelected calls
-        // This minimal version ensures the current patient is properly loaded without changing UI state
-//        if let current = currentPatient, !allPatients.isEmpty {
-            // Store current state to restore later
-//            let originalPatient = current
-            
-            // Trigger a patient selection to ensure context is in the right state
-             // This is what made the original workaround work
-//            onPatientSelected(current)
-            
-            // If we're not already on the current patient, make sure we're back to it
-//            if currentPatient != originalPatient {
-//                onPatientSelected(originalPatient)
-//            }
-//        }
         
         // Search using the shared persistence controller
         searchResults = PersistenceController.shared.searchPatients(by: trimmedSearch)

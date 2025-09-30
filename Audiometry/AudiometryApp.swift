@@ -2,7 +2,8 @@
 //  AudiometryApp.swift
 //  Audiometry
 //
-//  Created by perez987 on 2025/09/25.
+//  Created by GitHub Copilot on 20/09/2025.
+//  Modified by perez987 on 20/09/2025.
 //
 
 import SwiftUI
