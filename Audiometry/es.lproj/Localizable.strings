@@ -4,8 +4,6 @@
 "app_title" = "Audiometría";
 "patient_report" = "Informe del Paciente";
 "language" = "Idioma";
-"current: " = "Actual: ";
-"storage_mode:" = "Almacén de Datos:";
 
 /* Patient Information */
 "patient_information" = "Información del Paciente";
@@ -14,7 +12,7 @@
 "job" = "Trabajo:";
 "enter_patient_name" = "Introduzca el Nombre";
 "enter_age" = "Introduzca la edad";
-"enter_job_occupation" = "Introduzca el trabajo o la ocupación";
+"enter_job_occupation" = "Introduzca el trabajo u ocupación";
 "not_specified" = "No especificado";
 
 /* Audiometric Testing */
@@ -63,8 +61,6 @@
 "no_patients_found" = "No se encuentran pacientes con ese nombre";
 "patient_saved" = "Paciente guardado";
 "patient_loaded" = "Paciente cargado";
-"search_results_for" = "Buscar resultados para";
-"search_by_name" = "Buscar por nombre";
 
 /* Buttons */
 "save" = "Guardar";
@@ -72,10 +68,8 @@
 "clear" = "Limpiar";
 "cancel" = "Cancelar";
 "ok" = "Aceptar";
-"close" = "Cerrar";
 
 /* Help */
 "select_language" = "Elige el idioma de la aplicación";
 
 /* Other */
-
