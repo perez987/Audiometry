@@ -35,16 +35,28 @@ struct PatientNavigationViewSwiftUI: View {
     }
     
     var body: some View {
-        VStack(spacing: 0) {
+        VStack(spacing: 8) {
+            // Top row: Language selector and search
             HStack(spacing: 12) {
-                // New Patient Button
-                Button("new_patient".localized) {
-                    onNewPatient()
-                }
-                
-                // Save Patient Button
-                Button("save_patient".localized) {
-                    onSavePatient()
+                // Language Menu
+                Menu {
+                    ForEach(LanguageManager.Language.allCases, id: \.self) { language in
+                        Button(action: {
+                            languageManager.setLanguage(language)
+                        }) {
+                            HStack {
+                                Text(language.displayName)
+                                if languageManager.currentLanguage == language {
+                                    Image(systemName: "checkmark")
+                                }
+                            }
+                        }
+                    }
+                } label: {
+                    HStack {
+                        Image(systemName: "globe")
+                        Text(languageManager.currentLanguage.displayName)
+                    }
                 }
                 
                 Spacer()
@@ -69,29 +81,24 @@ struct PatientNavigationViewSwiftUI: View {
                         .buttonStyle(PlainButtonStyle())
                     }
                 }
+            }
+            
+            // Bottom row: Patient management and navigation buttons
+            HStack(spacing: 8) {
+                Spacer()
                 
-                // Language Menu
-                Menu {
-                    ForEach(LanguageManager.Language.allCases, id: \.self) { language in
-                        Button(action: {
-                            languageManager.setLanguage(language)
-                        }) {
-                            HStack {
-                                Text(language.displayName)
-                                if languageManager.currentLanguage == language {
-                                    Image(systemName: "checkmark")
-                                }
-                            }
-                        }
-                    }
-                } label: {
-                    HStack {
-                        Image(systemName: "globe")
-                        Text(languageManager.currentLanguage.displayName)
-                    }
+                // New Patient Button
+                Button("new_patient".localized) {
+                    onNewPatient()
                 }
                 
-                Spacer()
+                // Save Patient Button
+                Button("save_patient".localized) {
+                    onSavePatient()
+                }
+                
+                Divider()
+                    .frame(height: 20)
                 
                 // Navigation Controls
                 Button("previous_patient".localized) {
