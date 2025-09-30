@@ -16,16 +16,34 @@
   - audiometric test input
   - hearing loss assessment calculations
   - including SAL and ELI indices with results display
-  - save patients data in core data
+  - **dual storage system: CoreData and SwiftUI storage** (toggle between them)
+  - save patients data in core data or JSON file
   - language system with English and Spanish
   - buttons to move back and forth between saved patients
   - search button.
 
+## Dual Storage Implementation
+
+The application now supports **two different storage mechanisms** that you can switch between:
+
+1. **CoreData Storage** - Traditional Apple framework using SQLite
+2. **SwiftUI Storage** - Native SwiftUI approach using Codable and JSON files
+
+A segmented control at the top of the window allows you to switch between storage modes. Each storage system maintains its own separate data.
+
+**For detailed comparison and developer information:**
+- [Storage Comparison](STORAGE_COMPARISON.md) - Compare features, performance, and use cases
+- [Developer Guide](DEVELOPER_GUIDE.md) - Implementation details and best practices
+
 ## Patient data saved
   
-Patient data are saved in the user folder as a SQLite database, at the following location:
+Patient data are saved in different locations depending on the storage mode:
 
+### CoreData Storage
 `/Users/<user_name>/Library/Containers/perez987.Audiometry/Data/Library/Application Support/Audiometry/DataModel.sqlite`
+
+### SwiftUI Storage
+`/Users/<user_name>/Library/Application Support/Audiometry/patients.json`
 
 ## Extended information on features
   
