@@ -19,36 +19,21 @@ While this is a valid app for everyday use, it's more of an exercise in learning
   - audiometric test input
   - hearing loss assessment calculations
   - including SAL and ELI indices with results display
-  - dual storage system: CoreData and SwiftUI storage (toggle between them)
-  - save patients data in core data or JSON file
+  - SwiftUI storage system using JSON files
+  - save patients data in JSON file
   - language system with English and Spanish
   - buttons to move back and forth between saved patients
   - search button.
 
-## Dual Storage Implementation
+## SwiftUI Storage Implementation
 
-The application now supports two different storage mechanisms that you can switch between:
-
-1. CoreData Storage - Traditional Apple framework using SQLite database
-2. SwiftUI Storage - Native SwiftUI approach using JSON files
-
-A segmented control at the top of the window allows you to switch between storage modes. Each storage system maintains its own separate data.
-
-The implementation of SwiftUI Storage alongside CoreData Storage allows users to compare the two approaches side-by-side. Users can now toggle between both storage methods to learn about them and evaluate which best suits their needs. Each storage system maintains its own separate data.
-
-## Patient data saved
-  
-Patient data are saved in different files depending on the storage mode:
-
-**CoreData Storage**
-
-`/Users/<user_name>/Library/Containers/perez987.Audiometry/Data/Library/Application Support/Audiometry/DataModel.sqlite`
-
-**SwiftUI Storage**
+This branch uses SwiftUI native storage with JSON files for patient data persistence. Data is stored in:
 
 `/Users/<user_name>/Library/Containers/perez987.Audiometry/Data/Library/Application Support/Audiometry/patients.json`
 
-You can bring your saved data back by copying those files (SQLite database and JSON file) to a different machine and running the Audiometry app on it.
+You can bring your saved data back by copying the JSON file to a different machine and running the Audiometry app on it.
+
+> **Note:** For a version with dual storage (CoreData and SwiftUI) that allows switching between both, see the `main` branch. For a CoreData-only version, see the `coredata` branch.
 
 ## Extended information on features
   
@@ -58,7 +43,7 @@ You can bring your saved data back by copying those files (SQLite database and J
 - **Complete UI Translation**: All interface elements support both languages.
 
 ### 💾 Patient Data Management
-- **Core Data Integration**: Persistent storage of patient records
+- **SwiftUI Storage**: Persistent storage of patient records using JSON files
 - **Save button**: Patient data saved. When saving data, patients are sorted by name
 - **Patient Navigation**: Browse through saved patients with Previous/Next buttons
 - **New Patient Creation**: Easy creation of new patient records.

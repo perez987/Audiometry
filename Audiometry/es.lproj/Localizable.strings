@@ -4,8 +4,6 @@
 "app_title" = "Audiometría";
 "patient_report" = "Informe del Paciente";
 "language" = "Idioma";
-"current: " = "Actual: ";
-"storage_mode:" = "Almacén de Datos:";
 
 /* Patient Information */
 "patient_information" = "Información del Paciente";
