@@ -188,7 +188,7 @@ var body: some View {
                         Text("\("age_label".localized) \(patientAge.isEmpty ? "not_specified".localized : patientAge)")
                         Text("\("occupation_label".localized) \(patientJob.isEmpty ? "not_specified".localized : patientJob)")
 
-                        Divider()
+//                        Divider()
 
                         Text("test_frequencies".localized)
                         Text("results_measured".localized)
