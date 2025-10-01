@@ -32,7 +32,7 @@ Patient data are saved in the user folder as a SQLite database, at the following
 
 You can bring your saved data by copying this file (SQLite database) to a different machine and running the Audiometry app on it.
 
-> Note: For a version with dual storage (CoreData and SwiftUI) that allows switching between both, see the `main` branch. For a SwiftUI-only version, see the `swiftui` branch.
+> **Note**: For a version with dual storage (CoreData and SwiftUI) that allows switching between both, see the `main` branch. For a SwiftUI-only version, see the `swiftui` branch.
 
 ## Extended information on features
   
