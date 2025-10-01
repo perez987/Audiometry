@@ -4,8 +4,6 @@
 "app_title" = "Audiometry";
 "patient_report" = "Patient Report";
 "language" = "Language";
-"storage_mode:" = "Storage Mode:";
-"current: " = "Current: ";
 
 /* Patient Information */
 "patient_information" = "Patient Information";
