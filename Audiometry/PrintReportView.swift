@@ -35,16 +35,22 @@ struct PrintReportView: View {
             }
             .padding()
         }
-        .frame(width: 650)
+        .frame(width: 550)
     }
     
     @ViewBuilder
     private func patientReport(patient: Patient) -> some View {
         VStack(alignment: .leading, spacing: 20) {
             // Title
-            Text("patient_report".localized)
-                .font(.title)
-                .fontWeight(.bold)
+            HStack {
+                Text("patient_report".localized)
+                    .font(.title)
+                    .fontWeight(.bold)
+                Spacer()
+                Image(systemName: "ear.and.waveform")
+                    .font(.title)
+                    .foregroundColor(.blue)
+            }
             
             // Patient Information Section
             VStack(alignment: .leading, spacing: 8) {
