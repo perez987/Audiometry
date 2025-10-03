@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D9471FB92E902B5500CEFED9 /* PrintReportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9471FB82E902B4C00CEFED9 /* PrintReportView.swift */; };
 		D951DC082E86BE6000D254D8 /* LanguageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D951DC072E86BE6000D254D8 /* LanguageManager.swift */; };
 		D951DC0A2E86BE6600D254D8 /* Patient.swift in Sources */ = {isa = PBXBuildFile; fileRef = D951DC092E86BE6600D254D8 /* Patient.swift */; };
 		D951DC0C2E86BE6B00D254D8 /* PatientNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D951DC0B2E86BE6B00D254D8 /* PatientNavigationView.swift */; };
@@ -23,6 +24,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		D9471FB82E902B4C00CEFED9 /* PrintReportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrintReportView.swift; sourceTree = "<group>"; };
 		D951DC072E86BE6000D254D8 /* LanguageManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LanguageManager.swift; sourceTree = "<group>"; };
 		D951DC092E86BE6600D254D8 /* Patient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Patient.swift; sourceTree = "<group>"; };
 		D951DC0B2E86BE6B00D254D8 /* PatientNavigationView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PatientNavigationView.swift; sourceTree = "<group>"; };
@@ -84,6 +86,7 @@
 				D951DC0B2E86BE6B00D254D8 /* PatientNavigationView.swift */,
 				D951DC0D2E86BE7000D254D8 /* PersistenceController.swift */,
 				D9779AB42E86A860000F22FB /* Preview Content */,
+				D9471FB82E902B4C00CEFED9 /* PrintReportView.swift */,
 			);
 			path = Audiometry;
 			sourceTree = "<group>";
@@ -174,6 +177,7 @@
 				D9779ABE2E86A896000F22FB /* AudiometryCalculations.swift in Sources */,
 				D951DC082E86BE6000D254D8 /* LanguageManager.swift in Sources */,
 				D951DC0C2E86BE6B00D254D8 /* PatientNavigationView.swift in Sources */,
+				D9471FB92E902B5500CEFED9 /* PrintReportView.swift in Sources */,
 				D951DC112E86BE7800D254D8 /* DataModel.xcdatamodeld in Sources */,
 				D951DC0A2E86BE6600D254D8 /* Patient.swift in Sources */,
 				D951DC0E2E86BE7000D254D8 /* PersistenceController.swift in Sources */,
