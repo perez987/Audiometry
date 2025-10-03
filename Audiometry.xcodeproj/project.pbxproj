@@ -23,6 +23,8 @@
 		D9779ABE2E86A896000F22FB /* AudiometryCalculations.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9779ABD2E86A896000F22FB /* AudiometryCalculations.swift */; };
 		D98472CE2E8C6DAD0050C695 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = D98472CC2E8C6DAD0050C695 /* Localizable.strings */; };
 		D9ABBBF82E86ADDB00703980 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9ABBBF72E86ADDB00703980 /* AppDelegate.swift */; };
+		D9C60E742E900C8A00B1E9FC /* PrintReportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9C60E732E900C8200B1E9FC /* PrintReportView.swift */; };
+		D9C60E762E900CBE00B1E9FC /* PrintReportViewSwiftUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9C60E752E900CA600B1E9FC /* PrintReportViewSwiftUI.swift */; };
 		EB1AEFFE4CA84D839C415878 /* PatientDataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 813E32C761E0469898ACB56A /* PatientDataStore.swift */; };
 /* End PBXBuildFile section */
 
@@ -44,6 +46,8 @@
 		D98472CD2E8C6DAD0050C695 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		D98472D22E8C6DF30050C695 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
 		D9ABBBF72E86ADDB00703980 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		D9C60E732E900C8200B1E9FC /* PrintReportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrintReportView.swift; sourceTree = "<group>"; };
+		D9C60E752E900CA600B1E9FC /* PrintReportViewSwiftUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrintReportViewSwiftUI.swift; sourceTree = "<group>"; };
 		DC306D28B64C49F99A607E44 /* PatientData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PatientData.swift; sourceTree = "<group>"; };
 		E9BAA1FD689E45CD863C10F2 /* StorageMode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StorageMode.swift; sourceTree = "<group>"; };
 		FE7A2085287644A48B4D3F8C /* PatientNavigationViewSwiftUI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PatientNavigationViewSwiftUI.swift; sourceTree = "<group>"; };
@@ -96,6 +100,8 @@
 				FE7A2085287644A48B4D3F8C /* PatientNavigationViewSwiftUI.swift */,
 				D951DC0D2E86BE7000D254D8 /* PersistenceController.swift */,
 				D9779AB42E86A860000F22FB /* Preview Content */,
+				D9C60E732E900C8200B1E9FC /* PrintReportView.swift */,
+				D9C60E752E900CA600B1E9FC /* PrintReportViewSwiftUI.swift */,
 				E9BAA1FD689E45CD863C10F2 /* StorageMode.swift */,
 			);
 			path = Audiometry;
@@ -181,10 +187,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				D9ABBBF82E86ADDB00703980 /* AppDelegate.swift in Sources */,
+				D9C60E742E900C8A00B1E9FC /* PrintReportView.swift in Sources */,
 				D9779AB12E86A85F000F22FB /* ContentView.swift in Sources */,
 				91193ED9F2534B7D966C80CE /* ContentViewSwiftUI.swift in Sources */,
 				D9779AAF2E86A85F000F22FB /* AudiometryApp.swift in Sources */,
 				D9779ABE2E86A896000F22FB /* AudiometryCalculations.swift in Sources */,
+				D9C60E762E900CBE00B1E9FC /* PrintReportViewSwiftUI.swift in Sources */,
 				D951DC082E86BE6000D254D8 /* LanguageManager.swift in Sources */,
 				D951DC0C2E86BE6B00D254D8 /* PatientNavigationView.swift in Sources */,
 				751996BAB576439C98DDAA0A /* PatientNavigationViewSwiftUI.swift in Sources */,

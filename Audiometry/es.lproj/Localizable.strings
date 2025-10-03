@@ -77,5 +77,6 @@
 /* Help */
 "select_language" = "Elige el idioma de la aplicación";
 
-/* Other */
-
+/* Print */
+"print_report" = "Imprimir";
+"print_all_reports" = "Imprimir Todo";
