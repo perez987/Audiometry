@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		2254379EEE2E463CA4F18FBD /* PatientData.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC306D28B64C49F99A607E44 /* PatientData.swift */; };
+		D936064E2E902DD70017A45F /* PrintReportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D936064D2E902DD50017A45F /* PrintReportView.swift */; };
 		D951DC082E86BE6000D254D8 /* LanguageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D951DC072E86BE6000D254D8 /* LanguageManager.swift */; };
 		D951DC0C2E86BE6B00D254D8 /* PatientNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D951DC0B2E86BE6B00D254D8 /* PatientNavigationView.swift */; };
 		D9779AAF2E86A85F000F22FB /* AudiometryApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9779AAE2E86A85F000F22FB /* AudiometryApp.swift */; };
@@ -22,6 +23,7 @@
 
 /* Begin PBXFileReference section */
 		813E32C761E0469898ACB56A /* PatientDataStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PatientDataStore.swift; sourceTree = "<group>"; };
+		D936064D2E902DD50017A45F /* PrintReportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrintReportView.swift; sourceTree = "<group>"; };
 		D951DC072E86BE6000D254D8 /* LanguageManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LanguageManager.swift; sourceTree = "<group>"; };
 		D951DC0B2E86BE6B00D254D8 /* PatientNavigationView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PatientNavigationView.swift; sourceTree = "<group>"; };
 		D9779AAB2E86A85F000F22FB /* Audiometry.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Audiometry.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -67,6 +69,7 @@
 		D9779AAD2E86A85F000F22FB /* Audiometry */ = {
 			isa = PBXGroup;
 			children = (
+				D936064D2E902DD50017A45F /* PrintReportView.swift */,
 				D9ABBBF72E86ADDB00703980 /* AppDelegate.swift */,
 				D9779AB22E86A860000F22FB /* Assets.xcassets */,
 				D9779AB72E86A860000F22FB /* Audiometry.entitlements */,
@@ -166,6 +169,7 @@
 				D9779AB12E86A85F000F22FB /* ContentView.swift in Sources */,
 				D9779AAF2E86A85F000F22FB /* AudiometryApp.swift in Sources */,
 				D9779ABE2E86A896000F22FB /* AudiometryCalculations.swift in Sources */,
+				D936064E2E902DD70017A45F /* PrintReportView.swift in Sources */,
 				D951DC082E86BE6000D254D8 /* LanguageManager.swift in Sources */,
 				D951DC0C2E86BE6B00D254D8 /* PatientNavigationView.swift in Sources */,
 				2254379EEE2E463CA4F18FBD /* PatientData.swift in Sources */,
