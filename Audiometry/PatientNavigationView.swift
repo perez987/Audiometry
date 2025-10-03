@@ -108,24 +108,6 @@ struct PatientNavigationView: View {
 
 				Divider()
 					.frame(height: 20)
-
-					// Print Report Button
-				Button("print_report".localized) {
-					printAllPatients = false
-					showingPrintView = true
-				}
-				.disabled(currentPatient == nil)
-
-					// Print All Reports Button
-				Button("print_all_reports".localized) {
-					printAllPatients = true
-					showingPrintView = true
-				}
-				.disabled(allPatients.isEmpty)
-
-
-                Divider()
-                    .frame(height: 20)
                 
                 // Print Report Button
                 Button("print_report".localized) {
