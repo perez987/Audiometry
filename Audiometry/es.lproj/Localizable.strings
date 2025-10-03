@@ -73,6 +73,8 @@
 "cancel" = "Cancelar";
 "ok" = "Aceptar";
 "close" = "Cerrar";
+"print_report" = "Imprimir";
+"print_all_reports" = "Imprimir Todo";
 
 /* Help */
 "select_language" = "Elige el idioma de la aplicación";
