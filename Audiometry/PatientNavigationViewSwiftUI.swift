@@ -16,6 +16,8 @@ struct PatientNavigationViewSwiftUI: View {
     @State private var searchText = ""
     @State private var showingSearchResults = false
     @State private var searchResults: [PatientData] = []
+    @State private var showingPrintView = false
+    @State private var printAllPatients = false
     
     let currentPatient: PatientData?
     let allPatients: [PatientData]
@@ -103,6 +105,23 @@ struct PatientNavigationViewSwiftUI: View {
                 Divider()
                     .frame(height: 20)
                 
+                // Print Report Button
+                Button("print_report".localized) {
+                    printAllPatients = false
+                    showingPrintView = true
+                }
+                .disabled(currentPatient == nil)
+                
+                // Print All Reports Button
+                Button("print_all_reports".localized) {
+                    printAllPatients = true
+                    showingPrintView = true
+                }
+                .disabled(allPatients.isEmpty)
+                
+                Divider()
+                    .frame(height: 20)
+                
                 // Navigation Controls
                 Button("previous_patient".localized) {
                     if hasPrevious {
@@ -139,6 +158,13 @@ struct PatientNavigationViewSwiftUI: View {
                     showingSearchResults = false
                 }
             )
+        }
+        .sheet(isPresented: $showingPrintView) {
+            if printAllPatients {
+                PrintReportViewSwiftUI(patients: allPatients)
+            } else if let patient = currentPatient {
+                PrintReportViewSwiftUI(patient: patient)
+            }
         }
     }
     
