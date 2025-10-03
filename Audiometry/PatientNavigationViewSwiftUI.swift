@@ -96,11 +96,13 @@ struct PatientNavigationViewSwiftUI: View {
                 Button("new_patient".localized) {
                     onNewPatient()
                 }
-                
+				.help(Text("add_new_patient".localized))
+
                 // Save Patient Button
                 Button("save_patient".localized) {
                     onSavePatient()
                 }
+				.help(Text("save_data".localized))
 
 				Divider()
 					.frame(height: 20)
@@ -110,13 +112,15 @@ struct PatientNavigationViewSwiftUI: View {
                     printAllPatients = false
                     showingPrintView = true
                 }
-                .disabled(currentPatient == nil)
-                
+				.help(Text("print_patient".localized))
+				.disabled(currentPatient == nil)
+
                 // Print All Reports Button
                 Button("print_all_reports".localized) {
                     printAllPatients = true
                     showingPrintView = true
                 }
+				.help(Text("print_all".localized))
                 .disabled(allPatients.isEmpty)
                 
                 Divider()
@@ -129,6 +133,7 @@ struct PatientNavigationViewSwiftUI: View {
                         onPatientSelected(previousPatient)
                     }
                 }
+				.help(Text("see_previous".localized))
                 .disabled(!hasPrevious)
                 
                 Text("\(currentIndex + 1) / \(allPatients.count)")
@@ -140,6 +145,7 @@ struct PatientNavigationViewSwiftUI: View {
                         onPatientSelected(nextPatient)
                     }
                 }
+				.help(Text("see_next".localized))
                 .disabled(!hasNext)
                 
                 Spacer()

@@ -46,24 +46,46 @@ struct PrintReportViewSwiftUI: View {
 				Text("patient_report".localized)
 					.font(.title)
 					.fontWeight(.bold)
+					.foregroundStyle(.primary)
+					.padding(8)
+					.border(Color.secondary, width: 1)
 
 				Image(systemName: "headphones.over.ear")
-					.font(.title)
+					.font(.largeTitle)
 					.foregroundColor(.blue)
+
+				Spacer()
+
+				Text("esc_cancel".localized)
+					.font(.callout)
+					.foregroundStyle(.secondary)
 
 			}
 
 				// Patient Information Section
 			VStack(alignment: .leading, spacing: 8) {
-				Text("patient_information".localized)
-					.font(.headline)
-					.fontWeight(.semibold)
-
-				Divider()
+//				Text("patient_information".localized)
+//					.font(.headline)
+//					.fontWeight(.semibold)
+//					.foregroundStyle(.primary)
+//					.padding(8)
+//					.border(Color.secondary, width: 1)
+//
+//				Divider()
+//					.background(Color.blue)
 
 				Text("\("name".localized) \(patient.name.isEmpty ? "not_specified".localized : patient.name)")
+					.foregroundStyle(.primary)
+					.padding(8)
+					.border(Color.secondary, width: 1)
 				Text("\("age".localized) \(patient.age.isEmpty ? "not_specified".localized : patient.age)")
+					.foregroundStyle(.primary)
+					.padding(8)
+					.border(Color.secondary, width: 1)
 				Text("\("job".localized) \(patient.job.isEmpty ? "not_specified".localized : patient.job)")
+					.foregroundStyle(.primary)
+					.padding(8)
+					.border(Color.secondary, width: 1)
 			}
 
 				// Audiometric Testing Section
@@ -73,6 +95,7 @@ struct PrintReportViewSwiftUI: View {
 					.fontWeight(.semibold)
 
 				Divider()
+					.background(Color.blue)
 
 				HStack {
 					Text("frequency_hz".localized)
@@ -100,6 +123,7 @@ struct PrintReportViewSwiftUI: View {
 					.fontWeight(.semibold)
 
 				Divider()
+					.background(Color.blue)
 
 				Text("hearing_loss_assessment".localized)
 					.fontWeight(.semibold)
@@ -109,6 +133,7 @@ struct PrintReportViewSwiftUI: View {
 				Text("\("bilateral".localized): \(calculateBilateralHearingLoss(right: patient.getRightEarValues(), left: patient.getLeftEarValues()))")
 
 				Divider()
+					.background(Color.blue)
 
 				Text("sal_index".localized)
 					.fontWeight(.semibold)
@@ -117,6 +142,7 @@ struct PrintReportViewSwiftUI: View {
 				Text("\("left_ear".localized) SAL: \(calculateSAL(frequencies: patient.getLeftEarValues())) - \(getSALDegree(sal: calculateSALValue(frequencies: patient.getLeftEarValues())))")
 
 				Divider()
+					.background(Color.blue)
 
 				Text("eli_index".localized)
 					.fontWeight(.semibold)
@@ -132,6 +158,7 @@ struct PrintReportViewSwiftUI: View {
 					.fontWeight(.semibold)
 
 				Divider()
+					.background(Color.blue)
 
 				Text("test_frequencies".localized)
 				Text("results_measured".localized)
