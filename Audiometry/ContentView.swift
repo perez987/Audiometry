@@ -201,7 +201,7 @@ struct ContentView: View {
 				.padding()
 			}
 		}
-//		.frame(minWidth: 580, idealWidth: 580, maxWidth: 580, minHeight: 610, idealHeight: 610, maxHeight: 1186)
+		.frame(minWidth: 580, idealWidth: 580, maxWidth: 580, minHeight: 610, idealHeight: 610, maxHeight: 1186)
 
 		.onAppear {
 			loadAllPatients()

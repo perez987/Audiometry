@@ -45,9 +45,9 @@ struct PatientNavigationView: View {
 
 	var body: some View {
 		VStack(spacing: 8) {
-				// Top row: Language selector, search box and Find button
+			// Top row: Language selector, search box and Find button
 			HStack(spacing: 12) {
-					// Language Selector
+				// Language Selector
 				Menu {
 					ForEach(LanguageManager.Language.allCases, id: \.self) { language in
 						Button(action: {
@@ -75,7 +75,7 @@ struct PatientNavigationView: View {
 
 				Spacer()
 
-					// Search
+				// Search
 				HStack {
 					TextField("search_placeholder".localized, text: $searchText)
 						.textFieldStyle(RoundedBorderTextFieldStyle())
@@ -92,35 +92,37 @@ struct PatientNavigationView: View {
 				}
 			}
 
-				// Bottom row: Patient management buttons (New, Save, Prev, Next)
+			// Bottom row: Patient management buttons (New, Save, Prev, Next)
 			HStack(spacing: 8) {
 				Spacer()
 				Button("new_patient".localized) {
 					onNewPatient()
 				}
-					//                .frame(width: 80)
+				.help(Text("add_new_patient".localized))
 
 				Button("save_patient".localized) {
 					onSavePatient()
 				}
-					//                .frame(width: 80)
+				.help(Text("save_data".localized))
 				.disabled(currentPatient == nil)
 
 				Divider()
 					.frame(height: 20)
 
-					// Print Report Button
+				// Print Report Button
 				Button("print_report".localized) {
 					printAllPatients = false
 					showingPrintView = true
 				}
+				.help(Text("print_report_preview".localized))
 				.disabled(currentPatient == nil)
 
-					// Print All Reports Button
+				// Print All Reports Button
 				Button("print_all_reports".localized) {
 					printAllPatients = true
 					showingPrintView = true
 				}
+				.help(Text("print_all_reports_preview".localized))
 				.disabled(allPatients.isEmpty)
 
 				Divider()
@@ -132,12 +134,11 @@ struct PatientNavigationView: View {
 						onPatientSelected(previousPatient)
 					}
 				}
-					//                .frame(width: 80)
+				.help(Text("see_previous".localized))
 				.disabled(!hasPrevious)
 
 				Text("\(currentIndex + 1) / \(allPatients.count)")
 					.foregroundColor(.secondary)
-					//                    .frame(minWidth: 50, idealWidth: 50, maxWidth: 50)
 
 				Button("next_patient".localized) {
 					if hasNext {
@@ -145,7 +146,7 @@ struct PatientNavigationView: View {
 						onPatientSelected(nextPatient)
 					}
 				}
-					//                .frame(width: 80)
+				.help(Text("see_next".localized))
 				.disabled(!hasNext)
 
 				Spacer()
@@ -180,20 +181,14 @@ struct PatientNavigationView: View {
 		let trimmedSearch = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
 		guard !trimmedSearch.isEmpty else { return }
 
-			// Ensure Core Data objects are properly faulted in before searching
-			// This is what the original workaround accomplished by calling onPatientSelected
-			//        for patient in allPatients {
-			//            _ = patient.name // Access a property to fault in the object from persistent store
-			//        }
-
-			// Force save any pending changes before searching
+		// Force save any pending changes before searching
 		onForceSave()
 
-			// MARK: workaround to resolve the issue with the search function:
-			// - Search returns "No patients found" on the first attempt
-			// - Navigating patient list using Next/Back buttons
-			// is required for the search to work.
-			// It's a work in progress
+		// MARK: workaround to resolve the issue with the search function:
+		// - Search returns "No patients found" on the first attempt
+		// - Navigating patient list using Next/Back buttons
+		// is required for the search to work.
+		// It's a work in progress
 
 		if allPatients.isEmpty {
 			let thisPatient = allPatients[currentIndex]
@@ -201,13 +196,9 @@ struct PatientNavigationView: View {
 		}
 		else {
 			if hasPrevious {
-					//                 let previousPatient = allPatients[currentIndex - 1]
-					//                 onPatientSelected(previousPatient)
 				onPatientSelected(allPatients[currentIndex - 1])
 			}
 			else if hasNext {
-					//                 let previousPatient = allPatients[currentIndex + 1]
-					//                 onPatientSelected(previousPatient)
 				onPatientSelected(allPatients[currentIndex + 1])
 			}
 			else {
@@ -220,25 +211,7 @@ struct PatientNavigationView: View {
 			}
 		}
 
-			// MARK: -
-
-			// The original workaround worked by triggering onPatientSelected calls
-			// This minimal version ensures the current patient is properly loaded without changing UI state
-			//        if let current = currentPatient, !allPatients.isEmpty {
-			// Store current state to restore later
-			//            let originalPatient = current
-
-			// Trigger a patient selection to ensure context is in the right state
-			// This is what made the original workaround work
-			//            onPatientSelected(current)
-
-			// If we're not already on the current patient, make sure we're back to it
-			//            if currentPatient != originalPatient {
-			//                onPatientSelected(originalPatient)
-			//            }
-			//        }
-
-			// Search using the shared persistence controller
+		// Search using the shared persistence controller
 		searchResults = PersistenceController.shared.searchPatients(by: trimmedSearch)
 		showingSearchResults = true
 	}
