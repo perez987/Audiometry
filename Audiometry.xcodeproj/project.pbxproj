@@ -26,7 +26,7 @@
 		D936064D2E902DD50017A45F /* PrintReportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrintReportView.swift; sourceTree = "<group>"; };
 		D951DC072E86BE6000D254D8 /* LanguageManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LanguageManager.swift; sourceTree = "<group>"; };
 		D951DC0B2E86BE6B00D254D8 /* PatientNavigationView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PatientNavigationView.swift; sourceTree = "<group>"; };
-		D9779AAB2E86A85F000F22FB /* Audiometry.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Audiometry.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		D9779AAB2E86A85F000F22FB /* Audiometry-swiftui.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Audiometry-swi\U0003ftui.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D9779AAE2E86A85F000F22FB /* AudiometryApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudiometryApp.swift; sourceTree = "<group>"; };
 		D9779AB02E86A85F000F22FB /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		D9779AB22E86A860000F22FB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -61,7 +61,7 @@
 		D9779AAC2E86A85F000F22FB /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				D9779AAB2E86A85F000F22FB /* Audiometry.app */,
+				D9779AAB2E86A85F000F22FB /* Audiometry-swiftui.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -69,7 +69,6 @@
 		D9779AAD2E86A85F000F22FB /* Audiometry */ = {
 			isa = PBXGroup;
 			children = (
-				D936064D2E902DD50017A45F /* PrintReportView.swift */,
 				D9ABBBF72E86ADDB00703980 /* AppDelegate.swift */,
 				D9779AB22E86A860000F22FB /* Assets.xcassets */,
 				D9779AB72E86A860000F22FB /* Audiometry.entitlements */,
@@ -82,6 +81,7 @@
 				813E32C761E0469898ACB56A /* PatientDataStore.swift */,
 				D951DC0B2E86BE6B00D254D8 /* PatientNavigationView.swift */,
 				D9779AB42E86A860000F22FB /* Preview Content */,
+				D936064D2E902DD50017A45F /* PrintReportView.swift */,
 			);
 			path = Audiometry;
 			sourceTree = "<group>";
@@ -97,9 +97,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		D9779AAA2E86A85F000F22FB /* Audiometry */ = {
+		D9779AAA2E86A85F000F22FB /* Audiometry-swiftui */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = D9779ABA2E86A860000F22FB /* Build configuration list for PBXNativeTarget "Audiometry" */;
+			buildConfigurationList = D9779ABA2E86A860000F22FB /* Build configuration list for PBXNativeTarget "Audiometry-swiftui" */;
 			buildPhases = (
 				D9779AA72E86A85F000F22FB /* Sources */,
 				D9779AA82E86A85F000F22FB /* Frameworks */,
@@ -109,9 +109,9 @@
 			);
 			dependencies = (
 			);
-			name = Audiometry;
+			name = "Audiometry-swi\U0003ftui";
 			productName = Audiometry;
-			productReference = D9779AAB2E86A85F000F22FB /* Audiometry.app */;
+			productReference = D9779AAB2E86A85F000F22FB /* Audiometry-swiftui.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -142,7 +142,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				D9779AAA2E86A85F000F22FB /* Audiometry */,
+				D9779AAA2E86A85F000F22FB /* Audiometry-swiftui */,
 			);
 		};
 /* End PBXProject section */
@@ -384,7 +384,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		D9779ABA2E86A860000F22FB /* Build configuration list for PBXNativeTarget "Audiometry" */ = {
+		D9779ABA2E86A860000F22FB /* Build configuration list for PBXNativeTarget "Audiometry-swiftui" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				D9779ABB2E86A860000F22FB /* Debug */,

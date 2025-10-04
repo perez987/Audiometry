@@ -41,9 +41,9 @@ struct PatientNavigationView: View {
 
 	var body: some View {
 		VStack(spacing: 8) {
-				// Top row: Language selector and search
+			// Top row: Language selector and search
 			HStack(spacing: 12) {
-					// Language Menu
+				// Language Menu
 				Menu {
 					ForEach(LanguageManager.Language.allCases, id: \.self) { language in
 						Button(action: {
@@ -63,16 +63,17 @@ struct PatientNavigationView: View {
 						Text(languageManager.currentLanguage.displayName)
 					}
 				}
+				.help("select_language".localized) //Tooltip
 
 				Spacer()
 
-					// Search Field
+				// Search Field
 				HStack {
 					Image(systemName: "magnifyingglass")
 						.foregroundColor(.secondary)
 					TextField("search_by_name".localized, text: $searchText)
 						.textFieldStyle(RoundedBorderTextFieldStyle())
-						.frame(width: 340)
+						.frame(width: 300)
 						.onSubmit {
 							performSearch()
 						}
@@ -88,47 +89,52 @@ struct PatientNavigationView: View {
 				}
 			}
 
-				// Bottom row: Patient management and navigation buttons
+			// Bottom row: Patient management and navigation buttons
 			HStack(spacing: 8) {
 				Spacer()
 
-					// New Patient Button
+				// New Patient Button
 				Button("new_patient".localized) {
 					onNewPatient()
 				}
+				.help(Text("add_new_patient".localized))
 
-					// Save Patient Button
+				// Save Patient Button
 				Button("save_patient".localized) {
 					onSavePatient()
 				}
+				.help(Text("save_data".localized))
 
 				Divider()
 					.frame(height: 20)
 
-					// Print Report Button
+				// Print Report Button
 				Button("print_report".localized) {
 					printAllPatients = false
 					showingPrintView = true
 				}
+				.help(Text("print_report_preview".localized))
 				.disabled(currentPatient == nil)
 
-					// Print All Reports Button
+				// Print All Reports Button
 				Button("print_all_reports".localized) {
 					printAllPatients = true
 					showingPrintView = true
 				}
+				.help(Text("print_all_reports_preview".localized))
 				.disabled(allPatients.isEmpty)
 
 				Divider()
 					.frame(height: 20)
 
-					// Navigation Controls
+				// Navigation Controls
 				Button("previous_patient".localized) {
 					if hasPrevious {
 						let previousPatient = allPatients[currentIndex - 1]
 						onPatientSelected(previousPatient)
 					}
 				}
+				.help(Text("see_previous".localized))
 				.disabled(!hasPrevious)
 
 				Text("\(currentIndex + 1) / \(allPatients.count)")
@@ -140,6 +146,7 @@ struct PatientNavigationView: View {
 						onPatientSelected(nextPatient)
 					}
 				}
+				.help(Text("see_next".localized))
 				.disabled(!hasNext)
 
 				Spacer()
@@ -174,10 +181,10 @@ struct PatientNavigationView: View {
 		let trimmedSearch = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
 		guard !trimmedSearch.isEmpty else { return }
 
-			// Force save any pending changes before searching
+		// Force save any pending changes before searching
 		onForceSave()
 
-			// Search using the shared data store
+		// Search using the shared data store
 		searchResults = dataStore.searchPatients(by: trimmedSearch)
 		showingSearchResults = true
 	}
