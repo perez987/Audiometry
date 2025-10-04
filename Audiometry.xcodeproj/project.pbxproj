@@ -36,7 +36,7 @@
 		D951DC0B2E86BE6B00D254D8 /* PatientNavigationView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PatientNavigationView.swift; sourceTree = "<group>"; };
 		D951DC0D2E86BE7000D254D8 /* PersistenceController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PersistenceController.swift; sourceTree = "<group>"; };
 		D951DC102E86BE7800D254D8 /* DataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DataModel.xcdatamodel; sourceTree = "<group>"; };
-		D9779AAB2E86A85F000F22FB /* Audiometry.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Audiometry.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		D9779AAB2E86A85F000F22FB /* Audiometry-dual.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Audiometry-dual.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D9779AAE2E86A85F000F22FB /* AudiometryApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudiometryApp.swift; sourceTree = "<group>"; };
 		D9779AB02E86A85F000F22FB /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		D9779AB22E86A860000F22FB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -75,7 +75,7 @@
 		D9779AAC2E86A85F000F22FB /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				D9779AAB2E86A85F000F22FB /* Audiometry.app */,
+				D9779AAB2E86A85F000F22FB /* Audiometry-dual.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -118,9 +118,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		D9779AAA2E86A85F000F22FB /* Audiometry */ = {
+		D9779AAA2E86A85F000F22FB /* Audiometry-dual */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = D9779ABA2E86A860000F22FB /* Build configuration list for PBXNativeTarget "Audiometry" */;
+			buildConfigurationList = D9779ABA2E86A860000F22FB /* Build configuration list for PBXNativeTarget "Audiometry-dual" */;
 			buildPhases = (
 				D9779AA72E86A85F000F22FB /* Sources */,
 				D9779AA82E86A85F000F22FB /* Frameworks */,
@@ -130,9 +130,9 @@
 			);
 			dependencies = (
 			);
-			name = Audiometry;
+			name = "Audiometry-dual";
 			productName = Audiometry;
-			productReference = D9779AAB2E86A85F000F22FB /* Audiometry.app */;
+			productReference = D9779AAB2E86A85F000F22FB /* Audiometry-dual.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -163,7 +163,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				D9779AAA2E86A85F000F22FB /* Audiometry */,
+				D9779AAA2E86A85F000F22FB /* Audiometry-dual */,
 			);
 		};
 /* End PBXProject section */
@@ -412,7 +412,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		D9779ABA2E86A860000F22FB /* Build configuration list for PBXNativeTarget "Audiometry" */ = {
+		D9779ABA2E86A860000F22FB /* Build configuration list for PBXNativeTarget "Audiometry-dual" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				D9779ABB2E86A860000F22FB /* Debug */,
