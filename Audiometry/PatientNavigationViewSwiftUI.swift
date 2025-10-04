@@ -63,7 +63,8 @@ struct PatientNavigationViewSwiftUI: View {
                         Text(languageManager.currentLanguage.displayName)
                     }
                 }
-                
+                .help("select_language".localized) //Tooltip
+
                 Spacer()
                 
                 // Search Field

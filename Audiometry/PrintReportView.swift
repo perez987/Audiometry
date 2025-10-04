@@ -51,8 +51,8 @@ struct PrintReportView: View {
 					.padding(8)
 					.border(Color.secondary, width: 1)
 
-				Image(systemName: "headphones.over.ear")
-					.font(.title)
+				Image(systemName: "person.circle")
+					.font(.system(size: 38))
 					.foregroundColor(.blue)
 
 				Spacer()
@@ -70,7 +70,7 @@ struct PrintReportView: View {
 //					.foregroundStyle(.primary)
 //					.padding(8)
 //					.border(Color.secondary, width: 1)
-//
+
 //				Divider()
 //					.background(Color.blue)
 

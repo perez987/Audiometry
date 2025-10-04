@@ -50,9 +50,8 @@ struct PrintReportViewSwiftUI: View {
 					.padding(8)
 					.border(Color.secondary, width: 1)
 
-				Image(systemName: "person.crop.circle")
+				Image(systemName: "person.circle")
                     .font(.system(size: 38))
-//                    .font(.largeTitle)
 					.foregroundColor(.blue)
 
 				Spacer()
@@ -64,14 +63,16 @@ struct PrintReportViewSwiftUI: View {
 			}
 
 				// Patient Information Section
+				
 			VStack(alignment: .leading, spacing: 8) {
+			
 //				Text("patient_information".localized)
 //					.font(.headline)
 //					.fontWeight(.semibold)
 //					.foregroundStyle(.primary)
 //					.padding(8)
 //					.border(Color.secondary, width: 1)
-//
+
 //				Divider()
 //					.background(Color.blue)
 
