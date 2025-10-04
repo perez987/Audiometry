@@ -87,8 +87,7 @@
 /* Tooltips */
 "add_new_patient" = "Añadir paciente nuevo";
 "save_data" = "Guardar los datos y reordenar los pacientes";
-"print_report" = "Vista previa del informe";
-"print_patient" = "Vista previa del informe de este paciente";
-"print_all" = "Vista previa del informe de todos los pacientes";
+"print_report_preview" = "Vista previa del informe de este paciente";
+"print_all_reports_preview" = "Vista previa del informe de todos los pacientes";
 "see_previous" = "Mostrar el paciente anterior";
 "see_next" = "Mostrar el siguiente paciente";

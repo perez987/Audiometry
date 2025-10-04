@@ -50,8 +50,9 @@ struct PrintReportViewSwiftUI: View {
 					.padding(8)
 					.border(Color.secondary, width: 1)
 
-				Image(systemName: "headphones.over.ear")
-					.font(.largeTitle)
+				Image(systemName: "person.crop.circle")
+                    .font(.system(size: 38))
+//                    .font(.largeTitle)
 					.foregroundColor(.blue)
 
 				Spacer()

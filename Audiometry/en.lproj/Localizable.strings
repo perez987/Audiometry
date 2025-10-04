@@ -88,8 +88,7 @@
 /* Tooltips */
 "add_new_patient" = "Add new patient";
 "save_data" = "Save data and reorder patientes";
-"print_report" = "Report preview";
-"print_patient" = "Patient report preview";
-"print_all" = "All patients report preview";
+"print_report_preview" = "Patient report preview";
+"print_all_reports_preview" = "All patients report preview";
 "see_previous" = "Go to the previous patient";
 "see_next" = "Go to the next patient";

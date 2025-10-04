@@ -112,7 +112,7 @@ struct PatientNavigationViewSwiftUI: View {
                     printAllPatients = false
                     showingPrintView = true
                 }
-				.help(Text("print_patient".localized))
+				.help(Text("print_report_preview".localized))
 				.disabled(currentPatient == nil)
 
                 // Print All Reports Button
@@ -120,7 +120,7 @@ struct PatientNavigationViewSwiftUI: View {
                     printAllPatients = true
                     showingPrintView = true
                 }
-				.help(Text("print_all".localized))
+				.help(Text("print_all_reports_preview".localized))
                 .disabled(allPatients.isEmpty)
                 
                 Divider()
