@@ -30,7 +30,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 //    func viewDidLoad() {
 //    }
 
-    // Close app from red button (thanks Chris1111)
+    // Close app from red button (thanks chris1111)
     func applicationShouldTerminateAfterLastWindowClosed(_: NSApplication) -> Bool {
         return true
     }
