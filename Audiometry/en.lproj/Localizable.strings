@@ -1,0 +1,96 @@
+/* English Localization for Audiometry App */
+
+/* Main UI */
+"app_title" = "Audiometry";
+"patient_report" = "Patient Report";
+"language" = "Language";
+"storage_mode:" = "Storage Mode:";
+"current: " = "Current: ";
+
+/* Patient Information */
+"patient_information" = "Patient Information";
+"name" = "Name:";
+"age" = "Age:";
+"job" = "Job:";
+"enter_patient_name" = "Enter patient name";
+"enter_age" = "Enter age";
+"enter_job_occupation" = "Enter job/occupation";
+"not_specified" = "Not specified";
+"age_label" = "Age";
+
+/* Audiometric Testing */
+"audiometric_testing_results" = "Audiometric Test Result (dB HL)";
+"frequency_hz" = "Frequency (Hz)";
+"right_ear" = "Right Ear";
+"left_ear" = "Left Ear";
+"db_placeholder" = "dB";
+
+/* Assessment Results */
+"assessment_results" = "Assessment Results";
+"hearing_loss_assessment" = "Hearing Loss Assessment:";
+"bilateral" = "Bilateral";
+
+/* SAL Index */
+"sal_index" = "SAL Index (Speech Average Loss):";
+"sal_description" = "SAL Index: Average of 500, 1000, 2000 Hz (speech frequencies).";
+
+/* ELI Index */
+"eli_index" = "ELI Index (Early Loss Index):";
+"eli_description" = "ELI Index: Average of all tested frequencies weighted for hearing loss impact.";
+
+/* Parameters Summary */
+"parameters_summary" = "Parameters Summary";
+"patient_label" = "Patient:";
+"age_label" = "Age:";
+"occupation_label" = "Occupation:";
+"test_frequencies" = "Frequencies: 500, 1000, 2000, 4000, 8000 Hz.";
+"results_measured" = "Results are measured in dB HL (Hearing Level).";
+
+/* Hearing Loss Classifications */
+"normal" = "Normal";
+"mild" = "Mild";
+"moderate" = "Moderate";
+"moderate_severe" = "Moderate-Severe";
+"severe" = "Severe";
+"profound" = "Profound";
+
+/* Patient Navigation */
+"save_patient" = "Save";
+"new_patient" = "New";
+"previous_patient" = "<<";
+"next_patient" = ">>";
+"search_patient" = "Find";
+"search_placeholder" = "Search by name";
+"no_patients_found" = "No patient found";
+"patient_saved" = "Patient saved";
+"patient_loaded" = "Patient loaded";
+"search_results_for" = "Search results for";
+"search_by_name" = "Search by name";
+
+/* Buttons */
+"save" = "Save";
+"load" = "Load";
+"clear" = "Clear";
+"cancel" = "Cancel";
+"ok" = "OK";
+"close" = "Close";
+"print_report" = "Print";
+"print_all_reports" = "Print All";
+
+/* Help */
+"select_language" = "Select the app language";
+
+/* Print */
+"print_report" = "Print";
+"print_all_reports" = "Print All";
+"esc_cancel" = "(Press Escape to Cancel)";
+
+/* Tooltips */
+"add_new_patient" = "Add new patient";
+"save_data" = "Save data and reorder patientes";
+"print_report_preview" = "Patient report preview";
+"print_all_reports_preview" = "All patients report preview";
+"see_previous" = "Go to the previous patient";
+"see_next" = "Go to the next patient";
+"print_preview" = "Open Preview app with PDF to print";
+"Print Error" = "Print Error";
