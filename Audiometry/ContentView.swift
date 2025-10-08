@@ -2,22 +2,21 @@
 	//  ContentView.swift
 	//  Audiometry
 	//
-	//  ContentView using SwiftUI data storage
-	//
 	//  Created by GitHub Copilot on 20/09/2025.
 	//  Modified by perez987 on 20/09/2025.
 	//
 
 import SwiftUI
+import CoreData
 import Combine
 
 struct ContentView: View {
+	@Environment(\.managedObjectContext) private var viewContext
 	@ObservedObject private var languageManager = LanguageManager.shared
-	@ObservedObject private var dataStore = PatientDataStore.shared
 
 		// Current patient being edited
-	@State private var currentPatient: PatientData?
-	@State private var allPatients: [PatientData] = []
+	@State private var currentPatient: Patient?
+	@State private var allPatients: [Patient] = []
 
 		// Patient Information
 	@State private var patientName: String = ""
@@ -202,7 +201,7 @@ struct ContentView: View {
 				.padding()
 			}
 		}
-//		.frame(minWidth: 580, idealWidth: 580, maxWidth: 580, minHeight: 610, idealHeight: 610, maxHeight: 1186)
+		.frame(minWidth: 580, idealWidth: 580, maxWidth: 580, minHeight: 610, idealHeight: 610, maxHeight: 1186)
 
 		.onAppear {
 			loadAllPatients()
@@ -239,18 +238,17 @@ struct ContentView: View {
 		// MARK: - Patient Management Functions
 
 	private func loadAllPatients() {
-		allPatients = dataStore.fetchPatients()
+		allPatients = PersistenceController.shared.fetchPatients()
 	}
 
 	private func createNewPatient() {
-		let newPatient = PatientData()
+		let newPatient = Patient.create(in: viewContext)
 		currentPatient = newPatient
-		dataStore.addPatient(newPatient)
 		allPatients.insert(newPatient, at: 0)
 		clearForm()
 	}
 
-	private func loadPatient(_ patient: PatientData) {
+	private func loadPatient(_ patient: Patient) {
 			// Cancel any pending auto-save for the previous patient
 		autoSaveWorkItem?.cancel()
 
@@ -271,7 +269,7 @@ struct ContentView: View {
 	}
 
 	private func updateCurrentPatient() {
-		guard var patient = currentPatient else { return }
+		guard let patient = currentPatient else { return }
 
 		patient.name = patientName
 		patient.age = patientAge
@@ -288,29 +286,42 @@ struct ContentView: View {
 		patient.leftEar8000 = leftEar8000
 		patient.updateModifiedDate()
 
-		currentPatient = patient
-
 			// Auto-save with debouncing to avoid excessive saves during rapid typing
 		autoSaveWorkItem?.cancel()
-		autoSaveWorkItem = DispatchWorkItem { [patient] in
-			dataStore.updatePatient(patient)
+		let context = viewContext  // Capture the context instead of self
+		autoSaveWorkItem = DispatchWorkItem {
+			do {
+				try context.save()
+			} catch {
+				print("Error auto-saving patient: \(error)")
+			}
 		}
 		DispatchQueue.main.asyncAfter(deadline: .now() + 1.0, execute: autoSaveWorkItem!)
 	}
 
 	private func saveCurrentPatient() {
-		guard let patient = currentPatient else { return }
-		dataStore.updatePatient(patient)
-		loadAllPatients() // Refresh the list
+		do {
+			try viewContext.save()
+			loadAllPatients() // Refresh the list
+		} catch {
+			print("Error saving patient: \(error)")
+		}
 	}
 
 	private func forceSavePendingChanges() {
 			// Cancel any pending auto-save and execute it immediately
 		autoSaveWorkItem?.cancel()
-		if let patient = currentPatient {
-			dataStore.updatePatient(patient)
+		if viewContext.hasChanges {
+			do {
+				try viewContext.save()
+				print("Force-saved pending changes successfully")
+					// Refresh the patient list to ensure consistency
+				loadAllPatients()
+			} catch {
+				print("Error force-saving pending changes: \(error)")
+			}
 		}
-			// Refresh the patient list to ensure consistency
+			// Always refresh the patient list to ensure search consistency
 		loadAllPatients()
 	}
 

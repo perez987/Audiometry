@@ -7,16 +7,19 @@
 //
 
 import SwiftUI
+import CoreData
 import AppKit
 
 @main
 struct AudiometryApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     @ObservedObject private var languageManager = LanguageManager.shared
+    let persistenceController = PersistenceController.shared
     
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environment(\.managedObjectContext, persistenceController.container.viewContext)
             
                 .onAppear {
                     // Set initial window title
