@@ -1,0 +1,2013 @@
+From a1ec65c99db264bf8c4fd02e7246c950e6e9faca Mon Sep 17 00:00:00 2001
+From: "copilot-swe-agent[bot]" <198982749+Copilot@users.noreply.github.com>
+Date: Wed, 1 Oct 2025 11:55:39 +0000
+Subject: [PATCH] Create swiftui branch with SwiftUI-only storage
+
+Co-authored-by: perez987 <50429399+perez987@users.noreply.github.com>
+---
+ Audiometry/AudiometryApp.swift                |  44 +-
+ Audiometry/ContentView.swift                  | 338 ++++++-------
+ Audiometry/ContentViewSwiftUI.swift           | 478 ------------------
+ .../DataModel.xcdatamodeld/.xccurrentversion  |   8 -
+ .../DataModel.xcdatamodel/contents            |  21 -
+ Audiometry/Patient.swift                      |  87 ----
+ Audiometry/PatientNavigationView.swift        | 238 +++------
+ Audiometry/PatientNavigationViewSwiftUI.swift | 218 --------
+ Audiometry/PersistenceController.swift        | 142 ------
+ Audiometry/StorageMode.swift                  |  25 -
+ Audiometry/en.lproj/Localizable.strings       |   2 -
+ Audiometry/es.lproj/Localizable.strings       |   2 -
+ README.md                                     |  31 +-
+ 13 files changed, 253 insertions(+), 1381 deletions(-)
+ delete mode 100644 Audiometry/ContentViewSwiftUI.swift
+ delete mode 100644 Audiometry/DataModel.xcdatamodeld/.xccurrentversion
+ delete mode 100644 Audiometry/DataModel.xcdatamodeld/DataModel.xcdatamodel/contents
+ delete mode 100644 Audiometry/Patient.swift
+ delete mode 100644 Audiometry/PatientNavigationViewSwiftUI.swift
+ delete mode 100644 Audiometry/PersistenceController.swift
+ delete mode 100644 Audiometry/StorageMode.swift
+
+diff --git a/Audiometry/AudiometryApp.swift b/Audiometry/AudiometryApp.swift
+index 39962a1..d6370c6 100644
+--- a/Audiometry/AudiometryApp.swift
++++ b/Audiometry/AudiometryApp.swift
+@@ -7,58 +7,16 @@
+ //
+ 
+ import SwiftUI
+-import CoreData
+ import AppKit
+ 
+ @main
+ struct AudiometryApp: App {
+     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
+     @ObservedObject private var languageManager = LanguageManager.shared
+-    @AppStorage("storageMode") private var storageModeRaw: String = StorageMode.coreData.rawValue
+-    let persistenceController = PersistenceController.shared
+-    
+-    var storageMode: StorageMode {
+-        StorageMode(rawValue: storageModeRaw) ?? .coreData
+-    }
+     
+     var body: some Scene {
+         WindowGroup {
+-            VStack(spacing: 0) {
+-                // Storage Mode Selector
+-                HStack {
+-					Text("storage_mode:".localized)
+-						.foregroundColor(.secondary)
+-                        .font(.headline)
+-                    Spacer()
+-                    Picker("", selection: $storageModeRaw) {
+-                        ForEach(StorageMode.allCases, id: \.rawValue) { mode in
+-                            Text(mode.displayName).tag(mode.rawValue)
+-                        }
+-                    }
+-                    .pickerStyle(SegmentedPickerStyle())
+-                    .frame(width: 300)
+-                    
+-                    Spacer()
+-
+-					let Text1 = "current: ".localized
+-					let Text2 = storageMode.displayName
+-					Text(Text1 + Text2)
+-                        .foregroundColor(.secondary)
+-						.font(.subheadline)
+-                }
+-                .padding()
+-                .background(Color(NSColor.windowBackgroundColor))
+-                
+-                Divider()
+-                
+-                // Content based on storage mode
+-                if storageMode == .coreData {
+-                    ContentView()
+-                        .environment(\.managedObjectContext, persistenceController.container.viewContext)
+-                } else {
+-                    ContentViewSwiftUI()
+-                }
+-            }
++            ContentView()
+             
+                 .onAppear {
+                     // Set initial window title
+diff --git a/Audiometry/ContentView.swift b/Audiometry/ContentView.swift
+index c1e431c..707d590 100644
+--- a/Audiometry/ContentView.swift
++++ b/Audiometry/ContentView.swift
+@@ -2,21 +2,22 @@
+ //  ContentView.swift
+ //  Audiometry
+ //
++//  ContentView using SwiftUI data storage
++//
+ //  Created by GitHub Copilot on 20/09/2025.
+ //  Modified by perez987 on 20/09/2025.
+ //
+ 
+ import SwiftUI
+-import CoreData
+ import Combine
+ 
+ struct ContentView: View {
+-    @Environment(\.managedObjectContext) private var viewContext
+     @ObservedObject private var languageManager = LanguageManager.shared
++    @ObservedObject private var dataStore = PatientDataStore.shared
+     
+     // Current patient being edited
+-    @State private var currentPatient: Patient?
+-    @State private var allPatients: [Patient] = []
++    @State private var currentPatient: PatientData?
++    @State private var allPatients: [PatientData] = []
+     
+     // Patient Information
+     @State private var patientName: String = ""
+@@ -41,178 +42,177 @@ struct ContentView: View {
+     // Auto-save debouncing
+     @State private var autoSaveWorkItem: DispatchWorkItem?
+ 
+-var body: some View {
+-    VStack(spacing: 0) {
+-        // Navigation bar
+-        PatientNavigationView(
+-            currentPatient: currentPatient,
+-            allPatients: allPatients,
+-            onPatientSelected: loadPatient,
+-            onNewPatient: createNewPatient,
+-            onSavePatient: saveCurrentPatient,
+-            onForceSave: forceSavePendingChanges
+-        )
+-        .padding(.vertical, 8)
+-        .background(Color(NSColor.controlBackgroundColor))
+-        
+-        Divider()
+-        
+-        // Main content
+-        ScrollView {
+-            VStack(alignment: .leading, spacing: 20) {
+-                // Title
+-                Text("patient_report".localized)
+-                    .font(.largeTitle)
+-                    .fontWeight(.bold)
+-                    .padding(.bottom, 10)
+-
+-                // Patient Information Section
+-                GroupBox("patient_information".localized) {
+-                    VStack(alignment: .leading, spacing: 12) {
+-                        HStack {
+-                            Text("name".localized)
+-                                .frame(width: 72, alignment: .leading)
+-                            TextField("enter_patient_name".localized, text: $patientName)
+-                                .textFieldStyle(RoundedBorderTextFieldStyle())
+-                                .frame(width: 380)
+-                                .onChange(of: patientName) { _ in
+-                                    updateCurrentPatient()
+-                                }
+-                        }
++    var body: some View {
++        VStack(spacing: 0) {
++            // Navigation bar
++            PatientNavigationView(
++                currentPatient: currentPatient,
++                allPatients: allPatients,
++                onPatientSelected: loadPatient,
++                onNewPatient: createNewPatient,
++                onSavePatient: saveCurrentPatient,
++                onForceSave: forceSavePendingChanges
++            )
++            .padding(.vertical, 8)
++            .background(Color(NSColor.controlBackgroundColor))
++            
++            Divider()
++            
++            // Main content
++            ScrollView {
++                VStack(alignment: .leading, spacing: 20) {
++                    // Title
++                    Text("patient_report".localized)
++                        .font(.largeTitle)
++                        .fontWeight(.bold)
++                        .padding(.bottom, 10)
++
++                    // Patient Information Section
++                    GroupBox("patient_information".localized) {
++                        VStack(alignment: .leading, spacing: 12) {
++                            HStack {
++                                Text("name".localized)
++                                    .frame(width: 72, alignment: .leading)
++                                TextField("enter_patient_name".localized, text: $patientName)
++                                    .textFieldStyle(RoundedBorderTextFieldStyle())
++                                    .frame(width: 380)
++                                    .onChange(of: patientName) { _ in
++                                        updateCurrentPatient()
++                                    }
++                            }
+ 
+-                        HStack {
+-                            Text("age".localized)
+-                                .frame(width: 72, alignment: .leading)
+-                            TextField("enter_age".localized, text: $patientAge)
+-                                .textFieldStyle(RoundedBorderTextFieldStyle())
+-                                .frame(width: 140)
+-                                .onChange(of: patientAge) { _ in
+-                                    updateCurrentPatient()
+-                                }
+-                            Spacer()
+-                        }
++                            HStack {
++                                Text("age".localized)
++                                    .frame(width: 72, alignment: .leading)
++                                TextField("enter_age".localized, text: $patientAge)
++                                    .textFieldStyle(RoundedBorderTextFieldStyle())
++                                    .frame(width: 140)
++                                    .onChange(of: patientAge) { _ in
++                                        updateCurrentPatient()
++                                    }
++                                Spacer()
++                            }
+ 
+-                        HStack {
+-                            Text("job".localized)
+-                                .frame(width: 72, alignment: .leading)
+-                            TextField("enter_job_occupation".localized, text: $patientJob)
+-                                .textFieldStyle(RoundedBorderTextFieldStyle())
+-                                .frame(width: 380)
+-                                .onChange(of: patientJob) { _ in
+-                                    updateCurrentPatient()
+-                                }
++                            HStack {
++                                Text("job".localized)
++                                    .frame(width: 72, alignment: .leading)
++                                TextField("enter_job_occupation".localized, text: $patientJob)
++                                    .textFieldStyle(RoundedBorderTextFieldStyle())
++                                    .frame(width: 380)
++                                    .onChange(of: patientJob) { _ in
++                                        updateCurrentPatient()
++                                    }
++                            }
+                         }
++                        .padding()
+                     }
+-                    .padding()
+-                }
+ 
+-                // Audiometric Testing Section
+-                GroupBox("audiometric_testing_results".localized) {
+-                    VStack(spacing: 16) {
+-                        // Header
+-                        HStack {
+-                            Text("frequency_hz".localized)
+-                                .frame(width: 120, alignment: .leading)
+-                                .fontWeight(.semibold)
+-                            Text("right_ear".localized)
+-                                .frame(width: 100, alignment: .center)
+-                                .fontWeight(.semibold)
+-                            Text("left_ear".localized)
+-                                .frame(width: 100, alignment: .center)
+-                                .fontWeight(.semibold)
+-                        }
++                    // Audiometric Testing Section
++                    GroupBox("audiometric_testing_results".localized) {
++                        VStack(spacing: 16) {
++                            // Header
++                            HStack {
++                                Text("frequency_hz".localized)
++                                    .frame(width: 120, alignment: .leading)
++                                    .fontWeight(.semibold)
++                                Text("right_ear".localized)
++                                    .frame(width: 100, alignment: .center)
++                                    .fontWeight(.semibold)
++                                Text("left_ear".localized)
++                                    .frame(width: 100, alignment: .center)
++                                    .fontWeight(.semibold)
++                            }
+ 
+-                        Divider()
++                            Divider()
+ 
+-                        // Frequency rows
+-                        frequencyRow(frequency: "500", rightValue: $rightEar500, leftValue: $leftEar500)
+-                        frequencyRow(frequency: "1000", rightValue: $rightEar1000, leftValue: $leftEar1000)
+-                        frequencyRow(frequency: "2000", rightValue: $rightEar2000, leftValue: $leftEar2000)
+-                        frequencyRow(frequency: "4000", rightValue: $rightEar4000, leftValue: $leftEar4000)
+-                        frequencyRow(frequency: "8000", rightValue: $rightEar8000, leftValue: $leftEar8000)
++                            // Frequency rows
++                            frequencyRow(frequency: "500", rightValue: $rightEar500, leftValue: $leftEar500)
++                            frequencyRow(frequency: "1000", rightValue: $rightEar1000, leftValue: $leftEar1000)
++                            frequencyRow(frequency: "2000", rightValue: $rightEar2000, leftValue: $leftEar2000)
++                            frequencyRow(frequency: "4000", rightValue: $rightEar4000, leftValue: $leftEar4000)
++                            frequencyRow(frequency: "8000", rightValue: $rightEar8000, leftValue: $leftEar8000)
++                        }
++                        .padding()
+                     }
+-                    .padding()
+-                }
+ 
+-                // Results Section
+-                GroupBox("assessment_results".localized) {
+-                    VStack(alignment: .leading, spacing: 12) {
+-                        // Hearing Loss Calculations
+-                        Text("hearing_loss_assessment".localized)
+-                            .fontWeight(.semibold)
+-
+-                        HStack {
+-                            VStack(alignment: .leading) {
+-                                Text("\("right_ear".localized): \(calculateHearingLoss(frequencies: getRightEarValues()))")
+-                                Text("\("left_ear".localized): \(calculateHearingLoss(frequencies: getLeftEarValues()))")
+-                                Text("\("bilateral".localized): \(calculateBilateralHearingLoss())")
++                    // Results Section
++                    GroupBox("assessment_results".localized) {
++                        VStack(alignment: .leading, spacing: 12) {
++                            // Hearing Loss Calculations
++                            Text("hearing_loss_assessment".localized)
++                                .fontWeight(.semibold)
++
++                            HStack {
++                                VStack(alignment: .leading) {
++                                    Text("\("right_ear".localized): \(calculateHearingLoss(frequencies: getRightEarValues()))")
++                                    Text("\("left_ear".localized): \(calculateHearingLoss(frequencies: getLeftEarValues()))")
++                                    Text("\("bilateral".localized): \(calculateBilateralHearingLoss())")
++                                }
++                                Spacer()
+                             }
+-                            Spacer()
+-                        }
+ 
+-                        Divider()
++                            Divider()
+ 
+-                        // SAL Index
+-                        Text("sal_index".localized)
+-                            .fontWeight(.semibold)
++                            // SAL Index
++                            Text("sal_index".localized)
++                                .fontWeight(.semibold)
+ 
+-                        HStack {
+-                            VStack(alignment: .leading) {
+-                                Text("\("right_ear".localized) SAL: \(calculateSAL(frequencies: getRightEarValues())) - \(getSALDegree(sal: calculateSALValue(frequencies: getRightEarValues())))")
+-                                Text("\("left_ear".localized) SAL: \(calculateSAL(frequencies: getLeftEarValues())) - \(getSALDegree(sal: calculateSALValue(frequencies: getLeftEarValues())))")
++                            HStack {
++                                VStack(alignment: .leading) {
++                                    Text("\("right_ear".localized) SAL: \(calculateSAL(frequencies: getRightEarValues())) - \(getSALDegree(sal: calculateSALValue(frequencies: getRightEarValues())))")
++                                    Text("\("left_ear".localized) SAL: \(calculateSAL(frequencies: getLeftEarValues())) - \(getSALDegree(sal: calculateSALValue(frequencies: getLeftEarValues())))")
++                                }
++                                Spacer()
+                             }
+-                            Spacer()
+-                        }
+ 
+-                        Divider()
++                            Divider()
+ 
+-                        // ELI Index
+-                        Text("eli_index".localized)
+-                            .fontWeight(.semibold)
++                            // ELI Index
++                            Text("eli_index".localized)
++                                .fontWeight(.semibold)
+ 
+-                        HStack {
+-                            VStack(alignment: .leading) {
+-                                Text("\("right_ear".localized) ELI: \(calculateELI(frequencies: getRightEarValues())) - \(getELIDegree(eli: calculateELIValue(frequencies: getRightEarValues())))")
+-                                Text("\("left_ear".localized) ELI: \(calculateELI(frequencies: getLeftEarValues())) - \(getELIDegree(eli: calculateELIValue(frequencies: getLeftEarValues())))")
++                            HStack {
++                                VStack(alignment: .leading) {
++                                    Text("\("right_ear".localized) ELI: \(calculateELI(frequencies: getRightEarValues())) - \(getELIDegree(eli: calculateELIValue(frequencies: getRightEarValues())))")
++                                    Text("\("left_ear".localized) ELI: \(calculateELI(frequencies: getLeftEarValues())) - \(getELIDegree(eli: calculateELIValue(frequencies: getLeftEarValues())))")
++                                }
++                                Spacer()
+                             }
+-                            Spacer()
+                         }
++                        .padding()
+                     }
+-                    .padding()
+-                }
+ 
+-                // Information Section
+-                GroupBox("parameters_summary".localized) {
+-                    VStack(alignment: .leading, spacing: 8) {
+-                        Text("\("patient_label".localized) \(patientName.isEmpty ? "not_specified".localized : patientName)")
+-                        Text("\("age_label".localized) \(patientAge.isEmpty ? "not_specified".localized : patientAge)")
+-                        Text("\("occupation_label".localized) \(patientJob.isEmpty ? "not_specified".localized : patientJob)")
++                    // Information Section
++                    GroupBox("parameters_summary".localized) {
++                        VStack(alignment: .leading, spacing: 8) {
++                            Text("\("patient_label".localized) \(patientName.isEmpty ? "not_specified".localized : patientName)")
++                            Text("\("age_label".localized) \(patientAge.isEmpty ? "not_specified".localized : patientAge)")
++                            Text("\("occupation_label".localized) \(patientJob.isEmpty ? "not_specified".localized : patientJob)")
+ 
+-//                        Divider()
++                            Divider()
+ 
+-                        Text("test_frequencies".localized)
+-                        Text("results_measured".localized)
+-                        Text("sal_description".localized)
+-                        Text("eli_description".localized)
++                            Text("test_frequencies".localized)
++                            Text("results_measured".localized)
++                            Text("sal_description".localized)
++                            Text("eli_description".localized)
++                        }
++                        .padding()
+                     }
+-                    .padding()
+                 }
++                .padding()
+             }
+-            .padding()
+         }
+-    }
+-//            .frame(minHeight: 524, idealHeight: 860, maxHeight: 960)
+-    .frame(minWidth: 580, idealWidth: 580, maxWidth: 580, minHeight: 610, idealHeight: 610, maxHeight: 1186)
+-    
+-    .onAppear {
+-        loadAllPatients()
+-        if allPatients.isEmpty {
+-            createNewPatient()
+-        } else {
+-            loadPatient(allPatients.first!)
++        .frame(minWidth: 580, idealWidth: 580, maxWidth: 580, minHeight: 610, idealHeight: 610, maxHeight: 1186)
++        
++        .onAppear {
++            loadAllPatients()
++            if allPatients.isEmpty {
++                createNewPatient()
++            } else {
++                loadPatient(allPatients.first!)
++            }
+         }
+     }
+-}
+ 
+     // Helper function to create frequency input rows
+     private func frequencyRow(frequency: String, rightValue: Binding<String>, leftValue: Binding<String>) -> some View {
+@@ -239,17 +239,18 @@ var body: some View {
+     // MARK: - Patient Management Functions
+     
+     private func loadAllPatients() {
+-        allPatients = PersistenceController.shared.fetchPatients()
++        allPatients = dataStore.fetchPatients()
+     }
+     
+     private func createNewPatient() {
+-        let newPatient = Patient.create(in: viewContext)
++        let newPatient = PatientData()
+         currentPatient = newPatient
++        dataStore.addPatient(newPatient)
+         allPatients.insert(newPatient, at: 0)
+         clearForm()
+     }
+     
+-    private func loadPatient(_ patient: Patient) {
++    private func loadPatient(_ patient: PatientData) {
+         // Cancel any pending auto-save for the previous patient
+         autoSaveWorkItem?.cancel()
+         
+@@ -270,7 +271,7 @@ var body: some View {
+     }
+     
+     private func updateCurrentPatient() {
+-        guard let patient = currentPatient else { return }
++        guard var patient = currentPatient else { return }
+         
+         patient.name = patientName
+         patient.age = patientAge
+@@ -287,42 +288,29 @@ var body: some View {
+         patient.leftEar8000 = leftEar8000
+         patient.updateModifiedDate()
+         
++        currentPatient = patient
++        
+         // Auto-save with debouncing to avoid excessive saves during rapid typing
+         autoSaveWorkItem?.cancel()
+-        let context = viewContext  // Capture the context instead of self
+-        autoSaveWorkItem = DispatchWorkItem {
+-            do {
+-                try context.save()
+-            } catch {
+-                print("Error auto-saving patient: \(error)")
+-            }
++        autoSaveWorkItem = DispatchWorkItem { [patient] in
++            dataStore.updatePatient(patient)
+         }
+         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0, execute: autoSaveWorkItem!)
+     }
+     
+     private func saveCurrentPatient() {
+-        do {
+-            try viewContext.save()
+-            loadAllPatients() // Refresh the list
+-        } catch {
+-            print("Error saving patient: \(error)")
+-        }
++        guard let patient = currentPatient else { return }
++        dataStore.updatePatient(patient)
++        loadAllPatients() // Refresh the list
+     }
+     
+     private func forceSavePendingChanges() {
+         // Cancel any pending auto-save and execute it immediately
+         autoSaveWorkItem?.cancel()
+-        if viewContext.hasChanges {
+-            do {
+-                try viewContext.save()
+-                print("Force-saved pending changes successfully")
+-                // Refresh the patient list to ensure consistency
+-                loadAllPatients()
+-            } catch {
+-                print("Error force-saving pending changes: \(error)")
+-            }
++        if let patient = currentPatient {
++            dataStore.updatePatient(patient)
+         }
+-        // Always refresh the patient list to ensure search consistency
++        // Refresh the patient list to ensure consistency
+         loadAllPatients()
+     }
+     
+@@ -486,5 +474,5 @@ var body: some View {
+ }
+ 
+ #Preview {
+-ContentView()
++    ContentView()
+ }
+diff --git a/Audiometry/ContentViewSwiftUI.swift b/Audiometry/ContentViewSwiftUI.swift
+deleted file mode 100644
+index 5362e60..0000000
+--- a/Audiometry/ContentViewSwiftUI.swift
++++ /dev/null
+@@ -1,478 +0,0 @@
+-//
+-//  ContentViewSwiftUI.swift
+-//  Audiometry
+-//
+-//  ContentView using SwiftUI data storage
+-//
+-//  Created by GitHub Copilot on 20/09/2025.
+-//  Modified by perez987 on 20/09/2025.
+-//
+-
+-import SwiftUI
+-import Combine
+-
+-struct ContentViewSwiftUI: View {
+-    @ObservedObject private var languageManager = LanguageManager.shared
+-    @ObservedObject private var dataStore = PatientDataStore.shared
+-    
+-    // Current patient being edited
+-    @State private var currentPatient: PatientData?
+-    @State private var allPatients: [PatientData] = []
+-    
+-    // Patient Information
+-    @State private var patientName: String = ""
+-    @State private var patientAge: String = ""
+-    @State private var patientJob: String = ""
+-
+-    // Frequency test results in dB HL (Hearing Level)
+-    // Right ear frequencies: 500, 1000, 2000, 4000, 8000 Hz
+-    @State private var rightEar500: String = ""
+-    @State private var rightEar1000: String = ""
+-    @State private var rightEar2000: String = ""
+-    @State private var rightEar4000: String = ""
+-    @State private var rightEar8000: String = ""
+-
+-    // Left ear frequencies: 500, 1000, 2000, 4000, 8000 Hz
+-    @State private var leftEar500: String = ""
+-    @State private var leftEar1000: String = ""
+-    @State private var leftEar2000: String = ""
+-    @State private var leftEar4000: String = ""
+-    @State private var leftEar8000: String = ""
+-    
+-    // Auto-save debouncing
+-    @State private var autoSaveWorkItem: DispatchWorkItem?
+-
+-    var body: some View {
+-        VStack(spacing: 0) {
+-            // Navigation bar
+-            PatientNavigationViewSwiftUI(
+-                currentPatient: currentPatient,
+-                allPatients: allPatients,
+-                onPatientSelected: loadPatient,
+-                onNewPatient: createNewPatient,
+-                onSavePatient: saveCurrentPatient,
+-                onForceSave: forceSavePendingChanges
+-            )
+-            .padding(.vertical, 8)
+-            .background(Color(NSColor.controlBackgroundColor))
+-            
+-            Divider()
+-            
+-            // Main content
+-            ScrollView {
+-                VStack(alignment: .leading, spacing: 20) {
+-                    // Title
+-                    Text("patient_report".localized)
+-                        .font(.largeTitle)
+-                        .fontWeight(.bold)
+-                        .padding(.bottom, 10)
+-
+-                    // Patient Information Section
+-                    GroupBox("patient_information".localized) {
+-                        VStack(alignment: .leading, spacing: 12) {
+-                            HStack {
+-                                Text("name".localized)
+-                                    .frame(width: 72, alignment: .leading)
+-                                TextField("enter_patient_name".localized, text: $patientName)
+-                                    .textFieldStyle(RoundedBorderTextFieldStyle())
+-                                    .frame(width: 380)
+-                                    .onChange(of: patientName) { _ in
+-                                        updateCurrentPatient()
+-                                    }
+-                            }
+-
+-                            HStack {
+-                                Text("age".localized)
+-                                    .frame(width: 72, alignment: .leading)
+-                                TextField("enter_age".localized, text: $patientAge)
+-                                    .textFieldStyle(RoundedBorderTextFieldStyle())
+-                                    .frame(width: 140)
+-                                    .onChange(of: patientAge) { _ in
+-                                        updateCurrentPatient()
+-                                    }
+-                                Spacer()
+-                            }
+-
+-                            HStack {
+-                                Text("job".localized)
+-                                    .frame(width: 72, alignment: .leading)
+-                                TextField("enter_job_occupation".localized, text: $patientJob)
+-                                    .textFieldStyle(RoundedBorderTextFieldStyle())
+-                                    .frame(width: 380)
+-                                    .onChange(of: patientJob) { _ in
+-                                        updateCurrentPatient()
+-                                    }
+-                            }
+-                        }
+-                        .padding()
+-                    }
+-
+-                    // Audiometric Testing Section
+-                    GroupBox("audiometric_testing_results".localized) {
+-                        VStack(spacing: 16) {
+-                            // Header
+-                            HStack {
+-                                Text("frequency_hz".localized)
+-                                    .frame(width: 120, alignment: .leading)
+-                                    .fontWeight(.semibold)
+-                                Text("right_ear".localized)
+-                                    .frame(width: 100, alignment: .center)
+-                                    .fontWeight(.semibold)
+-                                Text("left_ear".localized)
+-                                    .frame(width: 100, alignment: .center)
+-                                    .fontWeight(.semibold)
+-                            }
+-
+-                            Divider()
+-
+-                            // Frequency rows
+-                            frequencyRow(frequency: "500", rightValue: $rightEar500, leftValue: $leftEar500)
+-                            frequencyRow(frequency: "1000", rightValue: $rightEar1000, leftValue: $leftEar1000)
+-                            frequencyRow(frequency: "2000", rightValue: $rightEar2000, leftValue: $leftEar2000)
+-                            frequencyRow(frequency: "4000", rightValue: $rightEar4000, leftValue: $leftEar4000)
+-                            frequencyRow(frequency: "8000", rightValue: $rightEar8000, leftValue: $leftEar8000)
+-                        }
+-                        .padding()
+-                    }
+-
+-                    // Results Section
+-                    GroupBox("assessment_results".localized) {
+-                        VStack(alignment: .leading, spacing: 12) {
+-                            // Hearing Loss Calculations
+-                            Text("hearing_loss_assessment".localized)
+-                                .fontWeight(.semibold)
+-
+-                            HStack {
+-                                VStack(alignment: .leading) {
+-                                    Text("\("right_ear".localized): \(calculateHearingLoss(frequencies: getRightEarValues()))")
+-                                    Text("\("left_ear".localized): \(calculateHearingLoss(frequencies: getLeftEarValues()))")
+-                                    Text("\("bilateral".localized): \(calculateBilateralHearingLoss())")
+-                                }
+-                                Spacer()
+-                            }
+-
+-                            Divider()
+-
+-                            // SAL Index
+-                            Text("sal_index".localized)
+-                                .fontWeight(.semibold)
+-
+-                            HStack {
+-                                VStack(alignment: .leading) {
+-                                    Text("\("right_ear".localized) SAL: \(calculateSAL(frequencies: getRightEarValues())) - \(getSALDegree(sal: calculateSALValue(frequencies: getRightEarValues())))")
+-                                    Text("\("left_ear".localized) SAL: \(calculateSAL(frequencies: getLeftEarValues())) - \(getSALDegree(sal: calculateSALValue(frequencies: getLeftEarValues())))")
+-                                }
+-                                Spacer()
+-                            }
+-
+-                            Divider()
+-
+-                            // ELI Index
+-                            Text("eli_index".localized)
+-                                .fontWeight(.semibold)
+-
+-                            HStack {
+-                                VStack(alignment: .leading) {
+-                                    Text("\("right_ear".localized) ELI: \(calculateELI(frequencies: getRightEarValues())) - \(getELIDegree(eli: calculateELIValue(frequencies: getRightEarValues())))")
+-                                    Text("\("left_ear".localized) ELI: \(calculateELI(frequencies: getLeftEarValues())) - \(getELIDegree(eli: calculateELIValue(frequencies: getLeftEarValues())))")
+-                                }
+-                                Spacer()
+-                            }
+-                        }
+-                        .padding()
+-                    }
+-
+-                    // Information Section
+-                    GroupBox("parameters_summary".localized) {
+-                        VStack(alignment: .leading, spacing: 8) {
+-                            Text("\("patient_label".localized) \(patientName.isEmpty ? "not_specified".localized : patientName)")
+-                            Text("\("age_label".localized) \(patientAge.isEmpty ? "not_specified".localized : patientAge)")
+-                            Text("\("occupation_label".localized) \(patientJob.isEmpty ? "not_specified".localized : patientJob)")
+-
+-                            Divider()
+-
+-                            Text("test_frequencies".localized)
+-                            Text("results_measured".localized)
+-                            Text("sal_description".localized)
+-                            Text("eli_description".localized)
+-                        }
+-                        .padding()
+-                    }
+-                }
+-                .padding()
+-            }
+-        }
+-        .frame(minWidth: 580, idealWidth: 580, maxWidth: 580, minHeight: 610, idealHeight: 610, maxHeight: 1186)
+-        
+-        .onAppear {
+-            loadAllPatients()
+-            if allPatients.isEmpty {
+-                createNewPatient()
+-            } else {
+-                loadPatient(allPatients.first!)
+-            }
+-        }
+-    }
+-
+-    // Helper function to create frequency input rows
+-    private func frequencyRow(frequency: String, rightValue: Binding<String>, leftValue: Binding<String>) -> some View {
+-        HStack {
+-            Text(frequency)
+-                .frame(width: 120, alignment: .leading)
+-
+-            TextField("db_placeholder".localized, text: rightValue)
+-                .textFieldStyle(RoundedBorderTextFieldStyle())
+-                .frame(width: 100)
+-                .onChange(of: rightValue.wrappedValue) { _ in
+-                    updateCurrentPatient()
+-                }
+-
+-            TextField("db_placeholder".localized, text: leftValue)
+-                .textFieldStyle(RoundedBorderTextFieldStyle())
+-                .frame(width: 100)
+-                .onChange(of: leftValue.wrappedValue) { _ in
+-                    updateCurrentPatient()
+-                }
+-        }
+-    }
+-
+-    // MARK: - Patient Management Functions
+-    
+-    private func loadAllPatients() {
+-        allPatients = dataStore.fetchPatients()
+-    }
+-    
+-    private func createNewPatient() {
+-        let newPatient = PatientData()
+-        currentPatient = newPatient
+-        dataStore.addPatient(newPatient)
+-        allPatients.insert(newPatient, at: 0)
+-        clearForm()
+-    }
+-    
+-    private func loadPatient(_ patient: PatientData) {
+-        // Cancel any pending auto-save for the previous patient
+-        autoSaveWorkItem?.cancel()
+-        
+-        currentPatient = patient
+-        patientName = patient.name
+-        patientAge = patient.age
+-        patientJob = patient.job
+-        rightEar500 = patient.rightEar500
+-        rightEar1000 = patient.rightEar1000
+-        rightEar2000 = patient.rightEar2000
+-        rightEar4000 = patient.rightEar4000
+-        rightEar8000 = patient.rightEar8000
+-        leftEar500 = patient.leftEar500
+-        leftEar1000 = patient.leftEar1000
+-        leftEar2000 = patient.leftEar2000
+-        leftEar4000 = patient.leftEar4000
+-        leftEar8000 = patient.leftEar8000
+-    }
+-    
+-    private func updateCurrentPatient() {
+-        guard var patient = currentPatient else { return }
+-        
+-        patient.name = patientName
+-        patient.age = patientAge
+-        patient.job = patientJob
+-        patient.rightEar500 = rightEar500
+-        patient.rightEar1000 = rightEar1000
+-        patient.rightEar2000 = rightEar2000
+-        patient.rightEar4000 = rightEar4000
+-        patient.rightEar8000 = rightEar8000
+-        patient.leftEar500 = leftEar500
+-        patient.leftEar1000 = leftEar1000
+-        patient.leftEar2000 = leftEar2000
+-        patient.leftEar4000 = leftEar4000
+-        patient.leftEar8000 = leftEar8000
+-        patient.updateModifiedDate()
+-        
+-        currentPatient = patient
+-        
+-        // Auto-save with debouncing to avoid excessive saves during rapid typing
+-        autoSaveWorkItem?.cancel()
+-        autoSaveWorkItem = DispatchWorkItem { [patient] in
+-            dataStore.updatePatient(patient)
+-        }
+-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0, execute: autoSaveWorkItem!)
+-    }
+-    
+-    private func saveCurrentPatient() {
+-        guard let patient = currentPatient else { return }
+-        dataStore.updatePatient(patient)
+-        loadAllPatients() // Refresh the list
+-    }
+-    
+-    private func forceSavePendingChanges() {
+-        // Cancel any pending auto-save and execute it immediately
+-        autoSaveWorkItem?.cancel()
+-        if let patient = currentPatient {
+-            dataStore.updatePatient(patient)
+-        }
+-        // Refresh the patient list to ensure consistency
+-        loadAllPatients()
+-    }
+-    
+-    private func clearForm() {
+-        patientName = ""
+-        patientAge = ""
+-        patientJob = ""
+-        rightEar500 = ""
+-        rightEar1000 = ""
+-        rightEar2000 = ""
+-        rightEar4000 = ""
+-        rightEar8000 = ""
+-        leftEar500 = ""
+-        leftEar1000 = ""
+-        leftEar2000 = ""
+-        leftEar4000 = ""
+-        leftEar8000 = ""
+-    }
+-    
+-    // MARK: - Helper functions to get ear values as arrays
+-    private func getRightEarValues() -> [Double] {
+-        return [
+-            Double(rightEar500) ?? 0,
+-            Double(rightEar1000) ?? 0,
+-            Double(rightEar2000) ?? 0,
+-            Double(rightEar4000) ?? 0,
+-            Double(rightEar8000) ?? 0
+-        ]
+-    }
+-
+-    private func getLeftEarValues() -> [Double] {
+-        return [
+-            Double(leftEar500) ?? 0,
+-            Double(leftEar1000) ?? 0,
+-            Double(leftEar2000) ?? 0,
+-            Double(leftEar4000) ?? 0,
+-            Double(leftEar8000) ?? 0
+-        ]
+-    }
+-
+-    // MARK: - Localized Classification Functions
+-    private func localizedClassification(_ classification: String) -> String {
+-        switch classification.lowercased() {
+-        case "normal": return "normal".localized
+-        case "mild": return "mild".localized
+-        case "moderate": return "moderate".localized
+-        case "moderate-severe": return "moderate_severe".localized
+-        case "severe": return "severe".localized
+-        case "profound": return "profound".localized
+-        default: return classification
+-        }
+-    }
+-
+-    // MARK: - Hearing Loss Calculation
+-    private func calculateHearingLoss(frequencies: [Double]) -> String {
+-        let average = frequencies.reduce(0, +) / Double(frequencies.count)
+-
+-        if average <= 25 {
+-            return "\(String(format: "%.1f", average)) dB - \("normal".localized)"
+-        } else if average <= 40 {
+-            return "\(String(format: "%.1f", average)) dB - \("mild".localized)"
+-        } else if average <= 55 {
+-            return "\(String(format: "%.1f", average)) dB - \("moderate".localized)"
+-        } else if average <= 70 {
+-            return "\(String(format: "%.1f", average)) dB - \("moderate_severe".localized)"
+-        } else if average <= 90 {
+-            return "\(String(format: "%.1f", average)) dB - \("severe".localized)"
+-        } else {
+-            return "\(String(format: "%.1f", average)) dB - \("profound".localized)"
+-        }
+-    }
+-
+-    // Bilateral Hearing Loss Calculation
+-    private func calculateBilateralHearingLoss() -> String {
+-        let rightValues = getRightEarValues()
+-        let leftValues = getLeftEarValues()
+-
+-        let rightAverage = rightValues.reduce(0, +) / Double(rightValues.count)
+-        let leftAverage = leftValues.reduce(0, +) / Double(leftValues.count)
+-        let bilateralAverage = (rightAverage + leftAverage) / 2
+-
+-        if bilateralAverage <= 25 {
+-            return "\(String(format: "%.1f", bilateralAverage)) dB - \("normal".localized)"
+-        } else if bilateralAverage <= 40 {
+-            return "\(String(format: "%.1f", bilateralAverage)) dB - \("mild".localized)"
+-        } else if bilateralAverage <= 55 {
+-            return "\(String(format: "%.1f", bilateralAverage)) dB - \("moderate".localized)"
+-        } else if bilateralAverage <= 70 {
+-            return "\(String(format: "%.1f", bilateralAverage)) dB - \("moderate_severe".localized)"
+-        } else if bilateralAverage <= 90 {
+-            return "\(String(format: "%.1f", bilateralAverage)) dB - \("severe".localized)"
+-        } else {
+-            return "\(String(format: "%.1f", bilateralAverage)) dB - \("profound".localized)"
+-        }
+-    }
+-
+-    // SAL Index Calculation (Speech Audiometry Level)
+-    private func calculateSAL(frequencies: [Double]) -> String {
+-        let sal = calculateSALValue(frequencies: frequencies)
+-        return String(format: "%.1f dB", sal)
+-    }
+-
+-    private func calculateSALValue(frequencies: [Double]) -> Double {
+-        // SAL uses speech frequencies: 500, 1000, 2000 Hz
+-        let speechFrequencies = Array(frequencies.prefix(3))
+-        return speechFrequencies.reduce(0, +) / Double(speechFrequencies.count)
+-    }
+-
+-    private func getSALDegree(sal: Double) -> String {
+-        if sal <= 25 {
+-            return "normal".localized
+-        } else if sal <= 40 {
+-            return "mild".localized
+-        } else if sal <= 55 {
+-            return "moderate".localized
+-        } else if sal <= 70 {
+-            return "moderate_severe".localized
+-        } else if sal <= 90 {
+-            return "severe".localized
+-        } else {
+-            return "profound".localized
+-        }
+-    }
+-
+-    // ELI Index Calculation (Ear Loss Index)
+-    private func calculateELI(frequencies: [Double]) -> String {
+-        let eli = calculateELIValue(frequencies: frequencies)
+-        return String(format: "%.1f dB", eli)
+-    }
+-
+-    private func calculateELIValue(frequencies: [Double]) -> Double {
+-        // ELI uses weighted average of all frequencies
+-        // Weights: 500Hz(0.15), 1000Hz(0.25), 2000Hz(0.25), 4000Hz(0.25), 8000Hz(0.1)
+-        let weights = [0.15, 0.25, 0.25, 0.25, 0.1]
+-        var weightedSum = 0.0
+-
+-        for (index, frequency) in frequencies.enumerated() {
+-            if index < weights.count {
+-                weightedSum += frequency * weights[index]
+-            }
+-        }
+-
+-        return weightedSum
+-    }
+-
+-    private func getELIDegree(eli: Double) -> String {
+-        if eli <= 25 {
+-            return "normal".localized
+-        } else if eli <= 40 {
+-            return "mild".localized
+-        } else if eli <= 55 {
+-            return "moderate".localized
+-        } else if eli <= 70 {
+-            return "moderate_severe".localized
+-        } else if eli <= 90 {
+-            return "severe".localized
+-        } else {
+-            return "profound".localized
+-        }
+-    }
+-}
+-
+-#Preview {
+-    ContentViewSwiftUI()
+-}
+diff --git a/Audiometry/DataModel.xcdatamodeld/.xccurrentversion b/Audiometry/DataModel.xcdatamodeld/.xccurrentversion
+deleted file mode 100644
+index 2485795..0000000
+--- a/Audiometry/DataModel.xcdatamodeld/.xccurrentversion
++++ /dev/null
+@@ -1,8 +0,0 @@
+-<?xml version="1.0" encoding="UTF-8"?>
+-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+-<plist version="1.0">
+-<dict>
+-	<key>_XCCurrentVersionName</key>
+-	<string>DataModel.xcdatamodel</string>
+-</dict>
+-</plist>
+\ No newline at end of file
+diff --git a/Audiometry/DataModel.xcdatamodeld/DataModel.xcdatamodel/contents b/Audiometry/DataModel.xcdatamodeld/DataModel.xcdatamodel/contents
+deleted file mode 100644
+index 8f62251..0000000
+--- a/Audiometry/DataModel.xcdatamodeld/DataModel.xcdatamodel/contents
++++ /dev/null
+@@ -1,21 +0,0 @@
+-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="22522" systemVersion="22H730" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+-    <entity name="Patient" representedClassName="Patient" syncable="YES">
+-        <attribute name="age" optional="YES" attributeType="String"/>
+-        <attribute name="dateCreated" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+-        <attribute name="dateModified" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+-        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+-        <attribute name="job" optional="YES" attributeType="String"/>
+-        <attribute name="leftEar500" optional="YES" attributeType="String"/>
+-        <attribute name="leftEar1000" optional="YES" attributeType="String"/>
+-        <attribute name="leftEar2000" optional="YES" attributeType="String"/>
+-        <attribute name="leftEar4000" optional="YES" attributeType="String"/>
+-        <attribute name="leftEar8000" optional="YES" attributeType="String"/>
+-        <attribute name="name" optional="YES" attributeType="String"/>
+-        <attribute name="rightEar500" optional="YES" attributeType="String"/>
+-        <attribute name="rightEar1000" optional="YES" attributeType="String"/>
+-        <attribute name="rightEar2000" optional="YES" attributeType="String"/>
+-        <attribute name="rightEar4000" optional="YES" attributeType="String"/>
+-        <attribute name="rightEar8000" optional="YES" attributeType="String"/>
+-    </entity>
+-</model>
+\ No newline at end of file
+diff --git a/Audiometry/Patient.swift b/Audiometry/Patient.swift
+deleted file mode 100644
+index afe0610..0000000
+--- a/Audiometry/Patient.swift
++++ /dev/null
+@@ -1,87 +0,0 @@
+-//
+-//  Patient.swift
+-//  Audiometry
+-//
+-//  Created by GitHub Copilot on 20/09/2025.
+-//  Modified by perez987 on 20/09/2025.
+-//
+-
+-import Foundation
+-import CoreData
+-import SwiftUI
+-
+-@objc(Patient)
+-public class Patient: NSManagedObject {
+-    @NSManaged public var id: UUID
+-    @NSManaged public var name: String
+-    @NSManaged public var age: String
+-    @NSManaged public var job: String
+-    @NSManaged public var rightEar500: String
+-    @NSManaged public var rightEar1000: String
+-    @NSManaged public var rightEar2000: String
+-    @NSManaged public var rightEar4000: String
+-    @NSManaged public var rightEar8000: String
+-    @NSManaged public var leftEar500: String
+-    @NSManaged public var leftEar1000: String
+-    @NSManaged public var leftEar2000: String
+-    @NSManaged public var leftEar4000: String
+-    @NSManaged public var leftEar8000: String
+-    @NSManaged public var dateCreated: Date
+-    @NSManaged public var dateModified: Date
+-}
+-
+-extension Patient {
+-    @nonobjc public class func fetchRequest() -> NSFetchRequest<Patient> {
+-        return NSFetchRequest<Patient>(entityName: "Patient")
+-    }
+-    
+-    static func create(in context: NSManagedObjectContext) -> Patient {
+-        let patient = Patient(context: context)
+-        patient.id = UUID()
+-        patient.name = ""
+-        patient.age = ""
+-        patient.job = ""
+-        patient.rightEar500 = ""
+-        patient.rightEar1000 = ""
+-        patient.rightEar2000 = ""
+-        patient.rightEar4000 = ""
+-        patient.rightEar8000 = ""
+-        patient.leftEar500 = ""
+-        patient.leftEar1000 = ""
+-        patient.leftEar2000 = ""
+-        patient.leftEar4000 = ""
+-        patient.leftEar8000 = ""
+-        patient.dateCreated = Date()
+-        patient.dateModified = Date()
+-        return patient
+-    }
+-    
+-    func updateModifiedDate() {
+-        dateModified = Date()
+-    }
+-    
+-    // Helper methods for calculations
+-    func getRightEarValues() -> [Double] {
+-        return [
+-            Double(rightEar500) ?? 0,
+-            Double(rightEar1000) ?? 0,
+-            Double(rightEar2000) ?? 0,
+-            Double(rightEar4000) ?? 0,
+-            Double(rightEar8000) ?? 0
+-        ]
+-    }
+-    
+-    func getLeftEarValues() -> [Double] {
+-        return [
+-            Double(leftEar500) ?? 0,
+-            Double(leftEar1000) ?? 0,
+-            Double(leftEar2000) ?? 0,
+-            Double(leftEar4000) ?? 0,
+-            Double(leftEar8000) ?? 0
+-        ]
+-    }
+-}
+-
+-extension Patient: Identifiable {
+-    
+-}
+diff --git a/Audiometry/PatientNavigationView.swift b/Audiometry/PatientNavigationView.swift
+index f6fd1ac..2278264 100644
+--- a/Audiometry/PatientNavigationView.swift
++++ b/Audiometry/PatientNavigationView.swift
+@@ -2,62 +2,54 @@
+ //  PatientNavigationView.swift
+ //  Audiometry
+ //
++//  Navigation view for SwiftUI data storage
++//
+ //  Created by GitHub Copilot on 20/09/2025.
+ //  Modified by perez987 on 20/09/2025.
+ //
+-//  FIXED: Language switching Menu to avoid ViewBridge errors
+-//  - Removed BorderlessButtonMenuStyle() that could cause ViewBridge issues
+-//  - Added checkmark indicator for currently selected language
+-//  - Menu now properly observes LanguageManager for UI updates
+-//
+ 
+ import SwiftUI
+-import CoreData
+ 
+ struct PatientNavigationView: View {
+-    @Environment(\.managedObjectContext) private var viewContext
+     @ObservedObject var languageManager = LanguageManager.shared
++    @ObservedObject var dataStore = PatientDataStore.shared
+     @State private var searchText = ""
+     @State private var showingSearchResults = false
+-    @State private var searchResults: [Patient] = []
++    @State private var searchResults: [PatientData] = []
+     
+-    let currentPatient: Patient?
+-    let allPatients: [Patient]
+-    let onPatientSelected: (Patient) -> Void
++    let currentPatient: PatientData?
++    let allPatients: [PatientData]
++    let onPatientSelected: (PatientData) -> Void
+     let onNewPatient: () -> Void
+     let onSavePatient: () -> Void
+     let onForceSave: () -> Void
+     
+     var currentIndex: Int {
+         guard let current = currentPatient else { return -1 }
+-        return allPatients.firstIndex(of: current) ?? -1
++        return allPatients.firstIndex(where: { $0.id == current.id }) ?? -1
+     }
+     
+     var hasPrevious: Bool {
+-        currentIndex > 0 && !allPatients.isEmpty
++        currentIndex > 0
+     }
+     
+     var hasNext: Bool {
+-        currentIndex < allPatients.count - 1 && currentIndex >= 0
++        currentIndex >= 0 && currentIndex < allPatients.count - 1
+     }
+     
+     var body: some View {
+         VStack(spacing: 8) {
+-            // Top row: Language selector, search box and Find button
++            // Top row: Language selector and search
+             HStack(spacing: 12) {
+-                // Language Selector
++                // Language Menu
+                 Menu {
+                     ForEach(LanguageManager.Language.allCases, id: \.self) { language in
+                         Button(action: {
+-                            // Add small delay to avoid ViewBridge errors from rapid UI updates
+-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+-                                languageManager.setLanguage(language)
+-                            }
++                            languageManager.setLanguage(language)
+                         }) {
+                             HStack {
+                                 Text(language.displayName)
+                                 if languageManager.currentLanguage == language {
+-//                                Spacer()
+                                     Image(systemName: "checkmark")
+                                 }
+                             }
+@@ -66,59 +58,62 @@ struct PatientNavigationView: View {
+                 } label: {
+                     HStack {
+                         Image(systemName: "globe")
+-                        Text("language".localized)
++                        Text(languageManager.currentLanguage.displayName)
+                     }
+                 }
+-                .help("select_language".localized) //Tooltip
+-
++                
+                 Spacer()
+                 
+-                // Search
++                // Search Field
+                 HStack {
+-                    TextField("search_placeholder".localized, text: $searchText)
++                    Image(systemName: "magnifyingglass")
++                        .foregroundColor(.secondary)
++                    TextField("search_by_name".localized, text: $searchText)
+                         .textFieldStyle(RoundedBorderTextFieldStyle())
+-                        .frame(width: 300)
++                        .frame(width: 340)
+                         .onSubmit {
+                             performSearch()
+                         }
+-                    
+-                    Button("search_patient".localized) {
+-                        performSearch()
++                    if !searchText.isEmpty {
++                        Button(action: {
++                            searchText = ""
++                        }) {
++                            Image(systemName: "xmark.circle.fill")
++                                .foregroundColor(.secondary)
++                        }
++                        .buttonStyle(PlainButtonStyle())
+                     }
+-                    .frame(width: 80)
+-                    .disabled(searchText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+                 }
+             }
+             
+-            // Bottom row: Patient management buttons (New, Save, Prev, Next)
++            // Bottom row: Patient management and navigation buttons
+             HStack(spacing: 8) {
+                 Spacer()
++                
++                // New Patient Button
+                 Button("new_patient".localized) {
+                     onNewPatient()
+                 }
+-//                .frame(width: 80)
+                 
++                // Save Patient Button
+                 Button("save_patient".localized) {
+                     onSavePatient()
+                 }
+-//                .frame(width: 80)
+-                .disabled(currentPatient == nil)
+                 
+                 Divider()
+                     .frame(height: 20)
+                 
++                // Navigation Controls
+                 Button("previous_patient".localized) {
+                     if hasPrevious {
+                         let previousPatient = allPatients[currentIndex - 1]
+                         onPatientSelected(previousPatient)
+                     }
+                 }
+-//                .frame(width: 80)
+                 .disabled(!hasPrevious)
+                 
+                 Text("\(currentIndex + 1) / \(allPatients.count)")
+                     .foregroundColor(.secondary)
+-//                    .frame(minWidth: 50, idealWidth: 50, maxWidth: 50)
+                 
+                 Button("next_patient".localized) {
+                     if hasNext {
+@@ -126,7 +121,6 @@ struct PatientNavigationView: View {
+                         onPatientSelected(nextPatient)
+                     }
+                 }
+-//                .frame(width: 80)
+                 .disabled(!hasNext)
+                 
+                 Spacer()
+@@ -134,7 +128,7 @@ struct PatientNavigationView: View {
+         }
+         .padding(.horizontal)
+         .sheet(isPresented: $showingSearchResults) {
+-            PatientSearchResultsView(
++            PatientSearchResultsViewSwiftUI(
+                 searchResults: searchResults,
+                 searchText: searchText,
+                 onPatientSelected: { patient in
+@@ -152,143 +146,73 @@ struct PatientNavigationView: View {
+         let trimmedSearch = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
+         guard !trimmedSearch.isEmpty else { return }
+         
+-        // Ensure Core Data objects are properly faulted in before searching
+-        // This is what the original workaround accomplished by calling onPatientSelected
+-//        for patient in allPatients {
+-//            _ = patient.name // Access a property to fault in the object from persistent store
+-//        }
+-        
+         // Force save any pending changes before searching
+         onForceSave()
+         
+-        // MARK: workaround to resolve the issue with the search function:
+-        // - Search returns "No patients found" on the first attempt
+-        // - Navigating patient list using Next/Back buttons
+-        // is required for the search to work.
+-        // It's a work in progress
+-        
+-        if allPatients.isEmpty {
+-                 let thisPatient = allPatients[currentIndex]
+-                 onPatientSelected(thisPatient)
+-             }
+-        else {
+-            if hasPrevious {
+-//                 let previousPatient = allPatients[currentIndex - 1]
+-//                 onPatientSelected(previousPatient)
+-                onPatientSelected(allPatients[currentIndex - 1])
+-            }
+-            else if hasNext {
+-//                 let previousPatient = allPatients[currentIndex + 1]
+-//                 onPatientSelected(previousPatient)
+-                onPatientSelected(allPatients[currentIndex + 1])
+-            }
+-            else {
+-                if (currentIndex == 0) {
+-                    onPatientSelected(allPatients[currentIndex + 1])
+-                }
+-                else if (currentIndex == allPatients.count-1) {
+-                    onPatientSelected(allPatients[currentIndex - 1])
+-                }
+-            }
+-        }
+-        
+-        // MARK: -
+-        
+-        // The original workaround worked by triggering onPatientSelected calls
+-        // This minimal version ensures the current patient is properly loaded without changing UI state
+-//        if let current = currentPatient, !allPatients.isEmpty {
+-            // Store current state to restore later
+-//            let originalPatient = current
+-            
+-            // Trigger a patient selection to ensure context is in the right state
+-             // This is what made the original workaround work
+-//            onPatientSelected(current)
+-            
+-            // If we're not already on the current patient, make sure we're back to it
+-//            if currentPatient != originalPatient {
+-//                onPatientSelected(originalPatient)
+-//            }
+-//        }
+-        
+-        // Search using the shared persistence controller
+-        searchResults = PersistenceController.shared.searchPatients(by: trimmedSearch)
++        // Search using the shared data store
++        searchResults = dataStore.searchPatients(by: trimmedSearch)
+         showingSearchResults = true
+-        }
+     }
++}
+ 
+-struct PatientSearchResultsView: View {
+-    let searchResults: [Patient]
++struct PatientSearchResultsViewSwiftUI: View {
++    let searchResults: [PatientData]
+     let searchText: String
+-    let onPatientSelected: (Patient) -> Void
++    let onPatientSelected: (PatientData) -> Void
+     let onDismiss: () -> Void
+     
+     var body: some View {
+-//        NavigationView {
+-            VStack {
+-                if searchResults.isEmpty {
+-                    VStack(spacing: 16) {
+-                        Image(systemName: "person.fill.questionmark")
+-                            .font(.largeTitle)
+-                            .foregroundColor(.secondary)
+-                        Text("no_patients_found".localized)
+-                            .font(.title2)
+-                            .foregroundColor(.secondary)
+-                    }
+-                    .padding(40)
+-//                    .frame(minWidth: 300,idealWidth: 300, maxWidth: 300, minHeight: 300, idealHeight: 300, maxHeight: 300)
+-                } else {
+-                    List(searchResults) { patient in
+-                        Button(action: {
+-                            onPatientSelected(patient)
+-                        }) {
+-                            VStack(alignment: .leading, spacing: 8) {
+-                                Text(patient.name.isEmpty ? "not_specified".localized : patient.name)
+-                                    .font(.title2)
+-                                    .fontWeight(.medium)
+-                                    .foregroundColor(.primary)
+-                                
+-                                HStack {
+-                                    Text("age_label".localized)
+-                                        .font(.body)
++        VStack {
++            if searchResults.isEmpty {
++                VStack(spacing: 16) {
++                    Image(systemName: "person.fill.questionmark")
++                        .font(.largeTitle)
++                        .foregroundColor(.secondary)
++                    Text("no_patients_found".localized)
++                        .font(.title2)
++                        .foregroundColor(.secondary)
++                }
++                .padding(40)
++            } else {
++                List(searchResults) { patient in
++                    Button(action: {
++                        onPatientSelected(patient)
++                    }) {
++                        VStack(alignment: .leading, spacing: 4) {
++                            Text(patient.name)
++                                .font(.headline)
++                            HStack {
++                                if !patient.age.isEmpty {
++                                    Text("\("age_label".localized) \(patient.age)")
++                                        .font(.subheadline)
+                                         .foregroundColor(.secondary)
+-                                    Text(patient.age.isEmpty ? "not_specified".localized : patient.age)
+-                                        .font(.body)
++                                }
++                                if !patient.job.isEmpty {
++                                    Text("•")
+                                         .foregroundColor(.secondary)
+-                                    
+-                                    Spacer()
+-                                    
+-                                    Text(DateFormatter.shortDateTime.string(from: patient.dateModified))
+-                                        .font(.body)
++                                    Text(patient.job)
++                                        .font(.subheadline)
+                                         .foregroundColor(.secondary)
+                                 }
+                             }
+-                            .padding(.vertical, 8)
+-                            .padding(.horizontal, 4)
+                         }
+-                        .buttonStyle(PlainButtonStyle())
++                        .padding(.vertical, 4)
+                     }
++                    .buttonStyle(PlainButtonStyle())
+                 }
+-                
+-                Spacer()
+             }
+-            .navigationTitle("search_patient".localized + ": \(searchText)")
+-            .toolbar {
+-                ToolbarItem(placement: .cancellationAction) {
+-                    Button("cancel".localized) {
+-                        onDismiss()
+-                    }
++        }
++        .frame(minWidth: 320, idealWidth: 320, maxWidth: 320, minHeight: 300, idealHeight: 300, maxHeight: 300)
++        .toolbar {
++            ToolbarItem(placement: .principal) {
++                Text("search_results_for".localized + " \"\(searchText)\"")
++                    .font(.headline)
++            }
++            ToolbarItem(placement: .cancellationAction) {
++                Button("close".localized) {
++                    onDismiss()
+                 }
+             }
+-//        }
+-        .frame(minWidth: 400,idealWidth: 400, maxWidth: 400, minHeight: 300, idealHeight: 300, maxHeight: 300)
++        }
+     }
+ }
+-
+-extension DateFormatter {
+-    static let shortDateTime: DateFormatter = {
+-        let formatter = DateFormatter()
+-        formatter.dateStyle = .short
+-        formatter.timeStyle = .short
+-        return formatter
+-    }()
+-}
+diff --git a/Audiometry/PatientNavigationViewSwiftUI.swift b/Audiometry/PatientNavigationViewSwiftUI.swift
+deleted file mode 100644
+index 22163f4..0000000
+--- a/Audiometry/PatientNavigationViewSwiftUI.swift
++++ /dev/null
+@@ -1,218 +0,0 @@
+-//
+-//  PatientNavigationViewSwiftUI.swift
+-//  Audiometry
+-//
+-//  Navigation view for SwiftUI data storage
+-//
+-//  Created by GitHub Copilot on 20/09/2025.
+-//  Modified by perez987 on 20/09/2025.
+-//
+-
+-import SwiftUI
+-
+-struct PatientNavigationViewSwiftUI: View {
+-    @ObservedObject var languageManager = LanguageManager.shared
+-    @ObservedObject var dataStore = PatientDataStore.shared
+-    @State private var searchText = ""
+-    @State private var showingSearchResults = false
+-    @State private var searchResults: [PatientData] = []
+-    
+-    let currentPatient: PatientData?
+-    let allPatients: [PatientData]
+-    let onPatientSelected: (PatientData) -> Void
+-    let onNewPatient: () -> Void
+-    let onSavePatient: () -> Void
+-    let onForceSave: () -> Void
+-    
+-    var currentIndex: Int {
+-        guard let current = currentPatient else { return -1 }
+-        return allPatients.firstIndex(where: { $0.id == current.id }) ?? -1
+-    }
+-    
+-    var hasPrevious: Bool {
+-        currentIndex > 0
+-    }
+-    
+-    var hasNext: Bool {
+-        currentIndex >= 0 && currentIndex < allPatients.count - 1
+-    }
+-    
+-    var body: some View {
+-        VStack(spacing: 8) {
+-            // Top row: Language selector and search
+-            HStack(spacing: 12) {
+-                // Language Menu
+-                Menu {
+-                    ForEach(LanguageManager.Language.allCases, id: \.self) { language in
+-                        Button(action: {
+-                            languageManager.setLanguage(language)
+-                        }) {
+-                            HStack {
+-                                Text(language.displayName)
+-                                if languageManager.currentLanguage == language {
+-                                    Image(systemName: "checkmark")
+-                                }
+-                            }
+-                        }
+-                    }
+-                } label: {
+-                    HStack {
+-                        Image(systemName: "globe")
+-                        Text(languageManager.currentLanguage.displayName)
+-                    }
+-                }
+-                
+-                Spacer()
+-                
+-                // Search Field
+-                HStack {
+-                    Image(systemName: "magnifyingglass")
+-                        .foregroundColor(.secondary)
+-                    TextField("search_by_name".localized, text: $searchText)
+-                        .textFieldStyle(RoundedBorderTextFieldStyle())
+-                        .frame(width: 340)
+-                        .onSubmit {
+-                            performSearch()
+-                        }
+-                    if !searchText.isEmpty {
+-                        Button(action: {
+-                            searchText = ""
+-                        }) {
+-                            Image(systemName: "xmark.circle.fill")
+-                                .foregroundColor(.secondary)
+-                        }
+-                        .buttonStyle(PlainButtonStyle())
+-                    }
+-                }
+-            }
+-            
+-            // Bottom row: Patient management and navigation buttons
+-            HStack(spacing: 8) {
+-                Spacer()
+-                
+-                // New Patient Button
+-                Button("new_patient".localized) {
+-                    onNewPatient()
+-                }
+-                
+-                // Save Patient Button
+-                Button("save_patient".localized) {
+-                    onSavePatient()
+-                }
+-                
+-                Divider()
+-                    .frame(height: 20)
+-                
+-                // Navigation Controls
+-                Button("previous_patient".localized) {
+-                    if hasPrevious {
+-                        let previousPatient = allPatients[currentIndex - 1]
+-                        onPatientSelected(previousPatient)
+-                    }
+-                }
+-                .disabled(!hasPrevious)
+-                
+-                Text("\(currentIndex + 1) / \(allPatients.count)")
+-                    .foregroundColor(.secondary)
+-                
+-                Button("next_patient".localized) {
+-                    if hasNext {
+-                        let nextPatient = allPatients[currentIndex + 1]
+-                        onPatientSelected(nextPatient)
+-                    }
+-                }
+-                .disabled(!hasNext)
+-                
+-                Spacer()
+-            }
+-        }
+-        .padding(.horizontal)
+-        .sheet(isPresented: $showingSearchResults) {
+-            PatientSearchResultsViewSwiftUI(
+-                searchResults: searchResults,
+-                searchText: searchText,
+-                onPatientSelected: { patient in
+-                    onPatientSelected(patient)
+-                    showingSearchResults = false
+-                },
+-                onDismiss: {
+-                    showingSearchResults = false
+-                }
+-            )
+-        }
+-    }
+-    
+-    private func performSearch() {
+-        let trimmedSearch = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
+-        guard !trimmedSearch.isEmpty else { return }
+-        
+-        // Force save any pending changes before searching
+-        onForceSave()
+-        
+-        // Search using the shared data store
+-        searchResults = dataStore.searchPatients(by: trimmedSearch)
+-        showingSearchResults = true
+-    }
+-}
+-
+-struct PatientSearchResultsViewSwiftUI: View {
+-    let searchResults: [PatientData]
+-    let searchText: String
+-    let onPatientSelected: (PatientData) -> Void
+-    let onDismiss: () -> Void
+-    
+-    var body: some View {
+-        VStack {
+-            if searchResults.isEmpty {
+-                VStack(spacing: 16) {
+-                    Image(systemName: "person.fill.questionmark")
+-                        .font(.largeTitle)
+-                        .foregroundColor(.secondary)
+-                    Text("no_patients_found".localized)
+-                        .font(.title2)
+-                        .foregroundColor(.secondary)
+-                }
+-                .padding(40)
+-            } else {
+-                List(searchResults) { patient in
+-                    Button(action: {
+-                        onPatientSelected(patient)
+-                    }) {
+-                        VStack(alignment: .leading, spacing: 4) {
+-                            Text(patient.name)
+-                                .font(.headline)
+-                            HStack {
+-                                if !patient.age.isEmpty {
+-                                    Text("\("age_label".localized) \(patient.age)")
+-                                        .font(.subheadline)
+-                                        .foregroundColor(.secondary)
+-                                }
+-                                if !patient.job.isEmpty {
+-                                    Text("•")
+-                                        .foregroundColor(.secondary)
+-                                    Text(patient.job)
+-                                        .font(.subheadline)
+-                                        .foregroundColor(.secondary)
+-                                }
+-                            }
+-                        }
+-                        .padding(.vertical, 4)
+-                    }
+-                    .buttonStyle(PlainButtonStyle())
+-                }
+-            }
+-        }
+-        .frame(minWidth: 320, idealWidth: 320, maxWidth: 320, minHeight: 300, idealHeight: 300, maxHeight: 300)
+-        .toolbar {
+-            ToolbarItem(placement: .principal) {
+-                Text("search_results_for".localized + " \"\(searchText)\"")
+-                    .font(.headline)
+-            }
+-            ToolbarItem(placement: .cancellationAction) {
+-                Button("close".localized) {
+-                    onDismiss()
+-                }
+-            }
+-        }
+-    }
+-}
+diff --git a/Audiometry/PersistenceController.swift b/Audiometry/PersistenceController.swift
+deleted file mode 100644
+index ce07305..0000000
+--- a/Audiometry/PersistenceController.swift
++++ /dev/null
+@@ -1,142 +0,0 @@
+-//
+-//  PersistenceController.swift
+-//  Audiometry
+-//
+-//  Created by GitHub Copilot on 20/09/2025.
+-//  Modified by perez987 on 20/09/2025.
+-//
+-
+-import CoreData
+-import Foundation
+-
+-struct PersistenceController {
+-    static let shared = PersistenceController()
+-    
+-    static var preview: PersistenceController = {
+-        let result = PersistenceController(inMemory: true)
+-        let viewContext = result.container.viewContext
+-        
+-        // Add sample data for previews
+-        let samplePatient = Patient.create(in: viewContext)
+-        samplePatient.name = "John Sketches"
+-        samplePatient.age = "45"
+-        samplePatient.job = "Engineer"
+-        samplePatient.rightEar500 = "25"
+-        samplePatient.rightEar1000 = "30"
+-        samplePatient.rightEar2000 = "35"
+-        samplePatient.rightEar4000 = "40"
+-        samplePatient.rightEar8000 = "45"
+-        samplePatient.leftEar500 = "20"
+-        samplePatient.leftEar1000 = "25"
+-        samplePatient.leftEar2000 = "30"
+-        samplePatient.leftEar4000 = "35"
+-        samplePatient.leftEar8000 = "40"
+-        
+-        do {
+-            try viewContext.save()
+-        } catch {
+-            let nsError = error as NSError
+-            print("Unresolved error: \(nsError), \(nsError.localizedDescription)")
+-//            fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
+-        }
+-        return result
+-    }()
+-    
+-    let container: NSPersistentContainer
+-    
+-    init(inMemory: Bool = false) {
+-        container = NSPersistentContainer(name: "DataModel")
+-        
+-        if inMemory {
+-            container.persistentStoreDescriptions.first!.url = URL(fileURLWithPath: "/dev/null")
+-        }
+-        
+-        container.loadPersistentStores { _, error in
+-            if let error = error as NSError? {
+-                print("Unresolved error: \(error), \(error.localizedDescription)")
+-//                fatalError("Unresolved error \(error), \(error.userInfo)")
+-            }
+-        }
+-        container.viewContext.automaticallyMergesChangesFromParent = true
+-    }
+-}
+-
+-// MARK: - Convenience methods for data operations
+-extension PersistenceController {
+-    func save() {
+-        let context = container.viewContext
+-        
+-        if context.hasChanges {
+-            do {
+-                try context.save()
+-            } catch {
+-//                let nsError = error as NSError
+-                print("Unresolved error: \(error), \(error.localizedDescription)")
+-//                fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
+-            }
+-        }
+-    }
+-    
+-    func deletePatient(_ patient: Patient) {
+-        let context = container.viewContext
+-        context.delete(patient)
+-        save()
+-    }
+-    
+-    func fetchPatients() -> [Patient] {
+-        let context = container.viewContext
+-        
+-        // Process any pending changes to ensure we have the most up-to-date data
+-        context.processPendingChanges()
+-        
+-        // If there are unsaved changes, save them to ensure consistency with search
+-        if context.hasChanges {
+-            do {
+-                try context.save()
+-            } catch {
+-                print("Error saving changes before fetch: \(error.localizedDescription)")
+-            }
+-        }
+-        
+-        let request: NSFetchRequest<Patient> = Patient.fetchRequest()
+-        // Sort by dateModified
+-//        request.sortDescriptors = [NSSortDescriptor(keyPath: \Patient.dateModified, ascending: false)]
+-        // Sort by patient name
+-        request.sortDescriptors = [NSSortDescriptor(keyPath: \Patient.name, ascending: true)]
+-        do {
+-            return try context.fetch(request)
+-        } catch {
+-            print("Error fetching patients: \(error.localizedDescription)")
+-            return []
+-        }
+-    }
+-    
+-    func searchPatients(by name: String) -> [Patient] {
+-        let context = container.viewContext
+-        
+-        // Process any pending changes to ensure we have the most up-to-date data
+-        context.processPendingChanges()
+-        
+-        // If there are unsaved changes, save them to ensure search includes all data
+-        if context.hasChanges {
+-            do {
+-                try context.save()
+-            } catch {
+-                print("Error saving changes before search: \(error.localizedDescription)")
+-            }
+-        }
+-        
+-        let request: NSFetchRequest<Patient> = Patient.fetchRequest()
+-        request.predicate = NSPredicate(format: "name CONTAINS[cd] %@", name)
+-        request.sortDescriptors = [NSSortDescriptor(keyPath: \Patient.name, ascending: true)]
+-        // Ensure we get fresh data from the persistent store
+-        request.returnsObjectsAsFaults = false
+-        
+-        do {
+-            return try context.fetch(request)
+-        } catch {
+-            print("Error searching patients: \(error.localizedDescription)")
+-            return []
+-        }
+-    }
+-}
+diff --git a/Audiometry/StorageMode.swift b/Audiometry/StorageMode.swift
+deleted file mode 100644
+index ce20442..0000000
+--- a/Audiometry/StorageMode.swift
++++ /dev/null
+@@ -1,25 +0,0 @@
+-//
+-//  StorageMode.swift
+-//  Audiometry
+-//
+-//  Enum to toggle between CoreData and SwiftUI storage
+-//
+-//  Created by GitHub Copilot on 20/09/2025.
+-//  Modified by perez987 on 20/09/2025.
+-//
+-
+-import Foundation
+-
+-enum StorageMode: String, CaseIterable {
+-    case coreData = "CoreData"
+-    case swiftUI = "SwiftUI"
+-    
+-    var displayName: String {
+-        switch self {
+-        case .coreData:
+-            return "CoreData Storage"
+-        case .swiftUI:
+-            return "SwiftUI Storage"
+-        }
+-    }
+-}
+diff --git a/Audiometry/en.lproj/Localizable.strings b/Audiometry/en.lproj/Localizable.strings
+index 6bf885d..74b7fef 100644
+--- a/Audiometry/en.lproj/Localizable.strings
++++ b/Audiometry/en.lproj/Localizable.strings
+@@ -4,8 +4,6 @@
+ "app_title" = "Audiometry";
+ "patient_report" = "Patient Report";
+ "language" = "Language";
+-"storage_mode:" = "Storage Mode:";
+-"current: " = "Current: ";
+ 
+ /* Patient Information */
+ "patient_information" = "Patient Information";
+diff --git a/Audiometry/es.lproj/Localizable.strings b/Audiometry/es.lproj/Localizable.strings
+index 4a3435b..4afe796 100644
+--- a/Audiometry/es.lproj/Localizable.strings
++++ b/Audiometry/es.lproj/Localizable.strings
+@@ -4,8 +4,6 @@
+ "app_title" = "Audiometría";
+ "patient_report" = "Informe del Paciente";
+ "language" = "Idioma";
+-"current: " = "Actual: ";
+-"storage_mode:" = "Almacén de Datos:";
+ 
+ /* Patient Information */
+ "patient_information" = "Información del Paciente";
+diff --git a/README.md b/README.md
+index 9b7ad67..d865f41 100644
+--- a/README.md
++++ b/README.md
+@@ -19,36 +19,21 @@ While this is a valid app for everyday use, it's more of an exercise in learning
+   - audiometric test input
+   - hearing loss assessment calculations
+   - including SAL and ELI indices with results display
+-  - dual storage system: CoreData and SwiftUI storage (toggle between them)
+-  - save patients data in core data or JSON file
++  - SwiftUI storage system using JSON files
++  - save patients data in JSON file
+   - language system with English and Spanish
+   - buttons to move back and forth between saved patients
+   - search button.
+ 
+-## Dual Storage Implementation
++## SwiftUI Storage Implementation
+ 
+-The application now supports two different storage mechanisms that you can switch between:
+-
+-1. CoreData Storage - Traditional Apple framework using SQLite database
+-2. SwiftUI Storage - Native SwiftUI approach using JSON files
+-
+-A segmented control at the top of the window allows you to switch between storage modes. Each storage system maintains its own separate data.
+-
+-The implementation of SwiftUI Storage alongside CoreData Storage allows users to compare the two approaches side-by-side. Users can now toggle between both storage methods to learn about them and evaluate which best suits their needs. Each storage system maintains its own separate data.
+-
+-## Patient data saved
+-  
+-Patient data are saved in different files depending on the storage mode:
+-
+-**CoreData Storage**
+-
+-`/Users/<user_name>/Library/Containers/perez987.Audiometry/Data/Library/Application Support/Audiometry/DataModel.sqlite`
+-
+-**SwiftUI Storage**
++This branch uses SwiftUI native storage with JSON files for patient data persistence. Data is stored in:
+ 
+ `/Users/<user_name>/Library/Containers/perez987.Audiometry/Data/Library/Application Support/Audiometry/patients.json`
+ 
+-You can bring your saved data back by copying those files (SQLite database and JSON file) to a different machine and running the Audiometry app on it.
++You can bring your saved data back by copying the JSON file to a different machine and running the Audiometry app on it.
++
++> **Note:** For a version with dual storage (CoreData and SwiftUI) that allows switching between both, see the `main` branch. For a CoreData-only version, see the `coredata` branch.
+ 
+ ## Extended information on features
+   
+@@ -58,7 +43,7 @@ You can bring your saved data back by copying those files (SQLite database and J
+ - **Complete UI Translation**: All interface elements support both languages.
+ 
+ ### 💾 Patient Data Management
+-- **Core Data Integration**: Persistent storage of patient records
++- **SwiftUI Storage**: Persistent storage of patient records using JSON files
+ - **Save button**: Patient data saved. When saving data, patients are sorted by name
+ - **Patient Navigation**: Browse through saved patients with Previous/Next buttons
+ - **New Patient Creation**: Easy creation of new patient records.
+-- 
+2.51.0
+
