@@ -1,7 +1,7 @@
 # Audiometry
 
 ![Platform](https://img.shields.io/badge/macOS-13+-orange.svg)
-![Swift](https://img.shields.io/badge/Swift-5.9-color=9494ff.svg)
+![Swift](https://img.shields.io/badge/Swift-5-color=9494ff.svg)
 ![Xcode](https://img.shields.io/badge/Xcode-15.2+-lavender.svg)
 <!-- ![Downloads](https://img.shields.io/github/downloads/perez987/Audiometry/total?label=Downloads&color=9494ff) -->
 
