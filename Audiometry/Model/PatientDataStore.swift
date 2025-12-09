@@ -4,7 +4,6 @@
 //
 //  SwiftUI native data storage manager
 //
-//  Created by GitHub Copilot on 20/09/2025.
 //  Modified by perez987 on 20/09/2025.
 //
 
@@ -40,6 +39,9 @@ class PatientDataStore: ObservableObject {
     
     // MARK: - Load and Save
     func loadPatients() {
+        // Copy sample file on first run if needed
+        copySampleFileIfNeeded()
+        
         guard fileManager.fileExists(atPath: patientsFileURL.path) else {
             patients = []
             return
@@ -54,6 +56,29 @@ class PatientDataStore: ObservableObject {
         } catch {
             print("Error loading patients from SwiftUI storage: \(error.localizedDescription)")
             patients = []
+        }
+    }
+    
+    // MARK: - Sample Data Initialization
+    private func copySampleFileIfNeeded() {
+        // Check if patients.json already exists
+        if fileManager.fileExists(atPath: patientsFileURL.path) {
+            return // File already exists, no need to copy
+        }
+        
+        // Get the sample JSON file from Resources bundle
+        // Try without subdirectory first (files added to bundle root)
+        guard let sampleURL = Bundle.main.url(forResource: "patients", withExtension: "json") else {
+            print("Sample patients.json not found in Resources")
+            return
+        }
+        
+        // Copy the sample file to the Application Support directory
+        do {
+            try fileManager.copyItem(at: sampleURL, to: patientsFileURL)
+            print("Successfully copied sample patients.json to: \(patientsFileURL.path)")
+        } catch {
+            print("Error copying sample patients.json: \(error.localizedDescription)")
         }
     }
     

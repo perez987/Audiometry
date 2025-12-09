@@ -2,7 +2,6 @@
 //  AudiometryCalculations.swift
 //  Audiometry
 //
-//  Created by GitHub Copilot on 20/09/2025.
 //  Modified by perez987 on 20/09/2025.
 //
 

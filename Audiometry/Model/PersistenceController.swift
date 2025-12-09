@@ -2,7 +2,6 @@
 //  PersistenceController.swift
 //  Audiometry
 //
-//  Created by GitHub Copilot on 20/09/2025.
 //  Modified by perez987 on 20/09/2025.
 //
 
@@ -49,6 +48,9 @@ struct PersistenceController {
         
         if inMemory {
             container.persistentStoreDescriptions.first!.url = URL(fileURLWithPath: "/dev/null")
+        } else {
+            // Copy sample database on first run
+            copySampleDatabaseIfNeeded()
         }
         
         container.loadPersistentStores { _, error in
@@ -58,6 +60,55 @@ struct PersistenceController {
             }
         }
         container.viewContext.automaticallyMergesChangesFromParent = true
+    }
+    
+    // MARK: - Sample Data Initialization
+    private func copySampleDatabaseIfNeeded() {
+        let fileManager = FileManager.default
+        
+        // Get the default store URL (where CoreData will save the database)
+        // Use the container's default store description URL
+        guard let storeURL = container.persistentStoreDescriptions.first?.url else {
+            print("Could not determine store URL")
+            return
+        }
+        
+        // Check if database already exists
+        if fileManager.fileExists(atPath: storeURL.path) {
+            return // Database already exists, no need to copy
+        }
+        
+        // Get the sample database from Resources bundle
+        // Try without subdirectory first (files added to bundle root)
+        guard let sampleURL = Bundle.main.url(forResource: "DataModel", withExtension: "sqlite") else {
+            print("Sample database not found in Resources")
+            return
+        }
+        
+        // Create the Application Support directory if it doesn't exist
+        let directoryURL = storeURL.deletingLastPathComponent()
+        try? fileManager.createDirectory(at: directoryURL, withIntermediateDirectories: true)
+        
+        // Copy the sample database to the store location
+        do {
+            try fileManager.copyItem(at: sampleURL, to: storeURL)
+            print("Successfully copied sample CoreData database to: \(storeURL.path)")
+            
+            // Also copy the accompanying -shm and -wal files if they exist
+            let shmSampleURL = sampleURL.deletingPathExtension().appendingPathExtension("sqlite-shm")
+            let walSampleURL = sampleURL.deletingPathExtension().appendingPathExtension("sqlite-wal")
+            let shmStoreURL = storeURL.deletingPathExtension().appendingPathExtension("sqlite-shm")
+            let walStoreURL = storeURL.deletingPathExtension().appendingPathExtension("sqlite-wal")
+            
+            if fileManager.fileExists(atPath: shmSampleURL.path) {
+                try? fileManager.copyItem(at: shmSampleURL, to: shmStoreURL)
+            }
+            if fileManager.fileExists(atPath: walSampleURL.path) {
+                try? fileManager.copyItem(at: walSampleURL, to: walStoreURL)
+            }
+        } catch {
+            print("Error copying sample database: \(error.localizedDescription)")
+        }
     }
 }
 
