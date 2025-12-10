@@ -93,7 +93,6 @@
 				D9779AB22E86A860000F22FB /* Assets.xcassets */,
 				D9779AB72E86A860000F22FB /* Audiometry.entitlements */,
 				D9779AAE2E86A85F000F22FB /* AudiometryApp.swift */,
-				D951DC0F2E86BE7800D254D8 /* DataModel.xcdatamodeld */,
 				D98472CC2E8C6DAD0050C695 /* Localizable.strings */,
 				D9815C532EE897D30074254F /* Model */,
 				D9779AB42E86A860000F22FB /* Preview Content */,
@@ -115,6 +114,7 @@
 			isa = PBXGroup;
 			children = (
 				D9815C502EE897B30074254F /* DataModel.sqlite */,
+				D951DC0F2E86BE7800D254D8 /* DataModel.xcdatamodeld */,
 				D9815C4E2EE897960074254F /* patients.json */,
 			);
 			path = Resources;
