@@ -25,7 +25,8 @@ While this is a valid app for everyday use, it's more of an exercise in learning
   - language system with English and Spanish
   - buttons to move back and forth between saved patients
   - search button
-  - print report of current patient. 
+  - print report of current patient
+  -  sample data to have patients already in the first run.
 
 ## Dual Storage
 
