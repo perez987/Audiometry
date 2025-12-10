@@ -52,8 +52,6 @@ Patient data are saved in different files depending on the storage mode:
 
 You can bring your saved data back by copying those files (SQLite database and JSON file) to a different machine and running the Audiometry app on it.
 
-> **Note**: For a SwiftUI-only version, see the `swiftui` branch.
-
 ## Extended information on features
   
 ### 🌐 Language Support
