@@ -6,59 +6,16 @@
 //
 
 import SwiftUI
-import CoreData
 import AppKit
 
 @main
 struct AudiometryApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     @ObservedObject private var languageManager = LanguageManager.shared
-    @AppStorage("storageMode") private var storageModeRaw: String = StorageMode.coreData.rawValue
-    let persistenceController = PersistenceController.shared
-    
-    var storageMode: StorageMode {
-        StorageMode(rawValue: storageModeRaw) ?? .coreData
-    }
     
     var body: some Scene {
         WindowGroup {
-            VStack(spacing: 0) {
-                // Storage Mode Selector
-                HStack {
-					Text("storage_mode:".localized)
-						.foregroundColor(.secondary)
-                        .font(.headline)
-                    Spacer()
-                    Picker("", selection: $storageModeRaw) {
-                        ForEach(StorageMode.allCases, id: \.rawValue) { mode in
-                            Text(mode.displayName).tag(mode.rawValue)
-                        }
-                    }
-                    .pickerStyle(SegmentedPickerStyle())
-                    .frame(width: 300)
-                    
-                    Spacer()
-
-					let Text1 = "current: ".localized
-					let Text2 = storageMode.displayName
-					Text(Text1 + Text2)
-                        .foregroundColor(.secondary)
-                        .font(.caption)
-                }
-                .padding()
-                .background(Color(NSColor.windowBackgroundColor))
-                
-                Divider()
-                
-                // Content based on storage mode
-                if storageMode == .coreData {
-                    ContentView()
-                        .environment(\.managedObjectContext, persistenceController.container.viewContext)
-                } else {
-                    ContentViewSwiftUI()
-                }
-            }
-            
+            ContentView()
                 .onAppear {
                     // Set initial window title
                     DispatchQueue.main.async {

@@ -4,61 +4,51 @@
 //
 //  Modified by perez987 on 20/09/2025.
 //
-//  FIXED: Language switching Menu to avoid ViewBridge errors
-//  - Removed BorderlessButtonMenuStyle() that could cause ViewBridge issues
-//  - Added checkmark indicator for currently selected language
-//  - Menu now properly observes LanguageManager for UI updates
-//
 
 import SwiftUI
-import CoreData
 
 struct PatientNavigationView: View {
-    @Environment(\.managedObjectContext) private var viewContext
     @ObservedObject var languageManager = LanguageManager.shared
+    @ObservedObject var dataStore = PatientDataStore.shared
     @State private var searchText = ""
     @State private var showingSearchResults = false
-    @State private var searchResults: [Patient] = []
+    @State private var searchResults: [PatientData] = []
 	@State private var showingPrintView = false
 	@State private var printAllPatients = false
 
-    let currentPatient: Patient?
-    let allPatients: [Patient]
-    let onPatientSelected: (Patient) -> Void
+    let currentPatient: PatientData?
+    let allPatients: [PatientData]
+    let onPatientSelected: (PatientData) -> Void
     let onNewPatient: () -> Void
     let onSavePatient: () -> Void
     let onForceSave: () -> Void
     
     var currentIndex: Int {
         guard let current = currentPatient else { return -1 }
-        return allPatients.firstIndex(of: current) ?? -1
+        return allPatients.firstIndex(where: { $0.id == current.id }) ?? -1
     }
     
     var hasPrevious: Bool {
-        currentIndex > 0 && !allPatients.isEmpty
+        currentIndex > 0
     }
     
     var hasNext: Bool {
-        currentIndex < allPatients.count - 1 && currentIndex >= 0
+        currentIndex >= 0 && currentIndex < allPatients.count - 1
     }
     
     var body: some View {
         VStack(spacing: 8) {
-            // Top row: Language selector, search box and Find button
+            // Top row: Language selector and search
             HStack(spacing: 12) {
-                // Language Selector
+                // Language Menu
                 Menu {
                     ForEach(LanguageManager.Language.allCases, id: \.self) { language in
                         Button(action: {
-                            // Add small delay to avoid ViewBridge errors from rapid UI updates
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                                languageManager.setLanguage(language)
-                            }
+                            languageManager.setLanguage(language)
                         }) {
                             HStack {
                                 Text(language.displayName)
                                 if languageManager.currentLanguage == language {
-//                                Spacer()
                                     Image(systemName: "checkmark")
                                 }
                             }
@@ -67,35 +57,40 @@ struct PatientNavigationView: View {
                 } label: {
                     HStack {
                         Image(systemName: "globe")
-                        Text("language".localized)
+                        Text(languageManager.currentLanguage.displayName)
                     }
                 }
                 .help("select_language".localized) //Tooltip
 
                 Spacer()
                 
-                // Search
+                // Search Field
                 HStack {
-                    TextField("search_placeholder".localized, text: $searchText)
+                    Image(systemName: "magnifyingglass")
+                        .foregroundColor(.secondary)
+                    TextField("search_by_name".localized, text: $searchText)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
-                        .frame(width: 300)
+                        .frame(width: 340)
                         .onSubmit {
                             performSearch()
                         }
-                    
-                    Button("search_patient".localized) {
-                        performSearch()
+                    if !searchText.isEmpty {
+                        Button(action: {
+                            searchText = ""
+                        }) {
+                            Image(systemName: "xmark.circle.fill")
+                                .foregroundColor(.secondary)
+                        }
+                        .buttonStyle(PlainButtonStyle())
                     }
-                    .frame(width: 80)
-                    .disabled(searchText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
                 }
             }
             
-            // Bottom row: Patient management buttons (New, Save, Prev, Next)
+            // Bottom row: Patient management and navigation buttons
             HStack(spacing: 8) {
                 Spacer()
                 
-              // New Patient Button
+                // New Patient Button
                 Button("new_patient".localized) {
                     onNewPatient()
                 }
@@ -116,8 +111,8 @@ struct PatientNavigationView: View {
                     showingPrintView = true
                 }
 				.help(Text("print_report_preview".localized))
-                .disabled(currentPatient == nil)
-                
+				.disabled(currentPatient == nil)
+
                 // Print All Reports Button
 //                Button("print_all_reports".localized) {
 //                    printAllPatients = true
@@ -129,6 +124,7 @@ struct PatientNavigationView: View {
 //                Divider()
 //                    .frame(height: 20)
                 
+                // Navigation Controls
                 Button("previous_patient".localized) {
                     if hasPrevious {
                         let previousPatient = allPatients[currentIndex - 1]
@@ -155,7 +151,7 @@ struct PatientNavigationView: View {
         }
         .padding(.horizontal)
         .sheet(isPresented: $showingSearchResults) {
-            PatientSearchResultsView(
+            PatientSearchResultsViewSwiftUI(
                 searchResults: searchResults,
                 searchText: searchText,
                 onPatientSelected: { patient in
@@ -185,118 +181,70 @@ struct PatientNavigationView: View {
         // Force save any pending changes before searching
         onForceSave()
         
-        // MARK: workaround to resolve the issue with the search function:
-        // - Search returns "No patients found" on the first attempt
-        // - Navigating patient list using Next/Back buttons
-        // is required for the search to work.
-        // It's a work in progress
-        
-        if allPatients.isEmpty {
-                 let thisPatient = allPatients[currentIndex]
-                 onPatientSelected(thisPatient)
-             }
-        else {
-            if hasPrevious {
-//                 let previousPatient = allPatients[currentIndex - 1]
-//                 onPatientSelected(previousPatient)
-                onPatientSelected(allPatients[currentIndex - 1])
-            }
-            else if hasNext {
-//                 let previousPatient = allPatients[currentIndex + 1]
-//                 onPatientSelected(previousPatient)
-                onPatientSelected(allPatients[currentIndex + 1])
-            }
-            else {
-                if (currentIndex == 0) {
-                    onPatientSelected(allPatients[currentIndex + 1])
-                }
-                else if (currentIndex == allPatients.count-1) {
-                    onPatientSelected(allPatients[currentIndex - 1])
-                }
-            }
-        }
-        
-        // Search using the shared persistence controller
-        searchResults = PersistenceController.shared.searchPatients(by: trimmedSearch)
+        // Search using the shared data store
+        searchResults = dataStore.searchPatients(by: trimmedSearch)
         showingSearchResults = true
-        }
-    }
-
-struct PatientSearchResultsView: View {
-    let searchResults: [Patient]
-    let searchText: String
-    let onPatientSelected: (Patient) -> Void
-    let onDismiss: () -> Void
-    
-    var body: some View {
-            VStack {
-                if searchResults.isEmpty {
-                    VStack(spacing: 16) {
-                        Image(systemName: "person.fill.questionmark")
-                            .font(.largeTitle)
-                            .foregroundColor(.secondary)
-                        Text("no_patients_found".localized)
-                            .font(.title2)
-                            .foregroundColor(.secondary)
-                    }
-                    .padding(40)
-                } else {
-                    List(searchResults) { patient in
-                        Button(action: {
-                            onPatientSelected(patient)
-                        }) {
-                            VStack(alignment: .leading, spacing: 8) {
-                                Text(patient.name.isEmpty ? "not_specified".localized : patient.name)
-                                    .font(.title2)
-                                    .fontWeight(.medium)
-                                    .foregroundColor(.primary)
-                                
-                                HStack {
-                                    Text("age_label".localized)
-                                        .font(.body)
-                                        .foregroundColor(.secondary)
-                                    Text(patient.age.isEmpty ? "not_specified".localized : patient.age)
-                                        .font(.body)
-                                        .foregroundColor(.secondary)
-                                    
-                                    Spacer()
-                                    
-                                    Text(DateFormatter.shortDateTime.string(from: patient.dateModified))
-                                        .font(.body)
-                                        .foregroundColor(.secondary)
-                                }
-                            }
-                            .padding(.vertical, 8)
-                            .padding(.horizontal, 4)
-                        }
-                        .buttonStyle(PlainButtonStyle())
-                    }
-                }
-                
-//                Spacer()
-                
-            }
-            .navigationTitle("search_patient".localized + ": \(searchText)")
-            .toolbar {
-                ToolbarItem(placement: .principal) {
-                	Text("search_results_for".localized + " \"\(searchText)\"")
-                    .font(.headline)
-            }
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("cancel".localized) {
-                        onDismiss()
-                    }
-                }
-            }
-			.frame(minWidth: 320, idealWidth: 320, maxWidth: 320, minHeight: 300, idealHeight: 300, maxHeight: 300)
     }
 }
 
-extension DateFormatter {
-    static let shortDateTime: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .short
-        formatter.timeStyle = .short
-        return formatter
-    }()
+struct PatientSearchResultsViewSwiftUI: View {
+    let searchResults: [PatientData]
+    let searchText: String
+    let onPatientSelected: (PatientData) -> Void
+    let onDismiss: () -> Void
+    
+    var body: some View {
+        VStack {
+            if searchResults.isEmpty {
+                VStack(spacing: 16) {
+                    Image(systemName: "person.fill.questionmark")
+                        .font(.largeTitle)
+                        .foregroundColor(.secondary)
+                    Text("no_patients_found".localized)
+                        .font(.title2)
+                        .foregroundColor(.secondary)
+                }
+                .padding(40)
+            } else {
+                List(searchResults) { patient in
+                    Button(action: {
+                        onPatientSelected(patient)
+                    }) {
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text(patient.name)
+                                .font(.headline)
+                            HStack {
+                                if !patient.age.isEmpty {
+                                    Text("\("age_label".localized) \(patient.age)")
+                                        .font(.subheadline)
+                                        .foregroundColor(.secondary)
+                                }
+                                if !patient.job.isEmpty {
+                                    Text("•")
+                                        .foregroundColor(.secondary)
+                                    Text(patient.job)
+                                        .font(.subheadline)
+                                        .foregroundColor(.secondary)
+                                }
+                            }
+                        }
+                        .padding(.vertical, 4)
+                    }
+                    .buttonStyle(PlainButtonStyle())
+                }
+            }
+        }
+        .frame(minWidth: 320, idealWidth: 320, maxWidth: 320, minHeight: 300, idealHeight: 300, maxHeight: 300)
+        .toolbar {
+            ToolbarItem(placement: .principal) {
+                Text("search_results_for".localized + " \"\(searchText)\"")
+                    .font(.headline)
+            }
+            ToolbarItem(placement: .cancellationAction) {
+                Button("close".localized) {
+                    onDismiss()
+                }
+            }
+        }
+    }
 }

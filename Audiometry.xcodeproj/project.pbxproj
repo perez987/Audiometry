@@ -8,38 +8,26 @@
 
 /* Begin PBXBuildFile section */
 		2254379EEE2E463CA4F18FBD /* PatientData.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC306D28B64C49F99A607E44 /* PatientData.swift */; };
-		751996BAB576439C98DDAA0A /* PatientNavigationViewSwiftUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE7A2085287644A48B4D3F8C /* PatientNavigationViewSwiftUI.swift */; };
-		91193ED9F2534B7D966C80CE /* ContentViewSwiftUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB05424DFDB64B738E3B4D69 /* ContentViewSwiftUI.swift */; };
-		D5B78BC5572C4EC8A7C1845E /* StorageMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9BAA1FD689E45CD863C10F2 /* StorageMode.swift */; };
 		D9270C4F2E94738300C415EB /* PrintReportHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9270C4E2E94738000C415EB /* PrintReportHelpers.swift */; };
 		D951DC082E86BE6000D254D8 /* LanguageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D951DC072E86BE6000D254D8 /* LanguageManager.swift */; };
-		D951DC0A2E86BE6600D254D8 /* Patient.swift in Sources */ = {isa = PBXBuildFile; fileRef = D951DC092E86BE6600D254D8 /* Patient.swift */; };
 		D951DC0C2E86BE6B00D254D8 /* PatientNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D951DC0B2E86BE6B00D254D8 /* PatientNavigationView.swift */; };
-		D951DC0E2E86BE7000D254D8 /* PersistenceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D951DC0D2E86BE7000D254D8 /* PersistenceController.swift */; };
-		D951DC112E86BE7800D254D8 /* DataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = D951DC0F2E86BE7800D254D8 /* DataModel.xcdatamodeld */; };
 		D9779AAF2E86A85F000F22FB /* AudiometryApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9779AAE2E86A85F000F22FB /* AudiometryApp.swift */; };
 		D9779AB12E86A85F000F22FB /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9779AB02E86A85F000F22FB /* ContentView.swift */; };
 		D9779AB32E86A860000F22FB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D9779AB22E86A860000F22FB /* Assets.xcassets */; };
 		D9779AB62E86A860000F22FB /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D9779AB52E86A860000F22FB /* Preview Assets.xcassets */; };
 		D9779ABE2E86A896000F22FB /* AudiometryCalculations.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9779ABD2E86A896000F22FB /* AudiometryCalculations.swift */; };
 		D9815C4F2EE897960074254F /* patients.json in Resources */ = {isa = PBXBuildFile; fileRef = D9815C4E2EE897960074254F /* patients.json */; };
-		D9815C512EE897B30074254F /* DataModel.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = D9815C502EE897B30074254F /* DataModel.sqlite */; };
 		D98472CE2E8C6DAD0050C695 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = D98472CC2E8C6DAD0050C695 /* Localizable.strings */; };
 		D9ABBBF82E86ADDB00703980 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9ABBBF72E86ADDB00703980 /* AppDelegate.swift */; };
 		D9C60E742E900C8A00B1E9FC /* PrintReportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9C60E732E900C8200B1E9FC /* PrintReportView.swift */; };
-		D9C60E762E900CBE00B1E9FC /* PrintReportViewSwiftUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9C60E752E900CA600B1E9FC /* PrintReportViewSwiftUI.swift */; };
 		EB1AEFFE4CA84D839C415878 /* PatientDataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 813E32C761E0469898ACB56A /* PatientDataStore.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		813E32C761E0469898ACB56A /* PatientDataStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PatientDataStore.swift; sourceTree = "<group>"; };
-		BB05424DFDB64B738E3B4D69 /* ContentViewSwiftUI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentViewSwiftUI.swift; sourceTree = "<group>"; };
 		D9270C4E2E94738000C415EB /* PrintReportHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrintReportHelpers.swift; sourceTree = "<group>"; };
 		D951DC072E86BE6000D254D8 /* LanguageManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LanguageManager.swift; sourceTree = "<group>"; };
-		D951DC092E86BE6600D254D8 /* Patient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Patient.swift; sourceTree = "<group>"; };
 		D951DC0B2E86BE6B00D254D8 /* PatientNavigationView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PatientNavigationView.swift; sourceTree = "<group>"; };
-		D951DC0D2E86BE7000D254D8 /* PersistenceController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PersistenceController.swift; sourceTree = "<group>"; };
-		D951DC102E86BE7800D254D8 /* DataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DataModel.xcdatamodel; sourceTree = "<group>"; };
 		D9779AAB2E86A85F000F22FB /* Audiometry.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Audiometry.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D9779AAE2E86A85F000F22FB /* AudiometryApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudiometryApp.swift; sourceTree = "<group>"; };
 		D9779AB02E86A85F000F22FB /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -48,15 +36,11 @@
 		D9779AB72E86A860000F22FB /* Audiometry.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Audiometry.entitlements; sourceTree = "<group>"; };
 		D9779ABD2E86A896000F22FB /* AudiometryCalculations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudiometryCalculations.swift; sourceTree = "<group>"; };
 		D9815C4E2EE897960074254F /* patients.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = patients.json; sourceTree = "<group>"; };
-		D9815C502EE897B30074254F /* DataModel.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = DataModel.sqlite; sourceTree = "<group>"; };
 		D98472CD2E8C6DAD0050C695 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		D98472D22E8C6DF30050C695 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
 		D9ABBBF72E86ADDB00703980 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D9C60E732E900C8200B1E9FC /* PrintReportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrintReportView.swift; sourceTree = "<group>"; };
-		D9C60E752E900CA600B1E9FC /* PrintReportViewSwiftUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrintReportViewSwiftUI.swift; sourceTree = "<group>"; };
 		DC306D28B64C49F99A607E44 /* PatientData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PatientData.swift; sourceTree = "<group>"; };
-		E9BAA1FD689E45CD863C10F2 /* StorageMode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StorageMode.swift; sourceTree = "<group>"; };
-		FE7A2085287644A48B4D3F8C /* PatientNavigationViewSwiftUI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PatientNavigationViewSwiftUI.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -113,8 +97,6 @@
 		D9815C522EE897B80074254F /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				D9815C502EE897B30074254F /* DataModel.sqlite */,
-				D951DC0F2E86BE7800D254D8 /* DataModel.xcdatamodeld */,
 				D9815C4E2EE897960074254F /* patients.json */,
 			);
 			path = Resources;
@@ -125,14 +107,10 @@
 			children = (
 				D9779ABD2E86A896000F22FB /* AudiometryCalculations.swift */,
 				D951DC072E86BE6000D254D8 /* LanguageManager.swift */,
-				D951DC092E86BE6600D254D8 /* Patient.swift */,
 				DC306D28B64C49F99A607E44 /* PatientData.swift */,
 				813E32C761E0469898ACB56A /* PatientDataStore.swift */,
 				D951DC0B2E86BE6B00D254D8 /* PatientNavigationView.swift */,
-				FE7A2085287644A48B4D3F8C /* PatientNavigationViewSwiftUI.swift */,
-				D951DC0D2E86BE7000D254D8 /* PersistenceController.swift */,
 				D9270C4E2E94738000C415EB /* PrintReportHelpers.swift */,
-				E9BAA1FD689E45CD863C10F2 /* StorageMode.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -141,9 +119,7 @@
 			isa = PBXGroup;
 			children = (
 				D9779AB02E86A85F000F22FB /* ContentView.swift */,
-				BB05424DFDB64B738E3B4D69 /* ContentViewSwiftUI.swift */,
 				D9C60E732E900C8200B1E9FC /* PrintReportView.swift */,
-				D9C60E752E900CA600B1E9FC /* PrintReportViewSwiftUI.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -209,7 +185,6 @@
 				D9779AB62E86A860000F22FB /* Preview Assets.xcassets in Resources */,
 				D9815C4F2EE897960074254F /* patients.json in Resources */,
 				D98472CE2E8C6DAD0050C695 /* Localizable.strings in Resources */,
-				D9815C512EE897B30074254F /* DataModel.sqlite in Resources */,
 				D9779AB32E86A860000F22FB /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -224,20 +199,13 @@
 				D9ABBBF82E86ADDB00703980 /* AppDelegate.swift in Sources */,
 				D9C60E742E900C8A00B1E9FC /* PrintReportView.swift in Sources */,
 				D9779AB12E86A85F000F22FB /* ContentView.swift in Sources */,
-				91193ED9F2534B7D966C80CE /* ContentViewSwiftUI.swift in Sources */,
 				D9779AAF2E86A85F000F22FB /* AudiometryApp.swift in Sources */,
 				D9779ABE2E86A896000F22FB /* AudiometryCalculations.swift in Sources */,
-				D9C60E762E900CBE00B1E9FC /* PrintReportViewSwiftUI.swift in Sources */,
 				D951DC082E86BE6000D254D8 /* LanguageManager.swift in Sources */,
 				D951DC0C2E86BE6B00D254D8 /* PatientNavigationView.swift in Sources */,
-				751996BAB576439C98DDAA0A /* PatientNavigationViewSwiftUI.swift in Sources */,
-				D951DC112E86BE7800D254D8 /* DataModel.xcdatamodeld in Sources */,
 				D9270C4F2E94738300C415EB /* PrintReportHelpers.swift in Sources */,
-				D951DC0A2E86BE6600D254D8 /* Patient.swift in Sources */,
 				2254379EEE2E463CA4F18FBD /* PatientData.swift in Sources */,
 				EB1AEFFE4CA84D839C415878 /* PatientDataStore.swift in Sources */,
-				D951DC0E2E86BE7000D254D8 /* PersistenceController.swift in Sources */,
-				D5B78BC5572C4EC8A7C1845E /* StorageMode.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -461,16 +429,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCVersionGroup section */
-		D951DC0F2E86BE7800D254D8 /* DataModel.xcdatamodeld */ = {
-			isa = XCVersionGroup;
-			children = (
-				D951DC102E86BE7800D254D8 /* DataModel.xcdatamodel */,
-			);
-			currentVersion = D951DC102E86BE7800D254D8 /* DataModel.xcdatamodel */;
-			path = DataModel.xcdatamodeld;
-			sourceTree = "<group>";
-			versionGroupType = wrapper.xcdatamodel;
-		};
 /* End XCVersionGroup section */
 	};
 	rootObject = D9779AA32E86A85E000F22FB /* Project object */;

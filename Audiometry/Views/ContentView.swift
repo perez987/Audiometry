@@ -6,16 +6,15 @@
 //
 
 import SwiftUI
-import CoreData
 import Combine
 
 struct ContentView: View {
-    @Environment(\.managedObjectContext) private var viewContext
     @ObservedObject private var languageManager = LanguageManager.shared
+    @ObservedObject private var dataStore = PatientDataStore.shared
     
     // Current patient being edited
-    @State private var currentPatient: Patient?
-    @State private var allPatients: [Patient] = []
+    @State private var currentPatient: PatientData?
+    @State private var allPatients: [PatientData] = []
     
     // Patient Information
     @State private var patientName: String = ""
@@ -40,178 +39,177 @@ struct ContentView: View {
     // Auto-save debouncing
     @State private var autoSaveWorkItem: DispatchWorkItem?
 
-var body: some View {
-    VStack(spacing: 0) {
-        // Navigation bar
-        PatientNavigationView(
-            currentPatient: currentPatient,
-            allPatients: allPatients,
-            onPatientSelected: loadPatient,
-            onNewPatient: createNewPatient,
-            onSavePatient: saveCurrentPatient,
-            onForceSave: forceSavePendingChanges
-        )
-        .padding(.vertical, 8)
-        .background(Color(NSColor.controlBackgroundColor))
-        
-        Divider()
-        
-        // Main content
-        ScrollView {
-            VStack(alignment: .leading, spacing: 20) {
-                // Title
-                Text("patient_report".localized)
-                    .font(.largeTitle)
-                    .fontWeight(.bold)
-                    .padding(.bottom, 10)
+    var body: some View {
+        VStack(spacing: 0) {
+            // Navigation bar
+            PatientNavigationView(
+                currentPatient: currentPatient,
+                allPatients: allPatients,
+                onPatientSelected: loadPatient,
+                onNewPatient: createNewPatient,
+                onSavePatient: saveCurrentPatient,
+                onForceSave: forceSavePendingChanges
+            )
+            .padding(.vertical, 8)
+            .background(Color(NSColor.controlBackgroundColor))
+            
+            Divider()
+            
+            // Main content
+            ScrollView {
+                VStack(alignment: .leading, spacing: 20) {
+                    // Title
+                    Text("patient_report".localized)
+                        .font(.largeTitle)
+                        .fontWeight(.bold)
+                        .padding(.bottom, 10)
 
-                // Patient Information Section
-                GroupBox("patient_information".localized) {
-                    VStack(alignment: .leading, spacing: 12) {
-                        HStack {
-                            Text("name".localized)
-                                .frame(width: 72, alignment: .leading)
-                            TextField("enter_patient_name".localized, text: $patientName)
-                                .textFieldStyle(RoundedBorderTextFieldStyle())
-                                .frame(width: 380)
-                                .onChange(of: patientName) { _ in
-                                    updateCurrentPatient()
-                                }
-                        }
-
-                        HStack {
-                            Text("age".localized)
-                                .frame(width: 72, alignment: .leading)
-                            TextField("enter_age".localized, text: $patientAge)
-                                .textFieldStyle(RoundedBorderTextFieldStyle())
-                                .frame(width: 140)
-                                .onChange(of: patientAge) { _ in
-                                    updateCurrentPatient()
-                                }
-                            Spacer()
-                        }
-
-                        HStack {
-                            Text("job".localized)
-                                .frame(width: 72, alignment: .leading)
-                            TextField("enter_job_occupation".localized, text: $patientJob)
-                                .textFieldStyle(RoundedBorderTextFieldStyle())
-                                .frame(width: 380)
-                                .onChange(of: patientJob) { _ in
-                                    updateCurrentPatient()
-                                }
-                        }
-                    }
-                    .padding()
-                }
-
-                // Audiometric Testing Section
-                GroupBox("audiometric_testing_results".localized) {
-                    VStack(spacing: 16) {
-                        // Header
-                        HStack {
-                            Text("frequency_hz".localized)
-                                .frame(width: 120, alignment: .leading)
-                                .fontWeight(.semibold)
-                            Text("right_ear".localized)
-                                .frame(width: 100, alignment: .center)
-                                .fontWeight(.semibold)
-                            Text("left_ear".localized)
-                                .frame(width: 100, alignment: .center)
-                                .fontWeight(.semibold)
-                        }
-
-                        Divider()
-
-                        // Frequency rows
-                        frequencyRow(frequency: "500", rightValue: $rightEar500, leftValue: $leftEar500)
-                        frequencyRow(frequency: "1000", rightValue: $rightEar1000, leftValue: $leftEar1000)
-                        frequencyRow(frequency: "2000", rightValue: $rightEar2000, leftValue: $leftEar2000)
-                        frequencyRow(frequency: "4000", rightValue: $rightEar4000, leftValue: $leftEar4000)
-                        frequencyRow(frequency: "8000", rightValue: $rightEar8000, leftValue: $leftEar8000)
-                    }
-                    .padding()
-                }
-
-                // Results Section
-                GroupBox("assessment_results".localized) {
-                    VStack(alignment: .leading, spacing: 12) {
-                        // Hearing Loss Calculations
-                        Text("hearing_loss_assessment".localized)
-                            .fontWeight(.semibold)
-
-                        HStack {
-                            VStack(alignment: .leading) {
-                                Text("\("right_ear".localized): \(calculateHearingLoss(frequencies: getRightEarValues()))")
-                                Text("\("left_ear".localized): \(calculateHearingLoss(frequencies: getLeftEarValues()))")
-                                Text("\("bilateral".localized): \(calculateBilateralHearingLoss())")
+                    // Patient Information Section
+                    GroupBox("patient_information".localized) {
+                        VStack(alignment: .leading, spacing: 12) {
+                            HStack {
+                                Text("name".localized)
+                                    .frame(width: 72, alignment: .leading)
+                                TextField("enter_patient_name".localized, text: $patientName)
+                                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                                    .frame(width: 380)
+                                    .onChange(of: patientName) { _ in
+                                        updateCurrentPatient()
+                                    }
                             }
-                            Spacer()
-                        }
 
-                        Divider()
-
-                        // SAL Index
-                        Text("sal_index".localized)
-                            .fontWeight(.semibold)
-
-                        HStack {
-                            VStack(alignment: .leading) {
-                                Text("\("right_ear".localized) SAL: \(calculateSAL(frequencies: getRightEarValues())) - \(getSALDegree(sal: calculateSALValue(frequencies: getRightEarValues())))")
-                                Text("\("left_ear".localized) SAL: \(calculateSAL(frequencies: getLeftEarValues())) - \(getSALDegree(sal: calculateSALValue(frequencies: getLeftEarValues())))")
+                            HStack {
+                                Text("age".localized)
+                                    .frame(width: 72, alignment: .leading)
+                                TextField("enter_age".localized, text: $patientAge)
+                                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                                    .frame(width: 140)
+                                    .onChange(of: patientAge) { _ in
+                                        updateCurrentPatient()
+                                    }
+                                Spacer()
                             }
-                            Spacer()
-                        }
 
-                        Divider()
-
-                        // ELI Index
-                        Text("eli_index".localized)
-                            .fontWeight(.semibold)
-
-                        HStack {
-                            VStack(alignment: .leading) {
-                                Text("\("right_ear".localized) ELI: \(calculateELI(frequencies: getRightEarValues())) - \(getELIDegree(eli: calculateELIValue(frequencies: getRightEarValues())))")
-                                Text("\("left_ear".localized) ELI: \(calculateELI(frequencies: getLeftEarValues())) - \(getELIDegree(eli: calculateELIValue(frequencies: getLeftEarValues())))")
+                            HStack {
+                                Text("job".localized)
+                                    .frame(width: 72, alignment: .leading)
+                                TextField("enter_job_occupation".localized, text: $patientJob)
+                                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                                    .frame(width: 380)
+                                    .onChange(of: patientJob) { _ in
+                                        updateCurrentPatient()
+                                    }
                             }
-                            Spacer()
                         }
+                        .padding()
                     }
-                    .padding()
-                }
 
-                // Information Section
-                GroupBox("parameters_summary".localized) {
-                    VStack(alignment: .leading, spacing: 8) {
-                        Text("\("patient_label".localized) \(patientName.isEmpty ? "not_specified".localized : patientName)")
-                        Text("\("age_label".localized) \(patientAge.isEmpty ? "not_specified".localized : patientAge)")
-                        Text("\("occupation_label".localized) \(patientJob.isEmpty ? "not_specified".localized : patientJob)")
+                    // Audiometric Testing Section
+                    GroupBox("audiometric_testing_results".localized) {
+                        VStack(spacing: 16) {
+                            // Header
+                            HStack {
+                                Text("frequency_hz".localized)
+                                    .frame(width: 120, alignment: .leading)
+                                    .fontWeight(.semibold)
+                                Text("right_ear".localized)
+                                    .frame(width: 100, alignment: .center)
+                                    .fontWeight(.semibold)
+                                Text("left_ear".localized)
+                                    .frame(width: 100, alignment: .center)
+                                    .fontWeight(.semibold)
+                            }
 
-                        Divider()
+                            Divider()
 
-                        Text("test_frequencies".localized)
-                        Text("results_measured".localized)
-                        Text("sal_description".localized)
-                        Text("eli_description".localized)
+                            // Frequency rows
+                            frequencyRow(frequency: "500", rightValue: $rightEar500, leftValue: $leftEar500)
+                            frequencyRow(frequency: "1000", rightValue: $rightEar1000, leftValue: $leftEar1000)
+                            frequencyRow(frequency: "2000", rightValue: $rightEar2000, leftValue: $leftEar2000)
+                            frequencyRow(frequency: "4000", rightValue: $rightEar4000, leftValue: $leftEar4000)
+                            frequencyRow(frequency: "8000", rightValue: $rightEar8000, leftValue: $leftEar8000)
+                        }
+                        .padding()
                     }
-                    .padding()
+
+                    // Results Section
+                    GroupBox("assessment_results".localized) {
+                        VStack(alignment: .leading, spacing: 12) {
+                            // Hearing Loss Calculations
+                            Text("hearing_loss_assessment".localized)
+                                .fontWeight(.semibold)
+
+                            HStack {
+                                VStack(alignment: .leading) {
+                                    Text("\("right_ear".localized): \(calculateHearingLoss(frequencies: getRightEarValues()))")
+                                    Text("\("left_ear".localized): \(calculateHearingLoss(frequencies: getLeftEarValues()))")
+                                    Text("\("bilateral".localized): \(calculateBilateralHearingLoss())")
+                                }
+                                Spacer()
+                            }
+
+                            Divider()
+
+                            // SAL Index
+                            Text("sal_index".localized)
+                                .fontWeight(.semibold)
+
+                            HStack {
+                                VStack(alignment: .leading) {
+                                    Text("\("right_ear".localized) SAL: \(calculateSAL(frequencies: getRightEarValues())) - \(getSALDegree(sal: calculateSALValue(frequencies: getRightEarValues())))")
+                                    Text("\("left_ear".localized) SAL: \(calculateSAL(frequencies: getLeftEarValues())) - \(getSALDegree(sal: calculateSALValue(frequencies: getLeftEarValues())))")
+                                }
+                                Spacer()
+                            }
+
+                            Divider()
+
+                            // ELI Index
+                            Text("eli_index".localized)
+                                .fontWeight(.semibold)
+
+                            HStack {
+                                VStack(alignment: .leading) {
+                                    Text("\("right_ear".localized) ELI: \(calculateELI(frequencies: getRightEarValues())) - \(getELIDegree(eli: calculateELIValue(frequencies: getRightEarValues())))")
+                                    Text("\("left_ear".localized) ELI: \(calculateELI(frequencies: getLeftEarValues())) - \(getELIDegree(eli: calculateELIValue(frequencies: getLeftEarValues())))")
+                                }
+                                Spacer()
+                            }
+                        }
+                        .padding()
+                    }
+
+                    // Information Section
+                    GroupBox("parameters_summary".localized) {
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text("\("patient_label".localized) \(patientName.isEmpty ? "not_specified".localized : patientName)")
+                            Text("\("age_label".localized) \(patientAge.isEmpty ? "not_specified".localized : patientAge)")
+                            Text("\("occupation_label".localized) \(patientJob.isEmpty ? "not_specified".localized : patientJob)")
+
+                            Divider()
+
+                            Text("test_frequencies".localized)
+                            Text("results_measured".localized)
+                            Text("sal_description".localized)
+                            Text("eli_description".localized)
+                        }
+                        .padding()
+                    }
                 }
+                .padding()
             }
-            .padding()
+        }
+        .frame(minWidth: 580, idealWidth: 580, maxWidth: 580, minHeight: 610, idealHeight: 610, maxHeight: 1186)
+        
+        .onAppear {
+            loadAllPatients()
+            if allPatients.isEmpty {
+                createNewPatient()
+            } else {
+                loadPatient(allPatients.first!)
+            }
         }
     }
-//            .frame(minHeight: 524, idealHeight: 860, maxHeight: 960)
-    .frame(minWidth: 580, idealWidth: 580, maxWidth: 580, minHeight: 610, idealHeight: 610, maxHeight: 1186)
-    
-    .onAppear {
-        loadAllPatients()
-        if allPatients.isEmpty {
-            createNewPatient()
-        } else {
-            loadPatient(allPatients.first!)
-        }
-    }
-}
 
     // Helper function to create frequency input rows
     private func frequencyRow(frequency: String, rightValue: Binding<String>, leftValue: Binding<String>) -> some View {
@@ -238,17 +236,18 @@ var body: some View {
     // MARK: - Patient Management Functions
     
     private func loadAllPatients() {
-        allPatients = PersistenceController.shared.fetchPatients()
+        allPatients = dataStore.fetchPatients()
     }
     
     private func createNewPatient() {
-        let newPatient = Patient.create(in: viewContext)
+        let newPatient = PatientData()
         currentPatient = newPatient
+        dataStore.addPatient(newPatient)
         allPatients.insert(newPatient, at: 0)
         clearForm()
     }
     
-    private func loadPatient(_ patient: Patient) {
+    private func loadPatient(_ patient: PatientData) {
         // Cancel any pending auto-save for the previous patient
         autoSaveWorkItem?.cancel()
         
@@ -269,7 +268,7 @@ var body: some View {
     }
     
     private func updateCurrentPatient() {
-        guard let patient = currentPatient else { return }
+        guard var patient = currentPatient else { return }
         
         patient.name = patientName
         patient.age = patientAge
@@ -286,42 +285,29 @@ var body: some View {
         patient.leftEar8000 = leftEar8000
         patient.updateModifiedDate()
         
+        currentPatient = patient
+        
         // Auto-save with debouncing to avoid excessive saves during rapid typing
         autoSaveWorkItem?.cancel()
-        let context = viewContext  // Capture the context instead of self
-        autoSaveWorkItem = DispatchWorkItem {
-            do {
-                try context.save()
-            } catch {
-                print("Error auto-saving patient: \(error)")
-            }
+        autoSaveWorkItem = DispatchWorkItem { [patient] in
+            dataStore.updatePatient(patient)
         }
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0, execute: autoSaveWorkItem!)
     }
     
     private func saveCurrentPatient() {
-        do {
-            try viewContext.save()
-            loadAllPatients() // Refresh the list
-        } catch {
-            print("Error saving patient: \(error)")
-        }
+        guard let patient = currentPatient else { return }
+        dataStore.updatePatient(patient)
+        loadAllPatients() // Refresh the list
     }
     
     private func forceSavePendingChanges() {
         // Cancel any pending auto-save and execute it immediately
         autoSaveWorkItem?.cancel()
-        if viewContext.hasChanges {
-            do {
-                try viewContext.save()
-                print("Force-saved pending changes successfully")
-                // Refresh the patient list to ensure consistency
-                loadAllPatients()
-            } catch {
-                print("Error force-saving pending changes: \(error)")
-            }
+        if let patient = currentPatient {
+            dataStore.updatePatient(patient)
         }
-        // Always refresh the patient list to ensure search consistency
+        // Refresh the patient list to ensure consistency
         loadAllPatients()
     }
     
@@ -485,5 +471,5 @@ var body: some View {
 }
 
 #Preview {
-ContentView()
+    ContentView()
 }
