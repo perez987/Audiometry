@@ -43,7 +43,7 @@ struct AudiometryApp: App {
 					let Text2 = storageMode.displayName
 					Text(Text1 + Text2)
                         .foregroundColor(.secondary)
-						.font(.subheadline)
+                        .font(.caption)
                 }
                 .padding()
                 .background(Color(NSColor.windowBackgroundColor))
