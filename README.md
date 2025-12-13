@@ -30,14 +30,14 @@ While this is a valid app for everyday use, it's more of an exercise in learning
 
 ## Dual Storage Implementation
 
-The application now supports two different storage mechanisms that you can switch between:
+The application supports two different storage mechanisms that you can switch between:
 
 1. CoreData Storage - Traditional Apple framework using SQLite database
 2. SwiftUI Storage - Native SwiftUI approach using JSON files
 
 A segmented control at the top of the window allows you to switch between storage modes. Each storage system maintains its own separate data.
 
-The implementation of SwiftUI Storage alongside CoreData Storage allows users to compare the two approaches side-by-side. Users can now toggle between both storage methods to learn about them and evaluate which best suits their needs. Each storage system maintains its own separate data.
+The implementation of SwiftUI Storage alongside CoreData Storage allows users to compare the two approaches side-by-side. Users can now toggle between both storage methods to learn about them and evaluate which best suits their needs.
 
 ## SwiftUI Storage
 
