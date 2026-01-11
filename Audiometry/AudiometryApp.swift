@@ -32,7 +32,8 @@ struct AudiometryApp: App {
                         appDelegate.updateWindowTitle()
                     }
                 }
-            
+                .frame(minWidth: 680, idealWidth: 680, maxWidth: 680, minHeight: 680)
+
         }
         
         .windowStyle(DefaultWindowStyle())
