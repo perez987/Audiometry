@@ -39,7 +39,7 @@ fi
 git am "$PATCH_FILE"
 
 echo ""
-echo "✅ SwiftUI branch created successfully!"
+echo "SwiftUI branch created successfully!"
 echo ""
 echo "To push the branch to origin, run:"
 echo "  git push origin swiftui"

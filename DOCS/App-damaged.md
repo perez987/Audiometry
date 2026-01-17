@@ -12,11 +12,9 @@ Or this one:
 <br>`Could not verify that Download Full Installer does not contain malicious software.`<br>
 With the recommendation in both cases to move the file to the Trash.
 
-For example, in the first opening of Download Full Installer you can see:
-
-<img src="xattr1.png" width="520px">
-
 This is the warning that appears when the app is not digitally signed or notarized by Apple; in which case, the warning is more benign, reminiscent of the pre-Sequoia versions.
+
+Note: You don't need to remove the attribute if you download the source code, compile the app with Xcode, and save the product for regular use. When you compile an app in Xcode and set it to Sign to Run Locally, Xcode signs it with a trusted local certificate so the system can run it. If `Hardened Runtime` is disabled, the app doesn't need Apple's certification and will continue to function normally on your Mac. That's why you don't see the security warning.
 
 Currently, an Apple Developer account is required to digitally sign or notarize Mac applications. However, many developers don't want to register with the Apple Developer Program, either because of the cost or because they develop small apps that are distributed for free.
 
@@ -38,7 +36,7 @@ By clicking `Open Anyway`, macOS will ask again if you want to open the file and
 
 ## xattr command line tool
 
-`xattr`handles extended attributes (*xattrs*), which are additional metadata attached to files and directories beyond standard information like name or size. This tool is built into macOS natively. With `xattr` you can remove the `com.apple.quarantine` attribute from any file downloaded from Internet and the task is quite simple.
+`xattr`handles extended attributes, which are additional metadata attached to files and directories beyond standard information like name or size. This tool is built into macOS natively. With `xattr` you can remove the `com.apple.quarantine` attribute from any file downloaded from Internet and the task is quite simple.
 
 - `xattr` without arguments displays extended attributes:
 
