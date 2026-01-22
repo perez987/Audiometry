@@ -14,7 +14,7 @@ With the recommendation in both cases to move the file to the Trash.
 
 This is the warning that appears when the app is not digitally signed or notarized by Apple; in which case, the warning is more benign, reminiscent of the pre-Sequoia versions.
 
-Note: You don't need to remove the attribute if you download the source code, compile the app with Xcode, and save the product for regular use. When you compile an app in Xcode and set it to Sign to Run Locally, Xcode signs it with a trusted local certificate so the system can run it. If `Hardened Runtime` is disabled, the app doesn't need Apple's certification and will continue to function normally on your Mac. That's why you don't see the security warning.
+**Note**: You don't need to remove the attribute if you download the source code, compile the app with Xcode, and save the product for regular use. When you compile an app in Xcode and set it to Sign to Run Locally, Xcode signs it with a trusted local certificate so the system can run it. If `Hardened Runtime` is disabled, the app doesn't need Apple's certification and will continue to function normally on your Mac. That's why you don't see the security warning.
 
 Currently, an Apple Developer account is required to digitally sign or notarize Mac applications. However, many developers don't want to register with the Apple Developer Program, either because of the cost or because they develop small apps that are distributed for free.
 
@@ -24,14 +24,20 @@ Users who have Gatekeeper disabled will not see this warning. However, disabling
 
 How to fix this issue?
 
+## Disable Gatekeeper (NOT RECOMMENDED)
+
+1. Open the Terminal app on your Mac and run the following command: `sudo spctl —master-disable`<br>
+Note: in recent macOS versions, the argument `—master-disable` has been changed to `—global-disable`
+2.  Go to "System Settings"->"Privacy & Security"->"Security" -> Allow applications from "Everywhere"
+3. Both arguments can revert this and enable Gatekeeper again:  `sudo spctl —master-enable`  `sudo spctl —global-enable`
+4. From this point on, downloaded apps will run without security prompts.
+
+> Disabling Gatekeeper globally to run a single application is not a valid recommendation.
+
 ## System Settings >> Security and Privacy
 
 First, go to `Privacy & Security` to see if there's a message about blocking the downloaded application with `Open Anyway `option. This is the easiest way to fix it.
 
-<kbd>
-<img src="xattr2.png" width="480px"">
-</kbd>
-<br><br>
 By clicking `Open Anyway`, macOS will ask again if you want to open the file and, if you answer yes, it will ask for the user password and open it. 
 
 ## xattr command line tool
@@ -41,18 +47,18 @@ By clicking `Open Anyway`, macOS will ask again if you want to open the file and
 - `xattr` without arguments displays extended attributes:
 
 ```
-> sudo xattr /Applications/Download\ Full\ Installer.app
+> sudo xattr /Applications/My-app.app
 > com.apple.quarantine
 ```
 
 - `xattr -cr` removes all extended attributes:
 
-`> sudo xattr -cr /Applications/Download\ Full\ Installer.app`
+`> sudo xattr -cr /Applications/My-app.app`
 
 - After this command, `xattr` no longer displays `com.apple.quarantine` extended attribute:
 
 ```
-> sudo xattr /Applications/Download\ Full\ Installer.app 
+> sudo xattr /Applications/My-app.app 
 > (no output)
 ```
 
