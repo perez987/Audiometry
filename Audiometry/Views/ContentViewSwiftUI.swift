@@ -7,17 +7,17 @@
 //  Modified by perez987 on 20/09/2025.
 //
 
-import SwiftUI
 import Combine
+import SwiftUI
 
 struct ContentViewSwiftUI: View {
     @ObservedObject private var languageManager = LanguageManager.shared
     @ObservedObject private var dataStore = PatientDataStore.shared
-    
+
     // Current patient being edited
     @State private var currentPatient: PatientData?
     @State private var allPatients: [PatientData] = []
-    
+
     // Patient Information
     @State private var patientName: String = ""
     @State private var patientAge: String = ""
@@ -37,7 +37,7 @@ struct ContentViewSwiftUI: View {
     @State private var leftEar2000: String = ""
     @State private var leftEar4000: String = ""
     @State private var leftEar8000: String = ""
-    
+
     // Auto-save debouncing
     @State private var autoSaveWorkItem: DispatchWorkItem?
 
@@ -54,9 +54,9 @@ struct ContentViewSwiftUI: View {
             )
             .padding(.vertical, 8)
             .background(Color(NSColor.controlBackgroundColor))
-            
+
             Divider()
-            
+
             // Main content
             ScrollView {
                 VStack(alignment: .leading, spacing: 20) {
@@ -202,7 +202,6 @@ struct ContentViewSwiftUI: View {
             }
         }
         .frame(minWidth: 580, idealWidth: 580, maxWidth: 580, minHeight: 610, idealHeight: 610, maxHeight: 1186)
-        
         .onAppear {
             loadAllPatients()
             if allPatients.isEmpty {
@@ -236,11 +235,11 @@ struct ContentViewSwiftUI: View {
     }
 
     // MARK: - Patient Management Functions
-    
+
     private func loadAllPatients() {
         allPatients = dataStore.fetchPatients()
     }
-    
+
     private func createNewPatient() {
         let newPatient = PatientData()
         currentPatient = newPatient
@@ -248,11 +247,11 @@ struct ContentViewSwiftUI: View {
         allPatients.insert(newPatient, at: 0)
         clearForm()
     }
-    
+
     private func loadPatient(_ patient: PatientData) {
         // Cancel any pending auto-save for the previous patient
         autoSaveWorkItem?.cancel()
-        
+
         currentPatient = patient
         patientName = patient.name
         patientAge = patient.age
@@ -268,10 +267,10 @@ struct ContentViewSwiftUI: View {
         leftEar4000 = patient.leftEar4000
         leftEar8000 = patient.leftEar8000
     }
-    
+
     private func updateCurrentPatient() {
         guard var patient = currentPatient else { return }
-        
+
         patient.name = patientName
         patient.age = patientAge
         patient.job = patientJob
@@ -286,9 +285,9 @@ struct ContentViewSwiftUI: View {
         patient.leftEar4000 = leftEar4000
         patient.leftEar8000 = leftEar8000
         patient.updateModifiedDate()
-        
+
         currentPatient = patient
-        
+
         // Auto-save with debouncing to avoid excessive saves during rapid typing
         autoSaveWorkItem?.cancel()
         autoSaveWorkItem = DispatchWorkItem { [patient] in
@@ -296,13 +295,13 @@ struct ContentViewSwiftUI: View {
         }
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0, execute: autoSaveWorkItem!)
     }
-    
+
     private func saveCurrentPatient() {
         guard let patient = currentPatient else { return }
         dataStore.updatePatient(patient)
         loadAllPatients() // Refresh the list
     }
-    
+
     private func forceSavePendingChanges() {
         // Cancel any pending auto-save and execute it immediately
         autoSaveWorkItem?.cancel()
@@ -312,7 +311,7 @@ struct ContentViewSwiftUI: View {
         // Refresh the patient list to ensure consistency
         loadAllPatients()
     }
-    
+
     private func clearForm() {
         patientName = ""
         patientAge = ""
@@ -328,15 +327,16 @@ struct ContentViewSwiftUI: View {
         leftEar4000 = ""
         leftEar8000 = ""
     }
-    
+
     // MARK: - Helper functions to get ear values as arrays
+
     private func getRightEarValues() -> [Double] {
         return [
             Double(rightEar500) ?? 0,
             Double(rightEar1000) ?? 0,
             Double(rightEar2000) ?? 0,
             Double(rightEar4000) ?? 0,
-            Double(rightEar8000) ?? 0
+            Double(rightEar8000) ?? 0,
         ]
     }
 
@@ -346,11 +346,12 @@ struct ContentViewSwiftUI: View {
             Double(leftEar1000) ?? 0,
             Double(leftEar2000) ?? 0,
             Double(leftEar4000) ?? 0,
-            Double(leftEar8000) ?? 0
+            Double(leftEar8000) ?? 0,
         ]
     }
 
     // MARK: - Localized Classification Functions
+
     private func localizedClassification(_ classification: String) -> String {
         switch classification.lowercased() {
         case "normal": return "normal".localized
@@ -364,6 +365,7 @@ struct ContentViewSwiftUI: View {
     }
 
     // MARK: - Hearing Loss Calculation
+
     private func calculateHearingLoss(frequencies: [Double]) -> String {
         let average = frequencies.reduce(0, +) / Double(frequencies.count)
 

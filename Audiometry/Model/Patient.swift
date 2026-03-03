@@ -5,8 +5,8 @@
 //  Modified by perez987 on 20/09/2025.
 //
 
-import Foundation
 import CoreData
+import Foundation
 import SwiftUI
 
 @objc(Patient)
@@ -33,7 +33,7 @@ extension Patient {
     @nonobjc public class func fetchRequest() -> NSFetchRequest<Patient> {
         return NSFetchRequest<Patient>(entityName: "Patient")
     }
-    
+
     static func create(in context: NSManagedObjectContext) -> Patient {
         let patient = Patient(context: context)
         patient.id = UUID()
@@ -54,11 +54,11 @@ extension Patient {
         patient.dateModified = Date()
         return patient
     }
-    
+
     func updateModifiedDate() {
         dateModified = Date()
     }
-    
+
     // Helper methods for calculations
     func getRightEarValues() -> [Double] {
         return [
@@ -66,21 +66,19 @@ extension Patient {
             Double(rightEar1000) ?? 0,
             Double(rightEar2000) ?? 0,
             Double(rightEar4000) ?? 0,
-            Double(rightEar8000) ?? 0
+            Double(rightEar8000) ?? 0,
         ]
     }
-    
+
     func getLeftEarValues() -> [Double] {
         return [
             Double(leftEar500) ?? 0,
             Double(leftEar1000) ?? 0,
             Double(leftEar2000) ?? 0,
             Double(leftEar4000) ?? 0,
-            Double(leftEar8000) ?? 0
+            Double(leftEar8000) ?? 0,
         ]
     }
 }
 
-extension Patient: Identifiable {
-    
-}
+extension Patient: Identifiable {}

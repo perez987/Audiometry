@@ -15,8 +15,8 @@ struct PatientNavigationViewSwiftUI: View {
     @State private var searchText = ""
     @State private var showingSearchResults = false
     @State private var searchResults: [PatientData] = []
-	@State private var showingPrintView = false
-	@State private var printAllPatients = false
+    @State private var showingPrintView = false
+    @State private var printAllPatients = false
 
     let currentPatient: PatientData?
     let allPatients: [PatientData]
@@ -24,20 +24,20 @@ struct PatientNavigationViewSwiftUI: View {
     let onNewPatient: () -> Void
     let onSavePatient: () -> Void
     let onForceSave: () -> Void
-    
+
     var currentIndex: Int {
         guard let current = currentPatient else { return -1 }
         return allPatients.firstIndex(where: { $0.id == current.id }) ?? -1
     }
-    
+
     var hasPrevious: Bool {
         currentIndex > 0
     }
-    
+
     var hasNext: Bool {
         currentIndex >= 0 && currentIndex < allPatients.count - 1
     }
-    
+
     var body: some View {
         VStack(spacing: 8) {
             // Top row: Language selector and search
@@ -62,10 +62,10 @@ struct PatientNavigationViewSwiftUI: View {
                         Text(languageManager.currentLanguage.displayName)
                     }
                 }
-                .help("select_language".localized) //Tooltip
+                .help("select_language".localized) // Tooltip
 
                 Spacer()
-                
+
                 // Search Field
                 HStack {
                     Image(systemName: "magnifyingglass")
@@ -87,45 +87,45 @@ struct PatientNavigationViewSwiftUI: View {
                     }
                 }
             }
-            
+
             // Bottom row: Patient management and navigation buttons
             HStack(spacing: 8) {
                 Spacer()
-                
+
                 // New Patient Button
                 Button("new_patient".localized) {
                     onNewPatient()
                 }
-				.help(Text("add_new_patient".localized))
+                .help(Text("add_new_patient".localized))
 
                 // Save Patient Button
                 Button("save_patient".localized) {
                     onSavePatient()
                 }
-				.help(Text("save_data".localized))
+                .help(Text("save_data".localized))
 
-				Divider()
-					.frame(height: 20)
-                
+                Divider()
+                    .frame(height: 20)
+
                 // Print Report Button
                 Button("print_report".localized) {
                     printAllPatients = false
                     showingPrintView = true
                 }
-				.help(Text("print_report_preview".localized))
-				.disabled(currentPatient == nil)
+                .help(Text("print_report_preview".localized))
+                .disabled(currentPatient == nil)
 
                 // Print All Reports Button
 //                Button("print_all_reports".localized) {
 //                    printAllPatients = true
 //                    showingPrintView = true
 //                }
-//				.help(Text("print_all_reports_preview".localized))
+                //				.help(Text("print_all_reports_preview".localized))
 //                .disabled(allPatients.isEmpty)
-//                
+//
 //                Divider()
 //                    .frame(height: 20)
-                
+
                 // Navigation Controls
                 Button("previous_patient".localized) {
                     if hasPrevious {
@@ -133,21 +133,21 @@ struct PatientNavigationViewSwiftUI: View {
                         onPatientSelected(previousPatient)
                     }
                 }
-				.help(Text("see_previous".localized))
+                .help(Text("see_previous".localized))
                 .disabled(!hasPrevious)
-                
+
                 Text("\(currentIndex + 1) / \(allPatients.count)")
                     .foregroundColor(.secondary)
-                
+
                 Button("next_patient".localized) {
                     if hasNext {
                         let nextPatient = allPatients[currentIndex + 1]
                         onPatientSelected(nextPatient)
                     }
                 }
-				.help(Text("see_next".localized))
+                .help(Text("see_next".localized))
                 .disabled(!hasNext)
-                
+
                 Spacer()
             }
         }
@@ -166,23 +166,22 @@ struct PatientNavigationViewSwiftUI: View {
             )
         }
 
-		.sheet(isPresented: $showingPrintView) {
-			if printAllPatients {
-				PrintReportViewSwiftUI(patients: allPatients)
-			} else if let patient = currentPatient {
-				PrintReportViewSwiftUI(patient: patient)
-			}
-		}
-		
+        .sheet(isPresented: $showingPrintView) {
+            if printAllPatients {
+                PrintReportViewSwiftUI(patients: allPatients)
+            } else if let patient = currentPatient {
+                PrintReportViewSwiftUI(patient: patient)
+            }
+        }
     }
-    
+
     private func performSearch() {
         let trimmedSearch = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmedSearch.isEmpty else { return }
-        
+
         // Force save any pending changes before searching
         onForceSave()
-        
+
         // Search using the shared data store
         searchResults = dataStore.searchPatients(by: trimmedSearch)
         showingSearchResults = true
@@ -194,7 +193,7 @@ struct PatientSearchResultsViewSwiftUI: View {
     let searchText: String
     let onPatientSelected: (PatientData) -> Void
     let onDismiss: () -> Void
-    
+
     var body: some View {
         VStack {
             if searchResults.isEmpty {

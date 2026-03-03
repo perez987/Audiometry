@@ -27,30 +27,30 @@ struct PatientData: Codable, Identifiable, Equatable {
     var leftEar8000: String
     var dateCreated: Date
     var dateModified: Date
-    
+
     init(id: UUID = UUID()) {
         self.id = id
-        self.name = ""
-        self.age = ""
-        self.job = ""
-        self.rightEar500 = ""
-        self.rightEar1000 = ""
-        self.rightEar2000 = ""
-        self.rightEar4000 = ""
-        self.rightEar8000 = ""
-        self.leftEar500 = ""
-        self.leftEar1000 = ""
-        self.leftEar2000 = ""
-        self.leftEar4000 = ""
-        self.leftEar8000 = ""
-        self.dateCreated = Date()
-        self.dateModified = Date()
+        name = ""
+        age = ""
+        job = ""
+        rightEar500 = ""
+        rightEar1000 = ""
+        rightEar2000 = ""
+        rightEar4000 = ""
+        rightEar8000 = ""
+        leftEar500 = ""
+        leftEar1000 = ""
+        leftEar2000 = ""
+        leftEar4000 = ""
+        leftEar8000 = ""
+        dateCreated = Date()
+        dateModified = Date()
     }
-    
+
     mutating func updateModifiedDate() {
         dateModified = Date()
     }
-    
+
     // Helper methods for calculations
     func getRightEarValues() -> [Double] {
         return [
@@ -58,17 +58,17 @@ struct PatientData: Codable, Identifiable, Equatable {
             Double(rightEar1000) ?? 0,
             Double(rightEar2000) ?? 0,
             Double(rightEar4000) ?? 0,
-            Double(rightEar8000) ?? 0
+            Double(rightEar8000) ?? 0,
         ]
     }
-    
+
     func getLeftEarValues() -> [Double] {
         return [
             Double(leftEar500) ?? 0,
             Double(leftEar1000) ?? 0,
             Double(leftEar2000) ?? 0,
             Double(leftEar4000) ?? 0,
-            Double(leftEar8000) ?? 0
+            Double(leftEar8000) ?? 0,
         ]
     }
 }

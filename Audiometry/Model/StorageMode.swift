@@ -12,7 +12,7 @@ import Foundation
 enum StorageMode: String, CaseIterable {
     case coreData = "CoreData"
     case swiftUI = "SwiftUI"
-    
+
     var displayName: String {
         switch self {
         case .coreData:
