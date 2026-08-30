@@ -1,0 +1,103 @@
+/* Localisation française pour l’application Audiometry */
+
+/* Interface principale */
+"app_title" = "Audiométrie";
+"patient_report" = "Rapport du patient";
+"language" = "Langue";
+"storage_mode:" = "Mode de stockage :";
+"current: " = "Actuel : ";
+
+/* Informations sur le patient */
+"patient_information" = "Informations sur le patient";
+"name" = "Nom :";
+"age" = "Âge :";
+"job" = "Profession :";
+"enter_patient_name" = "Saisir le nom du patient";
+"enter_age" = "Saisir l’âge";
+"enter_job_occupation" = "Saisir le métier/la profession";
+"not_specified" = "Non précisé";
+"age_label" = "Âge";
+
+/* Tests audiométriques */
+"audiometric_testing_results" = "Résultat du test audiométrique (dB HL)";
+"frequency_hz" = "Fréquence (Hz)";
+"right_ear" = "Oreille droite";
+"left_ear" = "Oreille gauche";
+"db_placeholder" = "dB";
+
+/* Résultats de l’évaluation */
+"assessment_results" = "Résultats de l’évaluation";
+"hearing_loss_assessment" = "Évaluation de la perte auditive :";
+"bilateral" = "Bilatérale";
+
+/* Indice SAL */
+"sal_index" = "Indice SAL (perte moyenne de la parole) :";
+"sal_description" = "Indice SAL : moyenne des fréquences 500, 1000 et 2000 Hz (fréquences de la parole).";
+
+/* Indice ELI */
+"eli_index" = "Indice ELI (indice de perte précoce) :";
+"eli_description" = "Indice ELI : moyenne de toutes les fréquences testées, pondérée selon l’impact de la perte auditive.";
+
+/* Résumé des paramètres */
+"parameters_summary" = "Résumé des paramètres";
+"patient_label" = "Patient :";
+"age-label" = "Âge:";
+"occupation_label" = "Profession :";
+"test_frequencies" = "Fréquences : 500, 1000, 2000, 4000, 8000 Hz.";
+"results_measured" = "Les résultats sont mesurés en dB HL (niveau auditif).";
+
+/* Classifications de la perte auditive */
+"normal" = "Normale";
+"mild" = "Légère";
+"moderate" = "Modérée";
+"moderate_severe" = "Modérée à sévère";
+"severe" = "Sévère";
+"profound" = "Profonde";
+
+/* Navigation des patients */
+"save_patient" = "Enregistrer";
+"new_patient" = "Nouveau";
+"previous_patient" = "<<";
+"next_patient" = ">>";
+"search_patient" = "Rechercher";
+"search_placeholder" = "Rechercher par nom";
+"no_patients_found" = "Aucun patient trouvé";
+"patient_saved" = "Patient enregistré";
+"patient_loaded" = "Patient chargé";
+"search_results_for" = "Résultats de recherche pour";
+"search_by_name" = "Rechercher par nom";
+"navigation_buttons_label" = "Commandes de navigation:";
+
+/* Boutons */
+"save" = "Enregistrer";
+"load" = "Charger";
+"clear" = "Effacer";
+"cancel" = "Annuler";
+"ok" = "OK";
+"close" = "Fermer";
+"print_report" = "Imprimer";
+"print_all_reports" = "Tout imprimer";
+
+/* Aide */
+"select_language" = "Sélectionner la langue de l’application";
+
+/* Impression */
+//"print_report" = "Imprimer";
+"print_all_reports" = "Tout imprimer";
+"esc_cancel" = "(Appuyez sur Échap pour annuler)";
+
+/* Infobulles */
+"add_new_patient" = "Ajouter un nouveau patient";
+"save_data" = "Enregistrer les données et réorganiser les patients";
+"print_report_preview" = "Aperçu du rapport du patient";
+"print_all_reports_preview" = "Aperçu des rapports de tous les patients";
+"see_previous" = "Aller au patient précédent";
+"see_next" = "Aller au patient suivant";
+"print_preview" = "Ouvrir l’application Aperçu avec le PDF à imprimer";
+"Print Error" = "Erreur d’impression";
+
+/* Delete Patient */
+"delete_patient" = "Supprimer";
+"delete_patient_tooltip" = "Supprimer le patient actuel";
+"delete_patient_confirm" = "Voulez-vous vraiment supprimer ce patient ? Cette action est irréversible.";
+"delete_patient_action" = "Supprimer le patient";

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="22522" systemVersion="22H730" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="Patient" representedClassName="Patient" syncable="YES">
+        <attribute name="age" optional="YES" attributeType="String"/>
+        <attribute name="dateCreated" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="dateModified" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="job" optional="YES" attributeType="String"/>
+        <attribute name="leftEar500" optional="YES" attributeType="String"/>
+        <attribute name="leftEar1000" optional="YES" attributeType="String"/>
+        <attribute name="leftEar2000" optional="YES" attributeType="String"/>
+        <attribute name="leftEar4000" optional="YES" attributeType="String"/>
+        <attribute name="leftEar8000" optional="YES" attributeType="String"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="rightEar500" optional="YES" attributeType="String"/>
+        <attribute name="rightEar1000" optional="YES" attributeType="String"/>
+        <attribute name="rightEar2000" optional="YES" attributeType="String"/>
+        <attribute name="rightEar4000" optional="YES" attributeType="String"/>
+        <attribute name="rightEar8000" optional="YES" attributeType="String"/>
+    </entity>
+</model>
