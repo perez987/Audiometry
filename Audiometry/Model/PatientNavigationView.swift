@@ -13,9 +13,9 @@ struct PatientNavigationView: View {
     @State private var searchText = ""
     @State private var showingSearchResults = false
     @State private var searchResults: [PatientData] = []
-	@State private var showingPrintView = false
-	@State private var printAllPatients = false
-	@State private var showingDeleteConfirmation = false
+    @State private var showingPrintView = false
+    @State private var printAllPatients = false
+    @State private var showingDeleteConfirmation = false
 
     let currentPatient: PatientData?
     let allPatients: [PatientData]
@@ -24,20 +24,20 @@ struct PatientNavigationView: View {
     let onSavePatient: () -> Void
     let onDeletePatient: () -> Void
     let onForceSave: () -> Void
-    
+
     var currentIndex: Int {
         guard let current = currentPatient else { return -1 }
         return allPatients.firstIndex(where: { $0.id == current.id }) ?? -1
     }
-    
+
     var hasPrevious: Bool {
         currentIndex > 0
     }
-    
+
     var hasNext: Bool {
         currentIndex >= 0 && currentIndex < allPatients.count - 1
     }
-    
+
     var body: some View {
         VStack(spacing: 12) {
             // Top row: Language selector and search
@@ -67,14 +67,14 @@ struct PatientNavigationView: View {
                     .padding(.vertical, 4)
                     .background(.thinMaterial, in: Capsule())
                     .overlay(
-                           RoundedRectangle(cornerRadius: 12)
+                        RoundedRectangle(cornerRadius: 12)
                             .stroke(Color.blue)
-                           )
+                    )
                 }
                 .help("select_language".localized)
 
                 Spacer()
-                
+
                 // Search Field
                 HStack(spacing: 6) {
                     Image(systemName: "magnifyingglass")
@@ -99,7 +99,7 @@ struct PatientNavigationView: View {
                 .padding(.vertical, 6)
                 .background(.thinMaterial, in: Capsule())
             }
-            
+
             // Second row: Patient management buttons
             HStack(spacing: 6) {
                 Spacer()
@@ -220,23 +220,22 @@ struct PatientNavigationView: View {
             )
         }
 
-		.sheet(isPresented: $showingPrintView) {
-			if printAllPatients {
-				PrintReportView(patients: allPatients)
-			} else if let patient = currentPatient {
-				PrintReportView(patient: patient)
-			}
-		}
-		
+        .sheet(isPresented: $showingPrintView) {
+            if printAllPatients {
+                PrintReportView(patients: allPatients)
+            } else if let patient = currentPatient {
+                PrintReportView(patient: patient)
+            }
+        }
     }
-    
+
     private func performSearch() {
         let trimmedSearch = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmedSearch.isEmpty else { return }
-        
+
         // Force save any pending changes before searching
         onForceSave()
-        
+
         // Search using the shared data store
         searchResults = dataStore.searchPatients(by: trimmedSearch)
         showingSearchResults = true
@@ -248,7 +247,7 @@ struct PatientSearchResultsViewSwiftUI: View {
     let searchText: String
     let onPatientSelected: (PatientData) -> Void
     let onDismiss: () -> Void
-    
+
     var body: some View {
         VStack {
             if searchResults.isEmpty {

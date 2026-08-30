@@ -5,17 +5,17 @@
 //  Modified by perez987 on 20/09/2025.
 //
 
-import SwiftUI
 import Combine
+import SwiftUI
 
 struct ContentView: View {
     @ObservedObject private var languageManager = LanguageManager.shared
     @ObservedObject private var dataStore = PatientDataStore.shared
-    
+
     // Current patient being edited
     @State private var currentPatient: PatientData?
     @State private var allPatients: [PatientData] = []
-    
+
     // Patient Information
     @State private var patientName: String = ""
     @State private var patientAge: String = ""
@@ -35,8 +35,8 @@ struct ContentView: View {
     @State private var leftEar2000: String = ""
     @State private var leftEar4000: String = ""
     @State private var leftEar8000: String = ""
-    
-    // Auto-save with debouncing using structured concurrency
+
+    /// Auto-save with debouncing using structured concurrency
     @State private var autoSaveTask: Task<Void, any Error>?
 
     var body: some View {
@@ -55,10 +55,10 @@ struct ContentView: View {
             .padding(.bottom, 6)
             .background(.ultraThinMaterial)
             .shadow(color: .black.opacity(0.12), radius: 6, x: 0, y: 3)
-            
+
 //            Divider()
             Spacer()
-            
+
             // Main content
             ZStack {
                 // Gradient background so glass cards have something to show through
@@ -66,7 +66,7 @@ struct ContentView: View {
                     colors: [
                         Color(red: 0.55, green: 0.75, blue: 1.0).opacity(0.25),
                         Color(red: 0.65, green: 0.55, blue: 1.0).opacity(0.20),
-                        Color(red: 0.45, green: 0.65, blue: 0.95).opacity(0.25)
+                        Color(red: 0.45, green: 0.65, blue: 0.95).opacity(0.25),
                     ],
                     startPoint: .topLeading,
                     endPoint: .bottomTrailing
@@ -78,214 +78,211 @@ struct ContentView: View {
                 )
                 .ignoresSafeArea()
 
-            ScrollView {
-                VStack(alignment: .leading, spacing: 20) {
-                    // Title with gradient
-                    Text("patient_report".localized)
-                        .font(.largeTitle)
-                        .fontWeight(.bold)
-                        .foregroundStyle(
-                            LinearGradient(
-                                colors: [.indigo, .blue],
-                                startPoint: .leading,
-                                endPoint: .trailing
+                ScrollView {
+                    VStack(alignment: .leading, spacing: 20) {
+                        // Title with gradient
+                        Text("patient_report".localized)
+                            .font(.largeTitle)
+                            .fontWeight(.bold)
+                            .foregroundStyle(
+                                LinearGradient(
+                                    colors: [.indigo, .blue],
+                                    startPoint: .leading,
+                                    endPoint: .trailing
+                                )
                             )
-                        )
-                        .padding(.bottom, 10)
+                            .padding(.bottom, 10)
 
-                    // Patient Information Section
-                    GroupBox("patient_information".localized) {
-                        VStack(alignment: .leading, spacing: 12) {
-                            HStack {
-                                Text("name".localized)
-                                    .frame(width: 72, alignment: .leading)
-                                TextField("enter_patient_name".localized, text: $patientName)
-                                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                                    .frame(width: 380)
-                                    .onChange(of: patientName) { _, _ in
-                                        updateCurrentPatient()
-                                    }
-                            }
+                        // Patient Information Section
+                        GroupBox("patient_information".localized) {
+                            VStack(alignment: .leading, spacing: 12) {
+                                HStack {
+                                    Text("name".localized)
+                                        .frame(width: 72, alignment: .leading)
+                                    TextField("enter_patient_name".localized, text: $patientName)
+                                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                                        .frame(width: 380)
+                                        .onChange(of: patientName) { _, _ in
+                                            updateCurrentPatient()
+                                        }
+                                }
 
-                            HStack {
-                                Text("age".localized)
-                                    .frame(width: 72, alignment: .leading)
-                                TextField("enter_age".localized, text: $patientAge)
-                                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                                    .frame(width: 140)
-                                    .onChange(of: patientAge) { _, _ in
-                                        updateCurrentPatient()
-                                    }
-                                Spacer()
-                            }
+                                HStack {
+                                    Text("age".localized)
+                                        .frame(width: 72, alignment: .leading)
+                                    TextField("enter_age".localized, text: $patientAge)
+                                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                                        .frame(width: 140)
+                                        .onChange(of: patientAge) { _, _ in
+                                            updateCurrentPatient()
+                                        }
+                                    Spacer()
+                                }
 
-                            HStack {
-                                Text("job".localized)
-                                    .frame(width: 72, alignment: .leading)
-                                TextField("enter_job_occupation".localized, text: $patientJob)
-                                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                                    .frame(width: 380)
-                                    .onChange(of: patientJob) { _, _ in
-                                        updateCurrentPatient()
-                                    }
+                                HStack {
+                                    Text("job".localized)
+                                        .frame(width: 72, alignment: .leading)
+                                    TextField("enter_job_occupation".localized, text: $patientJob)
+                                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                                        .frame(width: 380)
+                                        .onChange(of: patientJob) { _, _ in
+                                            updateCurrentPatient()
+                                        }
+                                }
                             }
+                            .padding()
                         }
-                        .padding()
-                    }
-                    .groupBoxStyle(GlassGroupBoxStyle())
+                        .groupBoxStyle(GlassGroupBoxStyle())
 
-                    // Audiometric Testing Section
-                    GroupBox("audiometric_testing_results".localized) {
-                        VStack(spacing: 16) {
-                            // Header
-                            HStack {
-                                Text("frequency_hz".localized)
-                                    .frame(width: 120, alignment: .leading)
-                                    .fontWeight(.semibold)
-                                Text("right_ear".localized)
-                                    .frame(width: 100, alignment: .center)
-                                    .fontWeight(.semibold)
-                                    .foregroundStyle(Color.red)
-                                Text("left_ear".localized)
-                                    .frame(width: 100, alignment: .center)
-                                    .fontWeight(.semibold)
-                                    .foregroundStyle(Color.blue)
+                        // Audiometric Testing Section
+                        GroupBox("audiometric_testing_results".localized) {
+                            VStack(spacing: 16) {
+                                // Header
+                                HStack {
+                                    Text("frequency_hz".localized)
+                                        .frame(width: 120, alignment: .leading)
+                                        .fontWeight(.semibold)
+                                    Text("right_ear".localized)
+                                        .frame(width: 100, alignment: .center)
+                                        .fontWeight(.semibold)
+                                        .foregroundStyle(Color.red)
+                                    Text("left_ear".localized)
+                                        .frame(width: 100, alignment: .center)
+                                        .fontWeight(.semibold)
+                                        .foregroundStyle(Color.blue)
+                                }
+
+                                Divider()
+
+                                // Frequency rows with alternating background
+                                frequencyRow(frequency: "500 Hz", rightValue: $rightEar500, leftValue: $leftEar500, rowIndex: 0)
+                                frequencyRow(frequency: "1000 Hz", rightValue: $rightEar1000, leftValue: $leftEar1000, rowIndex: 1)
+                                frequencyRow(frequency: "2000 Hz", rightValue: $rightEar2000, leftValue: $leftEar2000, rowIndex: 2)
+                                frequencyRow(frequency: "4000 Hz", rightValue: $rightEar4000, leftValue: $leftEar4000, rowIndex: 3)
+                                frequencyRow(frequency: "8000 Hz", rightValue: $rightEar8000, leftValue: $leftEar8000, rowIndex: 4)
                             }
-
-                            Divider()
-
-                            // Frequency rows with alternating background
-                            frequencyRow(frequency: "500 Hz", rightValue: $rightEar500, leftValue: $leftEar500, rowIndex: 0)
-                            frequencyRow(frequency: "1000 Hz", rightValue: $rightEar1000, leftValue: $leftEar1000, rowIndex: 1)
-                            frequencyRow(frequency: "2000 Hz", rightValue: $rightEar2000, leftValue: $leftEar2000, rowIndex: 2)
-                            frequencyRow(frequency: "4000 Hz", rightValue: $rightEar4000, leftValue: $leftEar4000, rowIndex: 3)
-                            frequencyRow(frequency: "8000 Hz", rightValue: $rightEar8000, leftValue: $leftEar8000, rowIndex: 4)
+                            .padding()
                         }
-                        .padding()
-                    }
-                    .groupBoxStyle(GlassGroupBoxStyle())
+                        .groupBoxStyle(GlassGroupBoxStyle())
 
-                    // Results Section
-                    GroupBox("assessment_results".localized) {
-                        VStack(alignment: .leading, spacing: 12) {
-                            // Hearing Loss Calculations
-                            Text("hearing_loss_assessment".localized)
-                                .fontWeight(.semibold)
-                                .padding(.horizontal, 10)
-                                .padding(.vertical, 4)
-                                .background(.thinMaterial, in: Capsule())
+                        // Results Section
+                        GroupBox("assessment_results".localized) {
+                            VStack(alignment: .leading, spacing: 12) {
+                                // Hearing Loss Calculations
+                                Text("hearing_loss_assessment".localized)
+                                    .fontWeight(.semibold)
+                                    .padding(.horizontal, 10)
+                                    .padding(.vertical, 4)
+                                    .background(.thinMaterial, in: Capsule())
 
-                            HStack {
-                                VStack(alignment: .leading, spacing: 4) {
-                                    resultRow(
-                                        label: "right_ear".localized,
-                                        result: calculateHearingLoss(frequencies: getRightEarValues()),
-                                        color: .red,
-                                        accentColor: colorForFrequencies(getRightEarValues())
-                                    )
-                                    resultRow(
-                                        label: "left_ear".localized,
-                                        result: calculateHearingLoss(frequencies: getLeftEarValues()),
-                                        color: .blue,
-                                        accentColor: colorForFrequencies(getLeftEarValues())
-                                    )
-                                    resultRow(
-                                        label: "bilateral".localized,
-                                        result: calculateBilateralHearingLoss(),
-                                        color: .primary,
-                                        accentColor: colorForFrequencies(
-                                            getRightEarValues() + getLeftEarValues()
+                                HStack {
+                                    VStack(alignment: .leading, spacing: 4) {
+                                        resultRow(
+                                            label: "right_ear".localized,
+                                            result: calculateHearingLoss(frequencies: getRightEarValues()),
+                                            color: .red,
+                                            accentColor: colorForFrequencies(getRightEarValues())
                                         )
-                                    )
+                                        resultRow(
+                                            label: "left_ear".localized,
+                                            result: calculateHearingLoss(frequencies: getLeftEarValues()),
+                                            color: .blue,
+                                            accentColor: colorForFrequencies(getLeftEarValues())
+                                        )
+                                        resultRow(
+                                            label: "bilateral".localized,
+                                            result: calculateBilateralHearingLoss(),
+                                            color: .primary,
+                                            accentColor: colorForFrequencies(
+                                                getRightEarValues() + getLeftEarValues()
+                                            )
+                                        )
+                                    }
+                                    Spacer()
                                 }
-                                Spacer()
-                            }
 
-                            Divider()
+                                Divider()
 
-                            // SAL Index
-                            Text("sal_index".localized)
-                                .fontWeight(.semibold)
-                                .padding(.horizontal, 10)
-                                .padding(.vertical, 4)
-                                .background(.thinMaterial, in: Capsule())
+                                // SAL Index
+                                Text("sal_index".localized)
+                                    .fontWeight(.semibold)
+                                    .padding(.horizontal, 10)
+                                    .padding(.vertical, 4)
+                                    .background(.thinMaterial, in: Capsule())
 
-                            HStack {
-                                VStack(alignment: .leading, spacing: 4) {
-                                    resultRow(
-                                        label: "\("right_ear".localized) SAL",
-                                        result: "\(calculateSAL(frequencies: getRightEarValues())) - \(getSALDegree(sal: calculateSALValue(frequencies: getRightEarValues())))",
-                                        color: .red,
-                                        accentColor: colorForFrequencies(Array(getRightEarValues().prefix(3)))
-                                    )
-                                    resultRow(
-                                        label: "\("left_ear".localized) SAL",
-                                        result: "\(calculateSAL(frequencies: getLeftEarValues())) - \(getSALDegree(sal: calculateSALValue(frequencies: getLeftEarValues())))",
-                                        color: .blue,
-                                        accentColor: colorForFrequencies(Array(getLeftEarValues().prefix(3)))
-                                    )
+                                HStack {
+                                    VStack(alignment: .leading, spacing: 4) {
+                                        resultRow(
+                                            label: "\("right_ear".localized) SAL",
+                                            result: "\(calculateSAL(frequencies: getRightEarValues())) - \(getSALDegree(sal: calculateSALValue(frequencies: getRightEarValues())))",
+                                            color: .red,
+                                            accentColor: colorForFrequencies(Array(getRightEarValues().prefix(3)))
+                                        )
+                                        resultRow(
+                                            label: "\("left_ear".localized) SAL",
+                                            result: "\(calculateSAL(frequencies: getLeftEarValues())) - \(getSALDegree(sal: calculateSALValue(frequencies: getLeftEarValues())))",
+                                            color: .blue,
+                                            accentColor: colorForFrequencies(Array(getLeftEarValues().prefix(3)))
+                                        )
+                                    }
+                                    Spacer()
                                 }
-                                Spacer()
-                            }
 
-                            Divider()
+                                Divider()
 
-                            // ELI Index
-                            Text("eli_index".localized)
-                                .fontWeight(.semibold)
-                                .padding(.horizontal, 10)
-                                .padding(.vertical, 4)
-                                .background(.thinMaterial, in: Capsule())
+                                // ELI Index
+                                Text("eli_index".localized)
+                                    .fontWeight(.semibold)
+                                    .padding(.horizontal, 10)
+                                    .padding(.vertical, 4)
+                                    .background(.thinMaterial, in: Capsule())
 
-                            HStack {
-                                VStack(alignment: .leading, spacing: 4) {
-                                    resultRow(
-                                        label: "\("right_ear".localized) ELI",
-                                        result: "\(calculateELI(frequencies: getRightEarValues())) - \(getELIDegree(eli: calculateELIValue(frequencies: getRightEarValues())))",
-                                        color: .red,
-                                        accentColor: colorForFrequencies(getRightEarValues())
-                                    )
-                                    resultRow(
-                                        label: "\("left_ear".localized) ELI",
-                                        result: "\(calculateELI(frequencies: getLeftEarValues())) - \(getELIDegree(eli: calculateELIValue(frequencies: getLeftEarValues())))",
-                                        color: .blue,
-                                        accentColor: colorForFrequencies(getLeftEarValues())
-                                    )
+                                HStack {
+                                    VStack(alignment: .leading, spacing: 4) {
+                                        resultRow(
+                                            label: "\("right_ear".localized) ELI",
+                                            result: "\(calculateELI(frequencies: getRightEarValues())) - \(getELIDegree(eli: calculateELIValue(frequencies: getRightEarValues())))",
+                                            color: .red,
+                                            accentColor: colorForFrequencies(getRightEarValues())
+                                        )
+                                        resultRow(
+                                            label: "\("left_ear".localized) ELI",
+                                            result: "\(calculateELI(frequencies: getLeftEarValues())) - \(getELIDegree(eli: calculateELIValue(frequencies: getLeftEarValues())))",
+                                            color: .blue,
+                                            accentColor: colorForFrequencies(getLeftEarValues())
+                                        )
+                                    }
+                                    Spacer()
                                 }
-                                Spacer()
                             }
+                            .padding()
                         }
-                        .padding()
-                    }
-                    .groupBoxStyle(GlassGroupBoxStyle())
+                        .groupBoxStyle(GlassGroupBoxStyle())
 
-                    // Information Section
-                    GroupBox("parameters_summary".localized) {
-                        VStack(alignment: .leading, spacing: 8) {
-                            Text("\("patient_label".localized) \(patientName.isEmpty ? "not_specified".localized : patientName)")
-                            Text("\("age-label".localized) \(patientAge.isEmpty ? "not_specified".localized : patientAge)")
-                            Text("\("occupation_label".localized) \(patientJob.isEmpty ? "not_specified".localized : patientJob)")
+                        // Information Section
+                        GroupBox("parameters_summary".localized) {
+                            VStack(alignment: .leading, spacing: 8) {
+                                Text("\("patient_label".localized) \(patientName.isEmpty ? "not_specified".localized : patientName)")
+                                Text("\("age-label".localized) \(patientAge.isEmpty ? "not_specified".localized : patientAge)")
+                                Text("\("occupation_label".localized) \(patientJob.isEmpty ? "not_specified".localized : patientJob)")
 
-                            Divider()
+                                Divider()
 
-                            Text("test_frequencies".localized)
-                            Text("results_measured".localized)
-                            Text("sal_description".localized)
-                            Text("eli_description".localized)
+                                Text("test_frequencies".localized)
+                                Text("results_measured".localized)
+                                Text("sal_description".localized)
+                                Text("eli_description".localized)
+                            }
+                            .padding()
                         }
-                        .padding()
+                        .groupBoxStyle(GlassGroupBoxStyle())
                     }
-                    .groupBoxStyle(GlassGroupBoxStyle())
-
+                    .padding()
                 }
-                .padding()
-            }
             } // ZStack
             .padding(.bottom, 20)
-
         }
         .frame(minWidth: 580, idealWidth: 580, maxWidth: 580, minHeight: 610, idealHeight: 610, maxHeight: 1186)
-        
         .onAppear {
             loadAllPatients()
             if allPatients.isEmpty {
@@ -296,7 +293,7 @@ struct ContentView: View {
         }
     }
 
-    // Helper function to create frequency input rows with alternating background
+    /// Helper function to create frequency input rows with alternating background
     private func frequencyRow(frequency: String, rightValue: Binding<String>, leftValue: Binding<String>, rowIndex: Int) -> some View {
         HStack {
             Text(frequency)
@@ -326,7 +323,7 @@ struct ContentView: View {
         .clipShape(RoundedRectangle(cornerRadius: 4))
     }
 
-    // Helper to display a labeled result row with color accent
+    /// Helper to display a labeled result row with color accent
     private func resultRow(label: String, result: String, color: Color, accentColor: Color) -> some View {
         HStack(spacing: 6) {
             Capsule()
@@ -341,25 +338,26 @@ struct ContentView: View {
     }
 
     // MARK: - Color helper based on average dB
+
     private func colorForFrequencies(_ frequencies: [Double]) -> Color {
         guard !frequencies.isEmpty else { return .secondary }
         let average = frequencies.reduce(0, +) / Double(frequencies.count)
         switch average {
-        case ...25:  return Color(red: 0.26, green: 0.62, blue: 0.28)
-        case 26...40: return .brown
-        case 41...55: return Color(red: 0.9, green: 0.4, blue: 0.0)
-        case 56...70: return Color(red: 0.7, green: 0.3, blue: 0.2)
-        case 71...90: return .red
-        default:      return Color(red: 0.7, green: 0.0, blue: 0.0)
+        case ...25: return Color(red: 0.26, green: 0.62, blue: 0.28)
+        case 26 ... 40: return .brown
+        case 41 ... 55: return Color(red: 0.9, green: 0.4, blue: 0.0)
+        case 56 ... 70: return Color(red: 0.7, green: 0.3, blue: 0.2)
+        case 71 ... 90: return .red
+        default: return Color(red: 0.7, green: 0.0, blue: 0.0)
         }
     }
 
     // MARK: - Patient Management Functions
-    
+
     private func loadAllPatients() {
         allPatients = dataStore.fetchPatients()
     }
-    
+
     private func createNewPatient() {
         let newPatient = PatientData()
         currentPatient = newPatient
@@ -367,11 +365,11 @@ struct ContentView: View {
         allPatients.insert(newPatient, at: 0)
         clearForm()
     }
-    
+
     private func loadPatient(_ patient: PatientData) {
         // Cancel any pending auto-save for the previous patient
         autoSaveTask?.cancel()
-        
+
         currentPatient = patient
         patientName = patient.name
         patientAge = patient.age
@@ -387,10 +385,10 @@ struct ContentView: View {
         leftEar4000 = patient.leftEar4000
         leftEar8000 = patient.leftEar8000
     }
-    
+
     private func updateCurrentPatient() {
         guard var patient = currentPatient else { return }
-        
+
         patient.name = patientName
         patient.age = patientAge
         patient.job = patientJob
@@ -405,9 +403,9 @@ struct ContentView: View {
         patient.leftEar4000 = leftEar4000
         patient.leftEar8000 = leftEar8000
         patient.updateModifiedDate()
-        
+
         currentPatient = patient
-        
+
         // Auto-save with debouncing using structured concurrency
         autoSaveTask?.cancel()
         autoSaveTask = Task {
@@ -415,13 +413,13 @@ struct ContentView: View {
             dataStore.updatePatient(patient)
         }
     }
-    
+
     private func saveCurrentPatient() {
         guard let patient = currentPatient else { return }
         dataStore.updatePatient(patient)
         loadAllPatients() // Refresh the list
     }
-    
+
     private func deleteCurrentPatient() {
         guard let patient = currentPatient else { return }
         autoSaveTask?.cancel()
@@ -433,7 +431,7 @@ struct ContentView: View {
             createNewPatient()
         }
     }
-    
+
     private func forceSavePendingChanges() {
         // Cancel any pending auto-save and execute it immediately
         autoSaveTask?.cancel()
@@ -443,7 +441,7 @@ struct ContentView: View {
         // Refresh the patient list to ensure consistency
         loadAllPatients()
     }
-    
+
     private func clearForm() {
         patientName = ""
         patientAge = ""
@@ -459,42 +457,45 @@ struct ContentView: View {
         leftEar4000 = ""
         leftEar8000 = ""
     }
-    
+
     // MARK: - Helper functions to get ear values as arrays
+
     private func getRightEarValues() -> [Double] {
-        return [
+        [
             Double(rightEar500) ?? 0,
             Double(rightEar1000) ?? 0,
             Double(rightEar2000) ?? 0,
             Double(rightEar4000) ?? 0,
-            Double(rightEar8000) ?? 0
+            Double(rightEar8000) ?? 0,
         ]
     }
 
     private func getLeftEarValues() -> [Double] {
-        return [
+        [
             Double(leftEar500) ?? 0,
             Double(leftEar1000) ?? 0,
             Double(leftEar2000) ?? 0,
             Double(leftEar4000) ?? 0,
-            Double(leftEar8000) ?? 0
+            Double(leftEar8000) ?? 0,
         ]
     }
 
     // MARK: - Localized Classification Functions
+
     private func localizedClassification(_ classification: String) -> String {
         switch classification.lowercased() {
-        case "normal": return "normal".localized
-        case "mild": return "mild".localized
-        case "moderate": return "moderate".localized
-        case "moderate-severe": return "moderate_severe".localized
-        case "severe": return "severe".localized
-        case "profound": return "profound".localized
-        default: return classification
+        case "normal": "normal".localized
+        case "mild": "mild".localized
+        case "moderate": "moderate".localized
+        case "moderate-severe": "moderate_severe".localized
+        case "severe": "severe".localized
+        case "profound": "profound".localized
+        default: classification
         }
     }
 
     // MARK: - Hearing Loss Calculation
+
     private func calculateHearingLoss(frequencies: [Double]) -> String {
         let average = frequencies.reduce(0, +) / Double(frequencies.count)
 
@@ -513,7 +514,7 @@ struct ContentView: View {
         }
     }
 
-    // Bilateral Hearing Loss Calculation
+    /// Bilateral Hearing Loss Calculation
     private func calculateBilateralHearingLoss() -> String {
         let rightValues = getRightEarValues()
         let leftValues = getLeftEarValues()
@@ -537,7 +538,7 @@ struct ContentView: View {
         }
     }
 
-    // SAL Index Calculation (Speech Audiometry Level)
+    /// SAL Index Calculation (Speech Audiometry Level)
     private func calculateSAL(frequencies: [Double]) -> String {
         let sal = calculateSALValue(frequencies: frequencies)
         return String(format: "%.1f dB", sal)
@@ -551,21 +552,21 @@ struct ContentView: View {
 
     private func getSALDegree(sal: Double) -> String {
         if sal <= 25 {
-            return "normal".localized
+            "normal".localized
         } else if sal <= 40 {
-            return "mild".localized
+            "mild".localized
         } else if sal <= 55 {
-            return "moderate".localized
+            "moderate".localized
         } else if sal <= 70 {
-            return "moderate_severe".localized
+            "moderate_severe".localized
         } else if sal <= 90 {
-            return "severe".localized
+            "severe".localized
         } else {
-            return "profound".localized
+            "profound".localized
         }
     }
 
-    // ELI Index Calculation (Ear Loss Index)
+    /// ELI Index Calculation (Ear Loss Index)
     private func calculateELI(frequencies: [Double]) -> String {
         let eli = calculateELIValue(frequencies: frequencies)
         return String(format: "%.1f dB", eli)
@@ -588,22 +589,23 @@ struct ContentView: View {
 
     private func getELIDegree(eli: Double) -> String {
         if eli <= 25 {
-            return "normal".localized
+            "normal".localized
         } else if eli <= 40 {
-            return "mild".localized
+            "mild".localized
         } else if eli <= 55 {
-            return "moderate".localized
+            "moderate".localized
         } else if eli <= 70 {
-            return "moderate_severe".localized
+            "moderate_severe".localized
         } else if eli <= 90 {
-            return "severe".localized
+            "severe".localized
         } else {
-            return "profound".localized
+            "profound".localized
         }
     }
 }
 
 // MARK: - Glass GroupBox Style
+
 struct GlassGroupBoxStyle: GroupBoxStyle {
     func makeBody(configuration: Configuration) -> some View {
         VStack(alignment: .leading, spacing: 0) {

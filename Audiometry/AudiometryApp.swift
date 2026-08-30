@@ -5,14 +5,14 @@
 //  Modified by perez987 on 20/09/2025.
 //
 
-import SwiftUI
 import AppKit
+import SwiftUI
 
 @main
 struct AudiometryApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     @ObservedObject private var languageManager = LanguageManager.shared
-    
+
     var body: some Scene {
         WindowGroup {
             ContentView()
@@ -24,7 +24,7 @@ struct AudiometryApp: App {
                         }
                     }
                 }
-            
+
                 .onChange(of: languageManager.currentLanguage) { _, _ in
                     // Force window title update when language changes
                     // Delegate window title update to AppDelegate to avoid ordering issues
@@ -33,12 +33,9 @@ struct AudiometryApp: App {
                     }
                 }
                 .frame(minWidth: 660, idealWidth: 660, maxWidth: 660, minHeight: 780)
-
         }
-        
+
         .windowStyle(DefaultWindowStyle())
         .windowResizability(.contentSize)
-        
     }
-    
 }
