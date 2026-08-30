@@ -8,7 +8,7 @@
 
 <img src="Images/Main-window.png" width="640px">
 
-<img src="Images/Results.png" width="640px">
+<img src="Images/Results.png" width="520px">
 
 <img src="Images/Report-to-print.png" width="640px">
 
