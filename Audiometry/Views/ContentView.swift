@@ -346,9 +346,9 @@ struct ContentView: View {
         case ...25: return Color(red: 0.26, green: 0.62, blue: 0.28)
         case 26 ... 40: return .brown
         case 41 ... 55: return Color(red: 0.9, green: 0.4, blue: 0.0)
-        case 56 ... 70: return Color(red: 0.7, green: 0.3, blue: 0.2)
+        case 56 ... 70: return .red
         case 71 ... 90: return .red
-        default: return Color(red: 0.7, green: 0.0, blue: 0.0)
+        default: return .red
         }
     }
 
