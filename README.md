@@ -6,9 +6,12 @@
 
 ## SwiftUI audiometry app for macOS
 
-|  |
+| Main window |
 |:----|
 | <img src="Images/Main-window.png" width="640px"> |
+
+| Print report |
+|:----|
 | <img src="Images/Report-to-print.png" width="640px"> | 
 
 Audiometry is a macOS SwiftUI application for capturing patient hearing test data, calculating hearing-loss results, and printing patient reports. The current project state is focused on a single SwiftUI-based persistence flow backed by a JSON store in Application Support.
