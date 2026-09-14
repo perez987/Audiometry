@@ -45,7 +45,7 @@ La aplicación utiliza una única implementación de almacenamiento: el estado d
 - Fuente de datos de ejemplo incluida en la aplicación: `Sample-data/patients.json`
 - En el primer inicio, el archivo de ejemplo incluido se copia en Application Support si todavía no existe una base de datos de pacientes
 
-Para migrar los datos a otro equipo, copie `patients.json` en la misma ubicación de Application Support antes de iniciar la aplicación.
+Para migrar los datos a otro equipo, copia `patients.json` en la misma ubicación de Application Support antes de iniciar la aplicación.
 
 ## Estructura del proyecto
 
@@ -58,7 +58,7 @@ Para migrar los datos a otro equipo, copie `patients.json` en la misma ubicació
 
 ## Compilación
 
-Abre `Audiometry.xcodeproj` en Xcode y ejecute el esquema `Audiometry` en macOS.
+Abre `Audiometry.xcodeproj` en Xcode y ejecuta el esquema `Audiometry` en macOS.
 
 Compilación desde la línea de comandos:
 
