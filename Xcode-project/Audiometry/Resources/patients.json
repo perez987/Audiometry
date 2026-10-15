@@ -214,5 +214,149 @@
     "leftEar1000" : "40",
     "job" : "Engineer",
     "name" : "John Sketches"
+  },
+  {
+    "id": "D0152E9A-2E39-4AF5-BCE5-52E1A1F34B01", "name": "Maya Bennett", "age": "24", "job": "Graphic Designer",
+    "rightEar500": "5", "rightEar1000": "10", "rightEar2000": "10", "rightEar4000": "10", "rightEar8000": "15",
+    "leftEar500": "10", "leftEar1000": "10", "leftEar2000": "10", "leftEar4000": "15", "leftEar8000": "15",
+    "dateCreated": "2025-10-07T09:12:00Z", "dateModified": "2025-10-07T09:12:00Z"
+  },
+  {
+    "id": "D0152E9A-2E39-4AF5-BCE5-52E1A1F34B02", "name": "Ethan Brooks", "age": "31", "job": "Construction Worker",
+    "rightEar500": "10", "rightEar1000": "15", "rightEar2000": "20", "rightEar4000": "35", "rightEar8000": "25",
+    "leftEar500": "10", "leftEar1000": "15", "leftEar2000": "20", "leftEar4000": "30", "leftEar8000": "25",
+    "dateCreated": "2025-10-07T09:18:00Z", "dateModified": "2025-10-07T09:18:00Z"
+  },
+  {
+    "id": "D0152E9A-2E39-4AF5-BCE5-52E1A1F34B03", "name": "Nora Patel", "age": "42", "job": "School Teacher",
+    "rightEar500": "10", "rightEar1000": "10", "rightEar2000": "15", "rightEar4000": "20", "rightEar8000": "25",
+    "leftEar500": "10", "leftEar1000": "15", "leftEar2000": "15", "leftEar4000": "20", "leftEar8000": "25",
+    "dateCreated": "2025-10-07T09:24:00Z", "dateModified": "2025-10-07T09:24:00Z"
+  },
+  {
+    "id": "D0152E9A-2E39-4AF5-BCE5-52E1A1F34B04", "name": "Caleb Foster", "age": "55", "job": "Farm Worker",
+    "rightEar500": "20", "rightEar1000": "20", "rightEar2000": "25", "rightEar4000": "45", "rightEar8000": "40",
+    "leftEar500": "20", "leftEar1000": "25", "leftEar2000": "25", "leftEar4000": "40", "leftEar8000": "35",
+    "dateCreated": "2025-10-07T09:30:00Z", "dateModified": "2025-10-07T09:30:00Z"
+  },
+  {
+    "id": "D0152E9A-2E39-4AF5-BCE5-52E1A1F34B05", "name": "Leila Morgan", "age": "36", "job": "Librarian",
+    "rightEar500": "5", "rightEar1000": "10", "rightEar2000": "10", "rightEar4000": "15", "rightEar8000": "20",
+    "leftEar500": "10", "leftEar1000": "10", "leftEar2000": "15", "leftEar4000": "15", "leftEar8000": "20",
+    "dateCreated": "2025-10-07T09:36:00Z", "dateModified": "2025-10-07T09:36:00Z"
+  },
+  {
+    "id": "D0152E9A-2E39-4AF5-BCE5-52E1A1F34B06", "name": "Owen Carter", "age": "27", "job": "Drummer",
+    "rightEar500": "10", "rightEar1000": "15", "rightEar2000": "20", "rightEar4000": "40", "rightEar8000": "30",
+    "leftEar500": "10", "leftEar1000": "15", "leftEar2000": "20", "leftEar4000": "35", "leftEar8000": "30",
+    "dateCreated": "2025-10-07T09:42:00Z", "dateModified": "2025-10-07T09:42:00Z"
+  },
+  {
+    "id": "D0152E9A-2E39-4AF5-BCE5-52E1A1F34B07", "name": "Priya Shah", "age": "63", "job": "Accountant",
+    "rightEar500": "20", "rightEar1000": "25", "rightEar2000": "30", "rightEar4000": "40", "rightEar8000": "50",
+    "leftEar500": "20", "leftEar1000": "25", "leftEar2000": "30", "leftEar4000": "45", "leftEar8000": "50",
+    "dateCreated": "2025-10-07T09:48:00Z", "dateModified": "2025-10-07T09:48:00Z"
+  },
+  {
+    "id": "D0152E9A-2E39-4AF5-BCE5-52E1A1F34B08", "name": "Lucas Reed", "age": "48", "job": "Auto Mechanic",
+    "rightEar500": "15", "rightEar1000": "20", "rightEar2000": "25", "rightEar4000": "50", "rightEar8000": "40",
+    "leftEar500": "15", "leftEar1000": "20", "leftEar2000": "25", "leftEar4000": "45", "leftEar8000": "40",
+    "dateCreated": "2025-10-07T09:54:00Z", "dateModified": "2025-10-07T09:54:00Z"
+  },
+  {
+    "id": "D0152E9A-2E39-4AF5-BCE5-52E1A1F34B09", "name": "Sofia Alvarez", "age": "21", "job": "Graduate Student",
+    "rightEar500": "5", "rightEar1000": "5", "rightEar2000": "10", "rightEar4000": "10", "rightEar8000": "10",
+    "leftEar500": "5", "leftEar1000": "10", "leftEar2000": "10", "leftEar4000": "10", "leftEar8000": "15",
+    "dateCreated": "2025-10-07T10:00:00Z", "dateModified": "2025-10-07T10:00:00Z"
+  },
+  {
+    "id": "D0152E9A-2E39-4AF5-BCE5-52E1A1F34B10", "name": "Harper Ellis", "age": "70", "job": "Retired Welder",
+    "rightEar500": "30", "rightEar1000": "35", "rightEar2000": "40", "rightEar4000": "65", "rightEar8000": "70",
+    "leftEar500": "30", "leftEar1000": "35", "leftEar2000": "40", "leftEar4000": "60", "leftEar8000": "65",
+    "dateCreated": "2025-10-07T10:06:00Z", "dateModified": "2025-10-07T10:06:00Z"
+  },
+  {
+    "id": "D0152E9A-2E39-4AF5-BCE5-52E1A1F34B11", "name": "Aiden Cole", "age": "39", "job": "Software Developer",
+    "rightEar500": "10", "rightEar1000": "10", "rightEar2000": "15", "rightEar4000": "20", "rightEar8000": "25",
+    "leftEar500": "10", "leftEar1000": "10", "leftEar2000": "15", "leftEar4000": "20", "leftEar8000": "20",
+    "dateCreated": "2025-10-07T10:12:00Z", "dateModified": "2025-10-07T10:12:00Z"
+  },
+  {
+    "id": "D0152E9A-2E39-4AF5-BCE5-52E1A1F34B12", "name": "Zoe Kim", "age": "33", "job": "Bartender",
+    "rightEar500": "10", "rightEar1000": "15", "rightEar2000": "20", "rightEar4000": "30", "rightEar8000": "25",
+    "leftEar500": "10", "leftEar1000": "15", "leftEar2000": "20", "leftEar4000": "30", "leftEar8000": "25",
+    "dateCreated": "2025-10-07T10:18:00Z", "dateModified": "2025-10-07T10:18:00Z"
+  },
+  {
+    "id": "D0152E9A-2E39-4AF5-BCE5-52E1A1F34B13", "name": "Mateo Rivera", "age": "58", "job": "Bus Driver",
+    "rightEar500": "20", "rightEar1000": "25", "rightEar2000": "30", "rightEar4000": "35", "rightEar8000": "45",
+    "leftEar500": "20", "leftEar1000": "25", "leftEar2000": "30", "leftEar4000": "40", "leftEar8000": "45",
+    "dateCreated": "2025-10-07T10:24:00Z", "dateModified": "2025-10-07T10:24:00Z"
+  },
+  {
+    "id": "D0152E9A-2E39-4AF5-BCE5-52E1A1F34B14", "name": "Amara Johnson", "age": "46", "job": "Dental Hygienist",
+    "rightEar500": "15", "rightEar1000": "15", "rightEar2000": "20", "rightEar4000": "25", "rightEar8000": "35",
+    "leftEar500": "15", "leftEar1000": "15", "leftEar2000": "20", "leftEar4000": "25", "leftEar8000": "30",
+    "dateCreated": "2025-10-07T10:30:00Z", "dateModified": "2025-10-07T10:30:00Z"
+  },
+  {
+    "id": "D0152E9A-2E39-4AF5-BCE5-52E1A1F34B15", "name": "Jack Whitaker", "age": "52", "job": "Carpenter",
+    "rightEar500": "20", "rightEar1000": "20", "rightEar2000": "25", "rightEar4000": "45", "rightEar8000": "40",
+    "leftEar500": "20", "leftEar1000": "25", "leftEar2000": "25", "leftEar4000": "40", "leftEar8000": "35",
+    "dateCreated": "2025-10-07T10:36:00Z", "dateModified": "2025-10-07T10:36:00Z"
+  },
+  {
+    "id": "D0152E9A-2E39-4AF5-BCE5-52E1A1F34B16", "name": "Isabella Cruz", "age": "29", "job": "Nurse",
+    "rightEar500": "5", "rightEar1000": "10", "rightEar2000": "10", "rightEar4000": "15", "rightEar8000": "15",
+    "leftEar500": "10", "leftEar1000": "10", "leftEar2000": "10", "leftEar4000": "15", "leftEar8000": "20",
+    "dateCreated": "2025-10-07T10:42:00Z", "dateModified": "2025-10-07T10:42:00Z"
+  },
+  {
+    "id": "D0152E9A-2E39-4AF5-BCE5-52E1A1F34B17", "name": "Ravi Desai", "age": "67", "job": "Retired Farmer",
+    "rightEar500": "25", "rightEar1000": "30", "rightEar2000": "35", "rightEar4000": "50", "rightEar8000": "60",
+    "leftEar500": "25", "leftEar1000": "30", "leftEar2000": "35", "leftEar4000": "50", "leftEar8000": "55",
+    "dateCreated": "2025-10-07T10:48:00Z", "dateModified": "2025-10-07T10:48:00Z"
+  },
+  {
+    "id": "D0152E9A-2E39-4AF5-BCE5-52E1A1F34B18", "name": "Chloe Martin", "age": "41", "job": "Office Administrator",
+    "rightEar500": "10", "rightEar1000": "15", "rightEar2000": "15", "rightEar4000": "20", "rightEar8000": "25",
+    "leftEar500": "10", "leftEar1000": "15", "leftEar2000": "15", "leftEar4000": "20", "leftEar8000": "25",
+    "dateCreated": "2025-10-07T10:54:00Z", "dateModified": "2025-10-07T10:54:00Z"
+  },
+  {
+    "id": "D0152E9A-2E39-4AF5-BCE5-52E1A1F34B19", "name": "Noah Greene", "age": "35", "job": "Factory Operator",
+    "rightEar500": "10", "rightEar1000": "15", "rightEar2000": "20", "rightEar4000": "40", "rightEar8000": "30",
+    "leftEar500": "10", "leftEar1000": "15", "leftEar2000": "20", "leftEar4000": "35", "leftEar8000": "30",
+    "dateCreated": "2025-10-07T11:00:00Z", "dateModified": "2025-10-07T11:00:00Z"
+  },
+  {
+    "id": "D0152E9A-2E39-4AF5-BCE5-52E1A1F34B20", "name": "Elena Rossi", "age": "76", "job": "Retired Florist",
+    "rightEar500": "30", "rightEar1000": "35", "rightEar2000": "40", "rightEar4000": "50", "rightEar8000": "65",
+    "leftEar500": "30", "leftEar1000": "35", "leftEar2000": "40", "leftEar4000": "55", "leftEar8000": "65",
+    "dateCreated": "2025-10-07T11:06:00Z", "dateModified": "2025-10-07T11:06:00Z"
+  },
+  {
+    "id": "D0152E9A-2E39-4AF5-BCE5-52E1A1F34B21", "name": "Miles Thompson", "age": "23", "job": "Music Student",
+    "rightEar500": "5", "rightEar1000": "10", "rightEar2000": "15", "rightEar4000": "30", "rightEar8000": "20",
+    "leftEar500": "5", "leftEar1000": "10", "leftEar2000": "15", "leftEar4000": "25", "leftEar8000": "20",
+    "dateCreated": "2025-10-07T11:12:00Z", "dateModified": "2025-10-07T11:12:00Z"
+  },
+  {
+    "id": "D0152E9A-2E39-4AF5-BCE5-52E1A1F34B22", "name": "Grace Wilson", "age": "60", "job": "Hair Stylist",
+    "rightEar500": "20", "rightEar1000": "25", "rightEar2000": "30", "rightEar4000": "35", "rightEar8000": "50",
+    "leftEar500": "20", "leftEar1000": "25", "leftEar2000": "30", "leftEar4000": "40", "leftEar8000": "45",
+    "dateCreated": "2025-10-07T11:18:00Z", "dateModified": "2025-10-07T11:18:00Z"
+  },
+  {
+    "id": "D0152E9A-2E39-4AF5-BCE5-52E1A1F34B23", "name": "Theo Wallace", "age": "44", "job": "Airport Ground Crew",
+    "rightEar500": "15", "rightEar1000": "20", "rightEar2000": "25", "rightEar4000": "45", "rightEar8000": "40",
+    "leftEar500": "15", "leftEar1000": "20", "leftEar2000": "25", "leftEar4000": "50", "leftEar8000": "40",
+    "dateCreated": "2025-10-07T11:24:00Z", "dateModified": "2025-10-07T11:24:00Z"
+  },
+  {
+    "id": "D0152E9A-2E39-4AF5-BCE5-52E1A1F34B24", "name": "Fatima Hassan", "age": "32", "job": "Pharmacist",
+    "rightEar500": "5", "rightEar1000": "10", "rightEar2000": "10", "rightEar4000": "15", "rightEar8000": "20",
+    "leftEar500": "5", "leftEar1000": "10", "leftEar2000": "15", "leftEar4000": "15", "leftEar8000": "20",
+    "dateCreated": "2025-10-07T11:30:00Z", "dateModified": "2025-10-07T11:30:00Z"
   }
 ]
